@@ -1,17 +1,16 @@
 
 #include <stdlib.h> // necesare pentru citirea shader-elor
 #include <stdio.h>
+#include <iostream>
+
 #include "Camera.h"
 
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-#include <GLM.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
-
-#include <glfw3.h>
-
-#include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #pragma comment (lib, "glfw3dll.lib")
 #pragma comment (lib, "glew32.lib")
