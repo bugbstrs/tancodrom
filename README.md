@@ -38,7 +38,7 @@ Simulation of a tank and helicopter tanker field on a battlefield, with clouds, 
 
 ## 🕹️ Installing `vcpkg`
 
-- Clone [this](git clone https://github.com/microsoft/vcpkg.git) repository wherever you would like to have vcpkg installed
+- Clone [this](https://github.com/microsoft/vcpkg.git) repository wherever you would like to have vcpkg installed
 - Open a terminal
   - `cd` into the vcpkg folder
   - run the bootstrap script (`bootstrap-vcpkg.bat`)
