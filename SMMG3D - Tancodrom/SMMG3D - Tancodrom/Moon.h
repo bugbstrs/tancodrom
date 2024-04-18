@@ -3,5 +3,10 @@
 
 class Moon : public LightSource
 {
+public:
+	void Update() override;
+
+private:
+
 };
 
