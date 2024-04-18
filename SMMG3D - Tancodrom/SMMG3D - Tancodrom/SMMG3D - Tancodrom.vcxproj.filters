@@ -48,9 +48,6 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="copie.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Program.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

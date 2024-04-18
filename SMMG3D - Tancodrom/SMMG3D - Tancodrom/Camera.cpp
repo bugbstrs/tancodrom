@@ -1,167 +1,121 @@
-#include "Camera.h"
-
 #include <GL/glew.h>
 #pragma comment (lib, "glew32.lib")
 
-Camera::Camera(const int width, const int height, const glm::vec3& position)
+#include "Program.h"
+#include "Scene.h"
+#include "Camera.h"
+#include "InputManager.h"
+
+Camera::Camera(const glm::vec3& position, const glm::vec3 rotation)
 {
-    startPosition = position;
-    Set(width, height, position);
+    SetPosition(position);
+
+    m_width = glfwGetVideoMode(glfwGetPrimaryMonitor())->width;
+    m_height = glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
+
+    m_lastX = m_width / 2.0f;
+    m_lastY = m_height / 2.0f;
+    m_bFirstMouseMove = true;
+
+    m_FOV = 70.0f;
+
+    ProjMatrixLocation = glGetUniformLocation(Program::GetProgramID(), "ProjMatrix");
+    ViewMatrixLocation = glGetUniformLocation(Program::GetProgramID(), "ViewMatrix");
 }
 
-void Camera::Set(const int width, const int height, const glm::vec3& position)
+void Camera::Update()
 {
-    this->isPerspective = true;
-    this->yaw = YAW;
-    this->pitch = PITCH;
+    Reshape();
 
-    this->FoVy = FOV;
-    this->width = width;
-    this->height = height;
-    this->zNear = zNEAR;
-    this->zFar = zFAR;
+    ProcessInput();
 
-    this->worldUp = glm::vec3(0, 1, 0);
-    this->position = position;
+    glm::mat4 projection = GetProjectionMatrix();
+    glUniformMatrix4fv(ProjMatrixLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
-    lastX = width / 2.0f;
-    lastY = height / 2.0f;
-    bFirstMouseMove = true;
-
-    UpdateCameraVectors();
-}
-
-void Camera::Reset(const int width, const int height)
-{
-    Set(width, height, startPosition);
-}
-
-void Camera::Reshape(int windowWidth, int windowHeight)
-{
-    width = windowWidth;
-    height = windowHeight;
-
-    // define the viewport transformation
-    glViewport(0, 0, windowWidth, windowHeight);
+    glm::mat4 view = GetViewMatrix();
+    glUniformMatrix4fv(ViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(view));
 }
 
 const glm::mat4 Camera::GetViewMatrix() const
 {
-    // Returns the View Matrix
-    return glm::lookAt(position, position + forward, up);
-}
-
-const glm::vec3 Camera::GetPosition() const
-{
-    return position;
+    return glm::lookAt(GetPosition(), GetPosition() + GetForward(), GetUp());
 }
 
 const glm::mat4 Camera::GetProjectionMatrix() const
 {
-    glm::mat4 Proj = glm::mat4(1);
-    if (isPerspective)
-    {
-        float aspectRatio = ((float)(width)) / height;
-        Proj = glm::perspective(glm::radians(FoVy), aspectRatio, zNear, zFar);
-    }
-    else
-    {
-        float scaleFactor = 2000.f;
-        Proj = glm::ortho<float>(
-            -width / scaleFactor, width / scaleFactor,
-            -height / scaleFactor, height / scaleFactor, -zFar, zFar);
-    }
-    return Proj;
+    float aspectRatio = ((float)(m_width)) / m_height;
+
+    return glm::perspective(glm::radians(m_FOV), aspectRatio, m_zNEAR, m_zFAR);
 }
 
-void Camera::ProcessInput(ECameraMovementType direction, float deltaTime)
+void Camera::ProcessInput()
 {
-    float velocity = (float)(cameraSpeedFactor * deltaTime);
-    switch (direction)
-    {
-    case ECameraMovementType::FORWARD:
-        position += forward * velocity;
-        break;
-    case ECameraMovementType::BACKWARD:
-        position -= forward * velocity;
-        break;
-    case ECameraMovementType::LEFT:
-        position -= right * velocity;
-        break;
-    case ECameraMovementType::RIGHT:
-        position += right * velocity;
-        break;
-    case ECameraMovementType::UP:
-        position += up * velocity;
-        break;
-    case ECameraMovementType::DOWN:
-        position -= up * velocity;
-        break;
-    }
+    float velocity = (float)(cameraSpeedFactor * Scene::GetDeltaTime());
+
+    if (InputManager::KeyDown(GLFW_KEY_W))
+        Move(Scene::Forward() * velocity);
+    if (InputManager::KeyDown(GLFW_KEY_A))
+        Move(-Scene::Right() * velocity);
+    if (InputManager::KeyDown(GLFW_KEY_S))
+        Move(-Scene::Forward() * velocity);
+    if (InputManager::KeyDown(GLFW_KEY_D))
+        Move(Scene::Right() * velocity);
 }
 
 void Camera::MouseControl(float xPos, float yPos)
 {
-    if (bFirstMouseMove)
-    {
-        lastX = xPos;
-        lastY = yPos;
-        bFirstMouseMove = false;
-    }
+    //if (m_bFirstMouseMove)
+    //{
+    //    m_lastX = xPos;
+    //    m_lastY = yPos;
+    //    m_bFirstMouseMove = false;
+    //}
 
-    float xChange = xPos - lastX;
-    float yChange = lastY - yPos;
-    lastX = xPos;
-    lastY = yPos;
+    //float xChange = xPos - m_lastX;
+    //float yChange = m_lastY - yPos;
+    //m_lastX = xPos;
+    //m_lastY = yPos;
 
-    if (fabs(xChange) <= 1e-6 && fabs(yChange) <= 1e-6)
-    {
-        return;
-    }
-    xChange *= mouseSensitivity;
-    yChange *= mouseSensitivity;
+    //if (fabs(xChange) <= 1e-6 && fabs(yChange) <= 1e-6)
+    //{
+    //    return;
+    //}
+    //xChange *= mouseSensitivity;
+    //yChange *= mouseSensitivity;
 
-    ProcessMouseMovement(xChange, yChange);
+    //ProcessMouseMovement(xChange, yChange);
 }
 
 void Camera::ProcessMouseScroll(float yOffset)
 {
-    if (FoVy >= 1.0f && FoVy <= 90.0f)
-    {
-        FoVy -= yOffset;
-    }
-    if (FoVy <= 1.0f)
-        FoVy = 1.0f;
-    if (FoVy >= 90.0f)
-        FoVy = 90.0f;
+    //if (m_FOV >= 1.0f && m_FOV <= 90.0f)
+    //{
+    //    m_FOV -= yOffset;
+    //}
+    //if (m_FOV <= 1.0f)
+    //    m_FOV = 1.0f;
+    //if (m_FOV >= 90.0f)
+    //    m_FOV = 90.0f;
 }
 
 void Camera::ProcessMouseMovement(float xOffset, float yOffset, bool constrainPitch)
 {
-    yaw += xOffset;
-    pitch += yOffset;
+    //m_yaw += xOffset;
+    //m_pitch += yOffset;
 
-    // Avem grijã sã nu ne dãm peste cap
-    if (constrainPitch)
-    {
-        if (pitch > 89.0f)
-            pitch = 89.0f;
-        if (pitch < -89.0f)
-            pitch = -89.0f;
-    }
-
-    // Se modificã vectorii camerei pe baza unghiurilor Euler
-    UpdateCameraVectors();
+    //if (constrainPitch)
+    //{
+    //    if (m_pitch > 89.0f)
+    //        m_pitch = 89.0f;
+    //    if (m_pitch < -89.0f)
+    //        m_pitch = -89.0f;
+    //}
 }
 
-void Camera::UpdateCameraVectors()
+void Camera::Reshape()
 {
-    // Calculate the new forward vector
-    this->forward.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    this->forward.y = sin(glm::radians(pitch));
-    this->forward.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    this->forward = glm::normalize(this->forward);
-    // Also re-calculate the Right and Up vector
-    right = glm::normalize(glm::cross(forward, worldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-    up = glm::normalize(glm::cross(right, forward));
+    m_width = Program::GetScreenWidth();
+    m_height = Program::GetScreenHeight();
+
+    glViewport(0, 0, m_width, m_height);
 }

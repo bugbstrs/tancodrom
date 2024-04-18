@@ -4,70 +4,43 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "ECameraMovementType.h"
+#include "SceneObject.h"
 
 #pragma comment (lib, "glfw3dll.lib")
 #pragma comment (lib, "OpenGL32.lib")
 
-class Camera
+class Camera : public SceneObject
 {
-private:
-    // Default camera values
-    const float zNEAR = 0.1f;
-    const float zFAR = 500.f;
-    const float YAW = -90.0f;
-    const float PITCH = 0.0f;
-    const float FOV = 45.0f;
-    glm::vec3 startPosition;
-
 public:
-    Camera(const int width, const int height, const glm::vec3& position);
+    Camera(const glm::vec3& position, const glm::vec3 rotation);
 
-    void Set(const int width, const int height, const glm::vec3& position);
+    void Update() override;
 
-    void Reset(const int width, const int height);
+    void ProcessInput();
+    void MouseControl(float xPos, float yPos);
+    void ProcessMouseScroll(float yOffset);
+    void ProcessMouseMovement(float xOffset, float yOffset, bool constrainPitch = true);
 
-    void Reshape(int windowWidth, int windowHeight);
+private:
+    void Reshape();
 
     const glm::mat4 GetViewMatrix() const;
-
-    const glm::vec3 GetPosition() const;
-
     const glm::mat4 GetProjectionMatrix() const;
 
-    void ProcessInput(ECameraMovementType direction, float deltaTime);
-
-    void MouseControl(float xPos, float yPos);
-
-    void ProcessMouseScroll(float yOffset);
-
-    void ProcessMouseMovement(float xOffset, float yOffset, bool constrainPitch = true);
-private:
-
-    void UpdateCameraVectors();
-
-protected:
+    const float m_zNEAR = 0.1f;
+    const float m_zFAR = 500.f;
     const float cameraSpeedFactor = 2.5f;
-    const float mouseSensitivity = 0.1f;
+    const float mouseSensitivity = 2.5f;
 
     // Perspective properties
-    float zNear;
-    float zFar;
-    float FoVy;
-    int width;
-    int height;
-    bool isPerspective;
-public:
-    glm::vec3 position;
-    glm::vec3 forward;
-    glm::vec3 right;
-    glm::vec3 up;
-    glm::vec3 worldUp;
+    float m_FOV;
+    int m_width;
+    int m_height;
 
-    // Euler Angles
-    float yaw;
-    float pitch;
+    bool m_bFirstMouseMove = true;
+    float m_lastX = 0.f;
+    float m_lastY = 0.f;
 
-    bool bFirstMouseMove = true;
-    float lastX = 0.f, lastY = 0.f;
+    GLuint ProjMatrixLocation;
+    GLuint ViewMatrixLocation;
 };
