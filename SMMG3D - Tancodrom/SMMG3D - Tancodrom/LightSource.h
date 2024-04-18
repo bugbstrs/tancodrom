@@ -3,5 +3,10 @@
 
 class LightSource: public SceneObject
 {
+public:
+	
+
+private:
+
 };
 
