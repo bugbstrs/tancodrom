@@ -136,35 +136,34 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="copie.cpp" />
     <ClCompile Include="Helicopter.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LightSource.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Moon.cpp" />
     <ClCompile Include="Particles.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SMMG3D - Tancodrom.cpp" />
     <ClCompile Include="Sun.cpp" />
     <ClCompile Include="Tank.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Helicopter.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LightSource.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Model.h" />
     <ClInclude Include="Moon.h" />
     <ClInclude Include="Particles.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sun.h" />
     <ClInclude Include="Tank.h" />
     <ClInclude Include="Texture.h" />
@@ -189,12 +188,27 @@
     <None Include="ShadowMappingDepth.vs">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </None>
+    <None Include="skybox.fs">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="skybox.vs">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </None>
     <None Include="sunlight.fs">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </None>
     <None Include="sunlight.vs">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Skybox\back.jpg" />
+    <Image Include="Skybox\bottom.jpg" />
+    <Image Include="Skybox\Floor.png" />
+    <Image Include="Skybox\front.jpg" />
+    <Image Include="Skybox\left.jpg" />
+    <Image Include="Skybox\right.jpg" />
+    <Image Include="Skybox\top.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
