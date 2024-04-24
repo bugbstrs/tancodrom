@@ -21,8 +21,8 @@ void SceneObject::Move(glm::vec3 direction, bool globalCoordonates)
     }
 
     glm::vec3 localDirection = glm::vec3(glm::dot(direction, GetRight()),
-        glm::dot(direction, GetUp()),
-        glm::dot(direction, GetForward()));
+                                         glm::dot(direction, GetUp()),
+                                         glm::dot(direction, GetForward()));
 
     m_position += localDirection;
 }
@@ -73,7 +73,7 @@ void SceneObject::Rotate(glm::vec3 direction)
     glm::quat rotation = glm::quat(direction);
 
     m_rotation = glm::eulerAngles(rotation);
-
+    
     NormalizeRotation();
 }
 
