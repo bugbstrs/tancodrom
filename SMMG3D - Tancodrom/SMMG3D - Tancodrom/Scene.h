@@ -5,6 +5,11 @@
 
 #include "SceneObject.h"
 #include "Camera.h"
+#include "Shader.h"
+#include "Texture.h"
+#include "Skybox.h"
+
+#include <memory>
 
 class Scene
 {
@@ -21,10 +26,14 @@ public:
 	static glm::vec3 Right();
 	static glm::vec3 Up();
 
+	static void LoadObjects();
+
 private:
 	static std::vector<SceneObject*> m_objects;
 	static Camera* m_camera;
 
 	static float m_deltaTime;
+
+	static std::unique_ptr<SkyBox> m_skybox;
 };
 
