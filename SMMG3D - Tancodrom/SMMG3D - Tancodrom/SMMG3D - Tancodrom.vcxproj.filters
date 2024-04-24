@@ -87,4 +87,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="PhongLight.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="PhongLight.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="sunlight.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="sunlight.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ShadowMapping.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ShadowMapping.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ShadowMappingDepth.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ShadowMappingDepth.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

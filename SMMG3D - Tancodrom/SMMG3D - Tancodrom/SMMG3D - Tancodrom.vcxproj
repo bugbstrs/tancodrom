@@ -161,6 +161,16 @@
     <ClInclude Include="Sun.h" />
     <ClInclude Include="Tank.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="PhongLight.fs" />
+    <None Include="PhongLight.vs" />
+    <None Include="ShadowMapping.fs" />
+    <None Include="ShadowMapping.vs" />
+    <None Include="ShadowMappingDepth.fs" />
+    <None Include="ShadowMappingDepth.vs" />
+    <None Include="sunlight.fs" />
+    <None Include="sunlight.vs" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
