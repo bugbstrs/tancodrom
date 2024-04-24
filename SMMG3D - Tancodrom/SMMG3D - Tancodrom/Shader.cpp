@@ -42,18 +42,18 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
 	vertex = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertex, 1, &vertexShaderCode, NULL);
 	glCompileShader(vertex);
-	checkCompileErrors(vertex, "VERTEX");
+	CheckCompileErrors(vertex, "VERTEX");
 
 	fragment = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragment, 1, &fragmentShaderCode, NULL);
 	glCompileShader(fragment);
-	checkCompileErrors(fragment, "FRAGMENT");
+	CheckCompileErrors(fragment, "FRAGMENT");
 
 	m_ID = glCreateProgram();
 	glAttachShader(m_ID, vertex);
 	glAttachShader(m_ID, fragment);
 	glLinkProgram(m_ID);
-	checkCompileErrors(m_ID, "PROGRAM");
+	CheckCompileErrors(m_ID, "PROGRAM");
 
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
@@ -64,47 +64,47 @@ Shader::~Shader()
 	glDeleteProgram(m_ID);
 }
 
-void Shader::use() const
+void Shader::Use() const
 {
 	glUseProgram(m_ID);
 }
 
-GLuint Shader::getID() const
+GLuint Shader::GetID() const
 {
 	return m_ID;
 }
 
-void Shader::setVec3(const std::string& name, const glm::vec3& value) const
+void Shader::SetVec3(const std::string& name, const glm::vec3& value) const
 {
 	glUniform3fv(glGetUniformLocation(m_ID, name.c_str()), 1, &value[0]);
 }
 
-void Shader::setVec3(const std::string& name, float x, float y, float z) const
+void Shader::SetVec3(const std::string& name, float x, float y, float z) const
 {
 	glUniform3f(glGetUniformLocation(m_ID, name.c_str()), x, y, z);
 }
 
-void Shader::setVec4(const std::string& name, const glm::vec4& value) const
+void Shader::SetVec4(const std::string& name, const glm::vec4& value) const
 {
 	glUniform4fv(glGetUniformLocation(m_ID, name.c_str()), 1, &value[0]);
 }
 
-void Shader::setMat4(const std::string& name, const glm::mat4& mat) const
+void Shader::SetMat4(const std::string& name, const glm::mat4& mat) const
 {
 	glUniformMatrix4fv(glGetUniformLocation(m_ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
-void Shader::setFloat(const std::string& name, float value) const
+void Shader::SetFloat(const std::string& name, float value) const
 {
 	glUniform1f(glGetUniformLocation(m_ID, name.c_str()), value);
 }
 
-void Shader::setInt(const std::string& name, int value) const
+void Shader::SetInt(const std::string& name, int value) const
 {
 	glUniform1i(glGetUniformLocation(m_ID, name.c_str()), value);
 }
 
-void Shader::checkCompileErrors(GLuint shader, const std::string& type)
+void Shader::CheckCompileErrors(GLuint shader, const std::string& type)
 {
 	GLint success;
 	GLchar infoLog[1024];

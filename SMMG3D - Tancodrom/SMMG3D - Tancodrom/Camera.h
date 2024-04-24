@@ -21,11 +21,11 @@ public:
     void ProcessMouseScroll(float yOffset);
     void ProcessMouseMovement(float xOffset, float yOffset, bool constrainPitch = true);
 
-private:
-    void Reshape();
-
     const glm::mat4 GetViewMatrix() const;
     const glm::mat4 GetProjectionMatrix() const;
+
+private:
+    void Reshape();
 
     const float m_zNEAR = 0.1f;
     const float m_zFAR = 500.f;

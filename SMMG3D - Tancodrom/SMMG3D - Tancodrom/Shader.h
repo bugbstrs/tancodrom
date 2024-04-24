@@ -11,24 +11,24 @@ public:
 	Shader(const std::string& vertexPath, const std::string& fragmentPath);
 	~Shader();
 
-	void use() const;
+	void Use() const;
 
-	GLuint getID() const;
+	GLuint GetID() const;
 
 	GLuint modelMatrixLocation;
 	GLuint viewMatrixLocation;
 	GLuint projMatrixLocation;
 
-	void setVec3(const std::string& name, const glm::vec3& value) const;
-	void setVec3(const std::string& name, float x, float y, float z) const;
-	void setVec4(const std::string& name, const glm::vec4& value) const;
-	void setMat4(const std::string& name, const glm::mat4& mat) const;
-	void setFloat(const std::string& name, float value) const;
-	void setInt(const std::string& name, int value) const;
+	void SetVec3(const std::string& name, const glm::vec3& value) const;
+	void SetVec3(const std::string& name, float x, float y, float z) const;
+	void SetVec4(const std::string& name, const glm::vec4& value) const;
+	void SetMat4(const std::string& name, const glm::mat4& mat) const;
+	void SetFloat(const std::string& name, float value) const;
+	void SetInt(const std::string& name, int value) const;
 
 private:
 
-	void checkCompileErrors(GLuint shader, const std::string& type);
+	void CheckCompileErrors(GLuint shader, const std::string& type);
 
 	GLuint m_ID;
 
