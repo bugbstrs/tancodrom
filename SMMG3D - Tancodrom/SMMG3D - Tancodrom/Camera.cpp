@@ -6,21 +6,13 @@
 #include "Camera.h"
 #include "InputManager.h"
 
-Camera::Camera(const glm::vec3& position, const glm::vec3 rotation)
+Camera::Camera(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
+    SceneObject(position, size, rotation)
 {
-    SetPosition(position);
-
     m_width = glfwGetVideoMode(glfwGetPrimaryMonitor())->width;
     m_height = glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
 
-    m_lastX = m_width / 2.0f;
-    m_lastY = m_height / 2.0f;
-    m_bFirstMouseMove = true;
-
     m_FOV = 70.0f;
-
-    ProjMatrixLocation = glGetUniformLocation(Program::GetProgramID(), "ProjMatrix");
-    ViewMatrixLocation = glGetUniformLocation(Program::GetProgramID(), "ViewMatrix");
 }
 
 void Camera::Update()
@@ -28,12 +20,6 @@ void Camera::Update()
     Reshape();
 
     ProcessInput();
-
-    glm::mat4 projection = GetProjectionMatrix();
-    glUniformMatrix4fv(ProjMatrixLocation, 1, GL_FALSE, glm::value_ptr(projection));
-
-    glm::mat4 view = GetViewMatrix();
-    glUniformMatrix4fv(ViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(view));
 }
 
 const glm::mat4 Camera::GetViewMatrix() const
@@ -50,66 +36,34 @@ const glm::mat4 Camera::GetProjectionMatrix() const
 
 void Camera::ProcessInput()
 {
-    float velocity = (float)(cameraSpeedFactor * Scene::GetDeltaTime());
+    float velocity = (float)(m_cameraSpeedFactor * Scene::GetDeltaTime());
 
+    //move
     if (InputManager::KeyDown(GLFW_KEY_W))
-        Move(Scene::Forward() * velocity);
+        Move(GetForward() * velocity);
     if (InputManager::KeyDown(GLFW_KEY_A))
-        Move(-Scene::Right() * velocity);
+        Move(-GetRight() * velocity);
     if (InputManager::KeyDown(GLFW_KEY_S))
-        Move(-Scene::Forward() * velocity);
+        Move(-GetForward() * velocity);
     if (InputManager::KeyDown(GLFW_KEY_D))
-        Move(Scene::Right() * velocity);
-}
+        Move(GetRight() * velocity);
 
-void Camera::MouseControl(float xPos, float yPos)
-{
-    //if (m_bFirstMouseMove)
-    //{
-    //    m_lastX = xPos;
-    //    m_lastY = yPos;
-    //    m_bFirstMouseMove = false;
-    //}
+    //rotation
+    Rotate(glm::vec3(-InputManager::MouseMoveY() * m_mouseSensitivity,
+        -InputManager::MouseMoveX() * m_mouseSensitivity,
+        0));
 
-    //float xChange = xPos - m_lastX;
-    //float yChange = m_lastY - yPos;
-    //m_lastX = xPos;
-    //m_lastY = yPos;
+    if (m_rotation.x > 89.0f)
+        m_rotation.x = 89.0f;
+    if (m_rotation.x < -89.0f)
+        m_rotation.x = -89.0f;
 
-    //if (fabs(xChange) <= 1e-6 && fabs(yChange) <= 1e-6)
-    //{
-    //    return;
-    //}
-    //xChange *= mouseSensitivity;
-    //yChange *= mouseSensitivity;
-
-    //ProcessMouseMovement(xChange, yChange);
-}
-
-void Camera::ProcessMouseScroll(float yOffset)
-{
-    //if (m_FOV >= 1.0f && m_FOV <= 90.0f)
-    //{
-    //    m_FOV -= yOffset;
-    //}
-    //if (m_FOV <= 1.0f)
-    //    m_FOV = 1.0f;
-    //if (m_FOV >= 90.0f)
-    //    m_FOV = 90.0f;
-}
-
-void Camera::ProcessMouseMovement(float xOffset, float yOffset, bool constrainPitch)
-{
-    //m_yaw += xOffset;
-    //m_pitch += yOffset;
-
-    //if (constrainPitch)
-    //{
-    //    if (m_pitch > 89.0f)
-    //        m_pitch = 89.0f;
-    //    if (m_pitch < -89.0f)
-    //        m_pitch = -89.0f;
-    //}
+    //zoom
+    m_FOV -= InputManager::ScrollY();
+    if (m_FOV <= 45.0f)
+        m_FOV = 45.0f;
+    if (m_FOV >= 90.0f)
+        m_FOV = 90.0f;
 }
 
 void Camera::Reshape()
