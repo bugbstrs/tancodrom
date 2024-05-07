@@ -1,6 +1,7 @@
 #include <glm/gtc/quaternion.hpp>
 
 #include "SceneObject.h"
+#include <GLFW/glfw3.h>
 
 SceneObject::SceneObject(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     m_position{ position },
@@ -77,6 +78,11 @@ void SceneObject::Rotate(glm::vec3 direction)
     m_rotation += glm::eulerAngles(rotation);
 
     NormalizeRotation();
+}
+
+void SceneObject::RotateAround(float distance, float rotationAngle)
+{
+    m_position = glm::vec3(distance * cos(rotationAngle), distance * sin(rotationAngle), 0.f);
 }
 
 glm::vec3 SceneObject::GetSize() const

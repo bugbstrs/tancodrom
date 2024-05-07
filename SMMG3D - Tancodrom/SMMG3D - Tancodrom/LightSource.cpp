@@ -1,7 +1,7 @@
 #include "LightSource.h"
 #include "Scene.h"
 
-LightSource::LightSource(const glm::vec3& position, const glm::vec3& size, const glm::vec3& rotation) :
+LightSource::LightSource(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     SceneObject(position, size, rotation)
 {}
 

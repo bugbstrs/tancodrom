@@ -20,7 +20,7 @@ public:
 	glm::vec3 GetRotation() const;
 	void SetRotation(glm::vec3 rotation);
 	void Rotate(glm::vec3 direction);
-	//TODO: rotatie in jurul unui punct cu o anumita viteza
+	void RotateAround(float distance, float rotationSpeed);
 
 	glm::vec3 GetSize() const;
 	void SetSize(glm::vec3 size);
@@ -37,6 +37,9 @@ protected:
 	glm::vec3 m_position;
 	glm::vec3 m_rotation;
 	glm::vec3 m_size;
+
+	float RotationAngle = 0;
+	const float DegreesToRadians = 0.01745f;
 
 private:
 	void NormalizeRotation();

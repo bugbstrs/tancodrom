@@ -2,6 +2,8 @@
 #include "Scene.h"
 #include "InputManager.h"
 #include "Tank.h"
+#include "Moon.h"
+#include "Sun.h"
 
 std::vector<SceneObject*> Scene::m_objects;
 std::vector<LightSource*> Scene::m_lights;
@@ -17,6 +19,9 @@ void Scene::Start()
 
 	m_lights.emplace_back(new LightSource(glm::vec3(5, 5, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.push_back(m_lights[0]);
+
+	m_objects.push_back(new Moon(glm::vec3(0, 5, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Sun(glm::vec3(0, -3, 0), glm::vec3(0.001), glm::vec3(0, 0, 0)));
 }
 
 void Scene::Run()
