@@ -2,6 +2,18 @@
 
 #include "SceneObject.h"
 
+SceneObject::SceneObject(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
+    m_position{ position },
+    m_size{ size },
+    m_rotation{ rotation },
+    m_model{ nullptr }
+{}
+
+void SceneObject::SetModel(std::string const& path, bool bSmoothNormals)
+{
+    m_model = new Model(path, bSmoothNormals);
+}
+
 glm::vec3 SceneObject::GetPosition() const
 {
     return m_position;
@@ -12,19 +24,9 @@ void SceneObject::SetPosition(glm::vec3 position)
     m_position = position;
 }
 
-void SceneObject::Move(glm::vec3 direction, bool globalCoordonates)
+void SceneObject::Move(glm::vec3 direction)
 {
-    if (globalCoordonates)
-    {
-        m_position += direction;
-        return;
-    }
-
-    glm::vec3 localDirection = glm::vec3(glm::dot(direction, GetRight()),
-                                         glm::dot(direction, GetUp()),
-                                         glm::dot(direction, GetForward()));
-
-    m_position += localDirection;
+    m_position += direction;
 }
 
 glm::vec3 SceneObject::GetRotation() const
@@ -36,7 +38,7 @@ glm::vec3 SceneObject::GetForward() const
 {
     glm::mat4 rotationMatrix = glm::mat4_cast(glm::quat(glm::radians(m_rotation)));
 
-    glm::vec3 forward = glm::vec3(rotationMatrix * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f));
+    glm::vec3 forward = glm::vec3(rotationMatrix * glm::vec4(0.0f, 0.0f, 1.0f, 0.0f));
 
     return glm::normalize(forward);
 }
@@ -45,7 +47,7 @@ glm::vec3 SceneObject::GetRight() const
 {
     glm::mat4 rotationMatrix = glm::mat4_cast(glm::quat(glm::radians(m_rotation)));
 
-    glm::vec3 right = glm::vec3(rotationMatrix * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+    glm::vec3 right = glm::vec3(rotationMatrix * glm::vec4(-1.0f, 0.0f, 0.0f, 0.0f));
 
     return glm::normalize(right);
 }
@@ -72,8 +74,8 @@ void SceneObject::Rotate(glm::vec3 direction)
 
     glm::quat rotation = glm::quat(direction);
 
-    m_rotation = glm::eulerAngles(rotation);
-    
+    m_rotation += glm::eulerAngles(rotation);
+
     NormalizeRotation();
 }
 
@@ -93,7 +95,20 @@ void SceneObject::NormalizeRotation()
     m_rotation.y = fmod(m_rotation.y, 360.0f);
     m_rotation.z = fmod(m_rotation.z, 360.0f);
 
-    if (m_rotation.x < 0) m_rotation.x += 360.0f;
-    if (m_rotation.y < 0) m_rotation.y += 360.0f;
-    if (m_rotation.z < 0) m_rotation.z += 360.0f;
+    //if (m_rotation.x < 0) m_rotation.x += 360.0f;
+    //if (m_rotation.y < 0) m_rotation.y += 360.0f;
+    //if (m_rotation.z < 0) m_rotation.z += 360.0f;
+}
+
+void SceneObject::Render(Shader& shader)
+{
+    if (!m_model)
+        return;
+    glm::mat4 model(1.0f);
+    model = glm::translate(model, m_position);
+    model = glm::rotate(model, glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, m_size);
+    m_model->RenderModel(shader, model);
 }
