@@ -4,6 +4,7 @@
 #include "Tank.h"
 #include "Moon.h"
 #include "Sun.h"
+#include "Helicopter.h"
 
 std::vector<SceneObject*> Scene::m_objects;
 std::vector<LightSource*> Scene::m_lights;
@@ -19,6 +20,7 @@ void Scene::Start()
 	m_objects.emplace_back(new Tank(glm::vec3(-10, 0, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(10, 0, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
+
 	m_camera->SetTank(new Tank(glm::vec3(20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.push_back(m_camera->GetTank());
 
@@ -28,11 +30,13 @@ void Scene::Start()
 	m_objects.emplace_back(new Tank(glm::vec3(10, 0, 35), glm::vec3(1), glm::vec3(0, 180, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(20, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
 
-	m_lights.emplace_back(new LightSource(glm::vec3(5, 5, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(0, 15, 0), glm::vec3(0.5), glm::vec3(-90, 0, 180)));
+
+	m_lights.emplace_back(new LightSource(glm::vec3(5, 10, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.push_back(m_lights[0]);
 
-	m_objects.push_back(new Moon(glm::vec3(0, 5, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
-	m_objects.push_back(new Sun(glm::vec3(0, -3, 0), glm::vec3(0.001), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Moon(glm::vec3(0, 5, 0), glm::vec3(5), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Sun(glm::vec3(0, -5, 0), glm::vec3(0.017), glm::vec3(0, 0, 0)));
 }
 
 void Scene::Run()
