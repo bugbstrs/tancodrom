@@ -5,9 +5,10 @@
 #include <glm/fwd.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath)
+void Shader::Initialize(const std::string& path)
 {
-
+	std::string vertexPath = path + ".vs";
+	std::string fragmentPath = path + ".fs";
 	std::string vertexCode;
 	std::string fragmentCode;
 	std::ifstream vertexShaderFile;
