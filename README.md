@@ -5,7 +5,7 @@
 - Teglas Dennis-Vlăduț • [github](https://github.com/tdenniss) • [dennis.teglas@student.unitbv.ro](mailto:dennis.teglas@student.unitbv.ro)
 - Stoica David-Ioan • [github](https://github.com/stoica-david) • [david.stoica@student.unitbv.ro](mailto:david.stoica@student.unitbv.ro)
 - Tufeanu Andrei-Ionuț • [github](https://github.com/andreitufeanu) • [andrei.tufeanu@student.unitbv.ro](mailto:andrei.tufeanu@student.unitbv.ro)
-- Sas Vlad-Ștefan • [github](https://github.com/vlsts) • [me@svs.pm](mailto:me@svs.pm) • [pgp key](https://keys.openpgp.org/search?q=ED82B2B95B3BEC7FEFC59C956E2186ECD0848BCA) (commits signed with this key)
+- Sas Vlad-Ștefan • [github](https://github.com/vlsts) • [me@svs.pm](mailto:me@svs.pm) • [pgp key](https://keys.openpgp.org/search?q=ED82B2B95B3BEC7FEFC59C956E2186ECD0848BCA) (commits signed with this key until `cd6312f5`, from that point commits are signed with a SSH key)
 
 # 📎 Basic description
 Simulation of a tank and helicopter tanker field on a battlefield, with clouds, having day and night cycles.
