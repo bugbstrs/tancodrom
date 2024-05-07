@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <memory>
 
 #include <glm/GLM.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -10,17 +11,27 @@
 #include "Vertex.h"
 #include "Texture.h"
 
-class Mesh {
-public:
-    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
-    void Draw(Shader& shader);
-private:
-    // mesh data
-    std::vector<Vertex>       vertices;
-    std::vector<unsigned int> indices;
-    std::vector<Texture>      textures;
-    //  render data
-    unsigned int VAO, VBO, EBO;
+using namespace std;
 
+class Mesh
+{
+public:
+    // mesh Data
+    unsigned int numVertices;
+    std::shared_ptr <Vertex> vertices;
+
+    unsigned int numIndexes;
+    std::shared_ptr <unsigned int> indices;
+    vector<Texture> textures;
+    unsigned int VAO;
+
+    Mesh(const vector<Vertex> &vertices, const vector<unsigned int> &indices, const vector<Texture> &textures);
+    Mesh(unsigned int numVertices, std::shared_ptr <Vertex> vertices, unsigned int numIndexes, std::shared_ptr <unsigned int> indices, const vector<Texture> &textures);
+    void RenderMesh(Shader &shader, const glm::mat4 &model = glm::mat4(1));
+
+protected:
     void setupMesh();
+private:
+    // render data 
+    unsigned int VBO, EBO;
 };
