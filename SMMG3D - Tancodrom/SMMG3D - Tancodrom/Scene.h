@@ -3,7 +3,7 @@
 #include <vector>
 #include <GLFW/glfw3.h>
 
-#include "SceneObject.h"
+#include "LightSource.h"
 #include "Camera.h"
 #include "Shader.h"
 #include "Texture.h"
@@ -26,10 +26,9 @@ public:
 	static glm::vec3 Right();
 	static glm::vec3 Up();
 
-	static void LoadObjects();
-
 private:
 	static std::vector<SceneObject*> m_objects;
+	static std::vector<LightSource*> m_lights;
 	static Camera* m_camera;
 
 	static float m_deltaTime;

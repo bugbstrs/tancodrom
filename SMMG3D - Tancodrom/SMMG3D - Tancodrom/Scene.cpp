@@ -1,28 +1,22 @@
 #include "Program.h"
 #include "Scene.h"
-
+#include "InputManager.h"
+#include "Tank.h"
 
 std::vector<SceneObject*> Scene::m_objects;
+std::vector<LightSource*> Scene::m_lights;
 Camera* Scene::m_camera;
 float Scene::m_deltaTime;
 
-// Texture loading
-Texture floorTexture("Skybox\\Floor.png");
-Texture skyboxTexture({
-	"Skybox\\left.jpg",
-	"Skybox\\right.jpg",
-	"Skybox\\top.jpg",
-	"Skybox\\bottom.jpg",
-	"Skybox\\front.jpg",
-	"Skybox\\back.jpg"
-	});
-
-std::unique_ptr<SkyBox> Scene::m_skybox;;
-
 void Scene::Start()
 {
-	m_camera = new Camera(glm::vec3(0.5, 0.5, 10), glm::vec3(0, 0, 0));
+	m_camera = new Camera(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0));
 	m_objects.push_back(m_camera);
+
+	m_objects.emplace_back(new Tank(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+
+	m_lights.emplace_back(new LightSource(glm::vec3(5, 5, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.push_back(m_lights[0]);
 }
 
 void Scene::Run()
@@ -30,36 +24,87 @@ void Scene::Run()
 	float lastFrame = 0;
 	m_deltaTime = 0;
 
-	Shader skyboxShader("skybox.vs", "skybox.fs");
-	skyboxShader.Use();
-	skyboxShader.SetInt("skybox", 0);
+	unsigned int depthMapFBO;
+	glGenFramebuffers(1, &depthMapFBO);
+	const unsigned int SHADOW_WIDTH = 4096, SHADOW_HEIGHT = 4096;
+	unsigned int depthMap;
+	glGenTextures(1, &depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	Program::m_shadowMappingShader.Use();
+	Program::m_shadowMappingShader.SetInt("diffuseTexture", 0);
+	Program::m_shadowMappingShader.SetInt("shadowMap", 1);
 
-	float hue = 1.0;
-	float floorHue = 0.9;
-	float timeAcceleration = 0.1f;
+	Start();
 
 	while (true)//TODO:  while (!glfwWindowShouldClose(window)) de preferat in Program.cpp
 	{
+		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		float currentFrame = glfwGetTime();
 		m_deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		//logica
 		for (auto object : m_objects)
 		{
 			object->Update();
 		}
 
-		float sunPassingTime = currentFrame * timeAcceleration;
-		hue = std::max<float>(sin(sunPassingTime), 0.1);
+		//randare umbre
+		for (auto light : m_lights) {
+			Program::m_shadowMappingDepthShader.Use();
+			Program::m_shadowMappingDepthShader.SetMat4("lightSpaceMatrix", light->GetLightSpaceMatrix());
 
-		glm::mat4 projection = m_camera->GetProjectionMatrix();
+			glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+			glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+			glClear(GL_DEPTH_BUFFER_BIT);
 
-		skyboxShader.Use();
-		skyboxShader.SetMat4("projection", projection);
-		skyboxShader.SetMat4("view", glm::mat4(glm::mat3(m_camera->GetViewMatrix())));
-		skyboxShader.SetFloat("hue", hue);
-		skyboxShader.SetFloat("time", currentFrame);
-		m_skybox->Render(skyboxShader);
+			for (auto object : m_objects)
+			{
+				object->Render(Program::m_shadowMappingDepthShader);
+			}
+
+			glActiveTexture(GL_TEXTURE0);
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_FRONT);
+			glCullFace(GL_BACK);
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		}
+
+		glViewport(0, 0, Program::GetScreenWidth(), Program::GetScreenHeight());
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//randare scena
+		Program::m_shadowMappingShader.Use();
+		Program::m_shadowMappingShader.SetMat4("projection", m_camera->GetProjectionMatrix());
+		Program::m_shadowMappingShader.SetMat4("view", m_camera->GetViewMatrix());
+
+		Program::m_shadowMappingShader.SetVec3("viewPos", m_camera->GetPosition());
+		Program::m_shadowMappingShader.SetVec3("lightPos", m_lights[0]->GetPosition());
+		Program::m_shadowMappingShader.SetMat4("lightSpaceMatrix", m_lights[0]->GetLightSpaceMatrix());
+		glActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, depthMap);
+
+		for (auto object : m_objects)
+		{
+			object->Render(Program::m_shadowMappingShader);
+		}
+
+		InputManager::ClearMouseMovement();
 
 		glfwSwapBuffers(Program::GetWindow());
 		glfwPollEvents();
@@ -73,7 +118,7 @@ void Scene::Instantiate(SceneObject* object)
 
 glm::vec3 Scene::Forward()
 {
-	return glm::vec3(0.0f, 0.0f, -1.0f);
+	return glm::vec3(0.0f, 0.0f, 1.0f);
 }
 
 glm::vec3 Scene::Right()
@@ -84,24 +129,6 @@ glm::vec3 Scene::Right()
 glm::vec3 Scene::Up()
 {
 	return glm::vec3(0.0f, 1.0f, 0.0f);
-}
-
-void Scene::LoadObjects()
-{
-	// Positions loading
-	const float floorSize = 50.0f;
-	std::vector<float> floorVertices{
-		// positions            // normals           // texcoords
-		floorSize, 0.0f,  floorSize,  0.0f, 1.0f, 0.0f,    floorSize,  0.0f,
-		-floorSize, 0.0f,  floorSize,  0.0f, 1.0f, 0.0f,    0.0f,  0.0f,
-		-floorSize, 0.0f, -floorSize,  0.0f, 1.0f, 0.0f,    0.0f, floorSize,
-
-		floorSize, 0.0f,  floorSize,  0.0f, 1.0f, 0.0f,    floorSize,  0.0f,
-		-floorSize, 0.0f, -floorSize,  0.0f, 1.0f, 0.0f,    0.0f, floorSize,
-		floorSize, 0.0f, -floorSize,  0.0f, 1.0f, 0.0f,    floorSize, floorSize
-	};
-
-	m_skybox = std::make_unique<SkyBox>(SkyBox(skyboxTexture));
 }
 
 float Scene::GetDeltaTime()
