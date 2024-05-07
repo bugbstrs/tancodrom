@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "Shader.h";
+
 class Program
 {
 public:
@@ -17,14 +19,17 @@ public:
 	static unsigned int GetScreenWidth();
 	static unsigned int GetScreenHeight();
 
+	static Shader m_shadowMappingShader;
+	static Shader m_shadowMappingDepthShader;
+
 private:
 	static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
 	static void Initialize();
-	static void CreateVBO();
 	static void CreateShaders();
 
 	static GLuint m_programId;
 	static GLFWwindow* m_window;
+
 	static unsigned int m_screenWidth;
 	static unsigned int m_screenHeight;
 };
