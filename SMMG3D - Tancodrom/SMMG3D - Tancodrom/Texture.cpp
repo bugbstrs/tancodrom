@@ -1,8 +1,7 @@
 #include "Texture.h"
 
-#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
-#include <stb_image.h>
 #include <GL/glew.h>
 #include <iostream>
 #include <filesystem>
@@ -19,7 +18,7 @@ Texture::Texture(const std::string& texturePath)
 
 	unsigned char* data = stbi_load(texturePath.c_str(), &width, &height, &nrChannels, 0);
 
-	if (data) 
+	if (data)
 	{
 		GLenum format;
 
