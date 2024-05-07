@@ -15,7 +15,18 @@ void Scene::Start()
 	m_camera = new Camera(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0));
 	m_objects.push_back(m_camera);
 
+	m_objects.emplace_back(new Tank(glm::vec3(-20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(-10, 0, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(10, 0, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_camera->SetTank(new Tank(glm::vec3(20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.push_back(m_camera->GetTank());
+
+	m_objects.emplace_back(new Tank(glm::vec3(-20, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(-10, 0, 35), glm::vec3(1), glm::vec3(0, 180, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(0, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(10, 0, 35), glm::vec3(1), glm::vec3(0, 180, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(20, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
 
 	m_lights.emplace_back(new LightSource(glm::vec3(5, 5, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.push_back(m_lights[0]);
@@ -139,4 +150,9 @@ glm::vec3 Scene::Up()
 float Scene::GetDeltaTime()
 {
 	return m_deltaTime;
+}
+
+Camera* Scene::GetCamera()
+{
+	return m_camera;
 }

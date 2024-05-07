@@ -17,9 +17,12 @@ public:
     void Update() override;
 
     void ProcessInput();
+    void SetTank(SceneObject* tank);
 
+    SceneObject* GetTank() const;
     const glm::mat4 GetViewMatrix() const;
     const glm::mat4 GetProjectionMatrix() const;
+
 
 private:
     void Reshape();
@@ -30,6 +33,8 @@ private:
     const float m_mouseSensitivity = 2.5f;
 
     // Perspective properties
+    SceneObject* m_tank;
+    bool m_isFirstPerson;
     float m_FOV;
     int m_width;
     int m_height;

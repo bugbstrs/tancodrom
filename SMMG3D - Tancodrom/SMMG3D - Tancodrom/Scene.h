@@ -21,6 +21,7 @@ public:
 	static void Instantiate(SceneObject* object);
 
 	static float GetDeltaTime();
+	static Camera* GetCamera();
 
 	static glm::vec3 Forward();
 	static glm::vec3 Right();
