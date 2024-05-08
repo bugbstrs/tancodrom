@@ -4,7 +4,7 @@
 Tank::Tank(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     SceneObject(position, size, rotation), isMoving(true)
 {
-    SetModel("Models/Tanks/Tank/IS.obj", false);
+    SetModel("Models/Tanks/Tank/IS.obj", false, 2);
 }
 
 void Tank::Update()

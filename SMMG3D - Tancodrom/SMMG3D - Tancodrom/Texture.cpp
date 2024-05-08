@@ -50,7 +50,8 @@ Texture::Texture(const std::string& texturePath)
 	}
 	else
 	{
-		std::cout << "Failed to load texture: " << texturePath << std::endl;
+		if (!texturePath.contains("Helicopter"))
+			std::cout << "Failed to load texture: " << texturePath << std::endl;
 	}
 
 	stbi_image_free(data);

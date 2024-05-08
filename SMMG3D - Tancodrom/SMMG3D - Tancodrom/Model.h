@@ -16,9 +16,10 @@ public:
     std::vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
     std::vector<Mesh>    meshes;
     std::string directory;
+    int modelId;
 
     // constructor, expects a filepath to a 3D model.
-    Model(std::string const &path, bool bSmoothNormals);
+    Model(std::string const &path, bool bSmoothNormals, int modelId);
 
     // draws the model, and thus all its meshes
     void RenderModel(Shader &shader, const glm::mat4 &model = glm::mat4(1));

@@ -9,7 +9,7 @@ class SceneObject
 public:
 	SceneObject(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation);
 
-	void SetModel(std::string const& path, bool bSmoothNormals);
+	void SetModel(std::string const& path, bool bSmoothNormals, int modelId);
 
 	virtual void Update() = 0;
 

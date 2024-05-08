@@ -10,9 +10,9 @@ SceneObject::SceneObject(const glm::vec3& position, const glm::vec3& size, const
     m_model{ nullptr }
 {}
 
-void SceneObject::SetModel(std::string const& path, bool bSmoothNormals)
+void SceneObject::SetModel(std::string const& path, bool bSmoothNormals, int modelId)
 {
-    m_model = new Model(path, bSmoothNormals);
+    m_model = new Model(path, bSmoothNormals, modelId);
 }
 
 glm::vec3 SceneObject::GetPosition() const

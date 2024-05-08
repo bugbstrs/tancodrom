@@ -4,10 +4,14 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #endif
+#include "Helicopter.h"
+#include "Moon.h"
+#include "Sun.h"
+#include "Tank.h"
 
-Model::Model(std::string const &path, bool bSmoothNormals)
+Model::Model(std::string const &path, bool bSmoothNormals, int modelId)
 {
-    textures_loaded.emplace_back(Texture(path));
+    modelId = modelId;
     loadModel(path, bSmoothNormals);
 }
 
@@ -140,7 +144,19 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-    //textures_loaded.emplace_back(Texture("Models/Moon/Moon.obj"));
+    
+    if (modelId == 2)
+    {
+        textures = Helicopter::textures;
+    }
+    if (modelId == 3)
+    {
+        textures = Moon::textures;
+    }
+    if (modelId == 4)
+    {
+        textures = Sun::textures;
+    }
 
     // return a mesh object created from the extracted mesh data
     return Mesh(vertices, indices, textures);
