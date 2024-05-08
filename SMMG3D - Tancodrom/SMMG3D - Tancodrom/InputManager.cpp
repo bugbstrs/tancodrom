@@ -7,15 +7,26 @@ float InputManager::m_oldMouseX = 0;
 float InputManager::m_oldMouseY = 0;
 float InputManager::m_scrollY = 0;
 bool InputManager::m_mouseMoved = false;
+std::unordered_set<int> InputManager::m_pressedKeys;
 
 bool InputManager::KeyDown(int key)
 {
-    return glfwGetKey(Program::GetWindow(), key) == GLFW_PRESS;
+    bool isKeyPressed = glfwGetKey(Program::GetWindow(), key) == GLFW_PRESS;
+
+    if (isKeyPressed && !m_pressedKeys.count(key)) {
+        m_pressedKeys.insert(key);
+        return true;
+    }
+    else if (!isKeyPressed && m_pressedKeys.count(key)) {
+        m_pressedKeys.erase(key);
+    }
+
+    return false;
 }
 
-bool InputManager::PrimaryClick()
+bool InputManager::KeyHold(int key)
 {
-    return glfwGetMouseButton(Program::GetWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+    return glfwGetKey(Program::GetWindow(), key) == GLFW_PRESS;
 }
 
 float InputManager::MouseMoveX()

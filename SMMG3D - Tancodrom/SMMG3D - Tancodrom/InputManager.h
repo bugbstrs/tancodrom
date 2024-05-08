@@ -1,4 +1,6 @@
 #pragma once
+#include <unordered_set>
+
 #include "Program.h"
 #include "Scene.h"
 
@@ -6,8 +8,7 @@ class InputManager
 {
 public:
 	static bool KeyDown(int key);//ex key: GLFW_KEY_W
-
-	static bool PrimaryClick();
+	static bool KeyHold(int key);//ex key: GLFW_KEY_W
 
 	static float MouseMoveX();
 	static float MouseMoveY();
@@ -15,6 +16,8 @@ public:
 	static float ScrollY();
 
 private:
+	static std::unordered_set<int> m_pressedKeys;
+
 	static float m_mouseChangedX;
 	static float m_mouseChangedY;
 	static float m_oldMouseX;
