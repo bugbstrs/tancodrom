@@ -1,7 +1,10 @@
 #include "Sun.h"
 #include "Scene.h"
+#include "InputManager.h"
 
 std::vector<Texture> Sun::textures;
+float Sun::rotationSpeed = 0.1f;
+float Sun::lastFrame;
 
 Sun::Sun(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation):
 	LightSource(position, size, rotation)
@@ -13,5 +16,5 @@ Sun::Sun(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotat
 
 void Sun::Update()
 {
-	RotateAround(-35.f, 0.2f * glfwGetTime());
+	RotateAround(-5.f, 0.1f * glfwGetTime());
 }

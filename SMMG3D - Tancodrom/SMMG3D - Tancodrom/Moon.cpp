@@ -1,7 +1,10 @@
 #include "Moon.h"
 #include "Scene.h"
+#include "InputManager.h"
 
 std::vector<Texture> Moon::textures;
+float Moon::rotationSpeed = 0.1f;
+float Moon::lastFrame;
 
 Moon::Moon(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     LightSource(position, size, rotation)
@@ -15,5 +18,5 @@ Moon::Moon(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rot
 
 void Moon::Update()
 {
-    RotateAround(35.f, 0.2f * glfwGetTime());
+    RotateAround(5.f, 0.1f * glfwGetTime());
 }

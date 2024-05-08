@@ -78,8 +78,12 @@ void SceneObject::Rotate(glm::vec3 direction)
 
 void SceneObject::RotateAround(float distance, float rotationAngle)
 {
-    m_position = glm::vec3(distance * cos(rotationAngle), distance * sin(rotationAngle), 0.f);
+    float scaleX = 25.0f; // Adjust this value to control the width of the ellipse
+    float scaleY = 7.0f; // Adjust this value to control the height of the ellipse
+
+    m_position = glm::vec3(distance * scaleX * cos(rotationAngle), distance * scaleY * sin(rotationAngle), 0.f);
 }
+
 
 glm::vec3 SceneObject::GetSize() const
 {

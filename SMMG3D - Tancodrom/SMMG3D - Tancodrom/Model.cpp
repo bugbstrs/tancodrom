@@ -12,6 +12,7 @@
 Model::Model(std::string const &path, bool bSmoothNormals, int modelId)
 {
     modelId = modelId;
+    textures_loaded.emplace_back(Texture(path));
     loadModel(path, bSmoothNormals);
 }
 

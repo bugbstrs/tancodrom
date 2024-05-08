@@ -51,6 +51,7 @@ void Program::Run()
     glfwSetFramebufferSizeCallback(m_window, FramebufferSizeCallback);
     glfwSetCursorPosCallback(m_window, InputManager::MouseCallback);
     glfwSetScrollCallback(m_window, InputManager::ScrollCallback);
+    glfwSetKeyCallback(m_window, InputManager::KeyCallback);
 
     glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 

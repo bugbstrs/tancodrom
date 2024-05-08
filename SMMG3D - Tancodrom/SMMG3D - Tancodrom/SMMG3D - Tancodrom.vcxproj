@@ -152,6 +152,7 @@
     <ClCompile Include="SMMG3D - Tancodrom.cpp" />
     <ClCompile Include="Sun.cpp" />
     <ClCompile Include="Tank.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +173,7 @@
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="Sun.h" />
     <ClInclude Include="Tank.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
