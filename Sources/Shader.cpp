@@ -7,8 +7,10 @@
 
 void Shader::Initialize(const std::string& path)
 {
-	std::string vertexPath = path + ".vs";
-	std::string fragmentPath = path + ".fs";
+	// std::string vertexPath = path + ".vs";
+	std::string vertexPath = std::format("Vertex Shaders/{}.vs", path);
+	// std::string fragmentPath = path + ".fs";
+	std::string fragmentPath = std::format("Fragment Shaders/{}.fs", path);
 	std::string vertexCode;
 	std::string fragmentCode;
 	std::ifstream vertexShaderFile;
