@@ -76,11 +76,11 @@ void Camera::ProcessInput()
 
     //rotation
     if (ptr == this)
-        ptr->Rotate(glm::vec3(-InputManager::MouseMoveY() * m_mouseSensitivity,
-            -InputManager::MouseMoveX() * m_mouseSensitivity,
+        ptr->Rotate(glm::vec3(-InputManager::MouseMoveY() * m_mouseSensitivity * Scene::GetDeltaTime(),
+            -InputManager::MouseMoveX() * m_mouseSensitivity * Scene::GetDeltaTime(),
             0));
     else
-        ptr->Rotate(glm::vec3(0, -InputManager::MouseMoveX() * m_mouseSensitivity, 0));
+        ptr->Rotate(glm::vec3(0, -InputManager::MouseMoveX() * m_mouseSensitivity * Scene::GetDeltaTime(), 0));
 
 
 

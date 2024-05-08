@@ -71,11 +71,7 @@ void SceneObject::SetRotation(glm::vec3 rotation)
 
 void SceneObject::Rotate(glm::vec3 direction)
 {
-    direction = glm::radians(direction);
-
-    glm::quat rotation = glm::quat(direction);
-
-    m_rotation += glm::eulerAngles(rotation);
+    m_rotation += direction;
 
     NormalizeRotation();
 }
@@ -100,10 +96,6 @@ void SceneObject::NormalizeRotation()
     m_rotation.x = fmod(m_rotation.x, 360.0f);
     m_rotation.y = fmod(m_rotation.y, 360.0f);
     m_rotation.z = fmod(m_rotation.z, 360.0f);
-
-    //if (m_rotation.x < 0) m_rotation.x += 360.0f;
-    //if (m_rotation.y < 0) m_rotation.y += 360.0f;
-    //if (m_rotation.z < 0) m_rotation.z += 360.0f;
 }
 
 void SceneObject::Render(Shader& shader)
