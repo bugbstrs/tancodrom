@@ -4,5 +4,6 @@ int main()
 {
 	Program::Run();
 
+	std::getchar();
 	return 0;
 }
