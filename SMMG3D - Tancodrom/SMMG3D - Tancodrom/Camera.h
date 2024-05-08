@@ -5,6 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "SceneObject.h"
+#include "POV.h"
 
 #pragma comment (lib, "glfw3dll.lib")
 #pragma comment (lib, "OpenGL32.lib")
@@ -18,11 +19,12 @@ public:
 
     void ProcessInput();
     void SetTank(SceneObject* tank);
+    void SetHelicopter(SceneObject* helicopter);
 
-    SceneObject* GetTank() const;
     const glm::mat4 GetViewMatrix() const;
     const glm::mat4 GetProjectionMatrix() const;
 
+    POV GetCameraPOV();
 
 private:
     void Reshape();
@@ -34,7 +36,9 @@ private:
 
     // Perspective properties
     SceneObject* m_tank;
-    bool m_isFirstPerson;
+    SceneObject* m_helicopter;
+    POV m_pov;
+
     float m_FOV;
     int m_width;
     int m_height;

@@ -113,14 +113,20 @@
     <ClInclude Include="Skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="PhongLight.vs">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="PhongLight.fs">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="sunlight.vs">
       <Filter>Resource Files</Filter>
     </None>
@@ -141,6 +147,7 @@
     </None>
     <None Include="skybox.fs" />
     <None Include="skybox.vs" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Skybox\back.jpg">

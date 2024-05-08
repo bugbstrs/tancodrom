@@ -13,7 +13,7 @@ float Scene::m_deltaTime;
 
 void Scene::Start()
 {
-	m_camera = new Camera(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0));
+	m_camera = new Camera(glm::vec3(0, 2, 0), glm::vec3(1), glm::vec3(0, 0, 0));
 	m_objects.push_back(m_camera);
 
 	m_objects.emplace_back(new Tank(glm::vec3(-20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
@@ -21,10 +21,11 @@ void Scene::Start()
 	m_objects.emplace_back(new Tank(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(10, 0, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
 
-	m_camera->SetTank(new Tank(glm::vec3(20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
-	m_objects.push_back(m_camera->GetTank());
-	m_camera->SetHelicopter(new Helicopter(glm::vec3(20, 15, 0), glm::vec3(0.5), glm::vec3(-90, 0, 180)));
-	m_objects.push_back(m_camera->GetHelicopter());
+	m_objects.emplace_back(new Tank(glm::vec3(20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_camera->SetTank(m_objects.back());
+
+	m_objects.emplace_back(new Helicopter(glm::vec3(20, 15, 0), glm::vec3(0.5), glm::vec3(-90, 0, 180)));
+	m_camera->SetHelicopter(m_objects.back());
 
 	m_objects.emplace_back(new Tank(glm::vec3(-20, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(-10, 0, 35), glm::vec3(1), glm::vec3(0, 180, 0)));

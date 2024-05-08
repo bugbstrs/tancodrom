@@ -5,10 +5,12 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "InputManager.h"
+#include "Tank.h"
+#include "Helicopter.h"
 
 Camera::Camera(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     SceneObject(position, size, rotation),
-    m_isFirstPerson(false)
+    m_pov{FreeCamera}
 {
     m_width = glfwGetVideoMode(glfwGetPrimaryMonitor())->width;
     m_height = glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
@@ -23,11 +25,6 @@ void Camera::Update()
     ProcessInput();
 }
 
-SceneObject* Camera::GetTank() const
-{
-    return m_tank;
-}
-
 const glm::mat4 Camera::GetViewMatrix() const
 {
     return glm::lookAt(GetPosition(), GetPosition() + GetForward(), GetUp());
@@ -40,18 +37,32 @@ const glm::mat4 Camera::GetProjectionMatrix() const
     return glm::perspective(glm::radians(m_FOV), aspectRatio, m_zNEAR, m_zFAR);
 }
 
+POV Camera::GetCameraPOV()
+{
+    return m_pov;
+}
+
 void Camera::SetTank(SceneObject* tank)
 {
     m_tank = tank;
+    dynamic_cast<Tank*>(m_tank)->SetCamera(this);
+}
+
+void Camera::SetHelicopter(SceneObject* helicopter)
+{
+    m_helicopter = helicopter;
+    dynamic_cast<Helicopter*>(m_helicopter)->SetCamera(this);
 }
 
 void Camera::ProcessInput()
 {
-    SceneObject* ptr;
     if (InputManager::KeyDown(GLFW_KEY_Z))
-        m_isFirstPerson = !m_isFirstPerson;
+        m_pov = m_pov == TankCamera ? FreeCamera : TankCamera;
+    if (InputManager::KeyDown(GLFW_KEY_X))
+        m_pov = m_pov == HelicopterCamera ? FreeCamera : HelicopterCamera;
 
-    if (m_isFirstPerson) {
+    if (m_pov == TankCamera)
+    {
         glm::quat tankRotationQuat = glm::quat(glm::radians(m_tank->GetRotation()));
         glm::quat cameraOffsetQuat = glm::quat(glm::vec3(glm::radians(3.0f), 0.0f, glm::radians(-7.0f)));
         glm::quat finalOffsetQuat = tankRotationQuat * cameraOffsetQuat;
@@ -59,34 +70,50 @@ void Camera::ProcessInput()
 
         m_position = m_tank->GetPosition() + cameraOffset;
         m_rotation = m_tank->GetRotation();
-        ptr = m_tank;
+
+        return;
     }
-    else ptr = this;
-    float velocity = (float)(m_cameraSpeedFactor * Scene::GetDeltaTime());
+
+    if (m_pov == HelicopterCamera)
+    {
+        glm::quat helicopterRotationQuat = glm::quat(glm::radians(m_helicopter->GetRotation() * -m_helicopter->GetForward()));
+        glm::quat cameraOffsetQuat = glm::quat(glm::vec3(glm::radians(5.0f), glm::radians(-1.0f), glm::radians(-10.0f)));
+        glm::quat finalOffsetQuat = helicopterRotationQuat * cameraOffsetQuat;
+        glm::vec3 cameraOffset = glm::vec3(finalOffsetQuat * glm::vec4(-1.0f, 5.0f, -10.0f, 1.0f));
+
+        m_position = m_helicopter->GetPosition() + cameraOffset;
+        m_rotation = m_helicopter->GetRotation() * -m_helicopter->GetForward();
+        m_rotation.x += 30;
+
+        return;
+    }
+
+    float moveSpeed = (float)(m_cameraSpeedFactor * Scene::GetDeltaTime());
+    float rotationSpeed = (float)(m_mouseSensitivity * Scene::GetDeltaTime());
 
     //move
     if (InputManager::KeyDown(GLFW_KEY_W))
-        ptr->Move(GetForward() * velocity);
+        Move(GetForward() * moveSpeed);
     if (InputManager::KeyDown(GLFW_KEY_A))
-        ptr->Move(-GetRight() * velocity);
+        Move(-GetRight() * moveSpeed);
     if (InputManager::KeyDown(GLFW_KEY_S))
-        ptr->Move(-GetForward() * velocity);
+        Move(-GetForward() * moveSpeed);
     if (InputManager::KeyDown(GLFW_KEY_D))
-        ptr->Move(GetRight() * velocity);
-    if (InputManager::KeyDown(GLFW_KEY_Q) && m_position.y < 20)
-        ptr->Move(Scene::Up() * velocity);
-    if (InputManager::KeyDown(GLFW_KEY_E) && m_position.y > 0)
-        ptr->Move(-Scene::Up() * velocity);
+        Move(GetRight() * moveSpeed);
+    if (InputManager::KeyDown(GLFW_KEY_Q))
+        Move(Scene::Up() * moveSpeed);
+    if (InputManager::KeyDown(GLFW_KEY_E))
+        Move(-Scene::Up() * moveSpeed);
+
+    if (m_position.y > 20)
+        m_position.y = 20;
+    if (m_position.y < 0)
+        m_position.y = 0;
 
     //rotation
-    if (ptr == this)
-        ptr->Rotate(glm::vec3(-InputManager::MouseMoveY() * m_mouseSensitivity * Scene::GetDeltaTime(),
-            -InputManager::MouseMoveX() * m_mouseSensitivity * Scene::GetDeltaTime(),
-            0));
-    else
-        ptr->Rotate(glm::vec3(0, -InputManager::MouseMoveX() * m_mouseSensitivity * Scene::GetDeltaTime(), 0));
-
-
+    Rotate(glm::vec3(-InputManager::MouseMoveY() * rotationSpeed,
+                     -InputManager::MouseMoveX() * rotationSpeed,
+                     0));
 
     if (m_rotation.x > 89.0f)
         m_rotation.x = 89.0f;

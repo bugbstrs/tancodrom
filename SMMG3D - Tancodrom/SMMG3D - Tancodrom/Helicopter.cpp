@@ -1,4 +1,5 @@
 #include "Helicopter.h"
+#include "InputManager.h"
 
 std::vector<Texture> Helicopter::textures;
 
@@ -16,5 +17,27 @@ Helicopter::Helicopter(const glm::vec3& position, const glm::vec3& size, const g
 
 void Helicopter::Update()
 {
+    if (!m_camera || m_camera->GetCameraPOV() != HelicopterCamera)
+        return;
 
+    float moveSpeed = (float)(m_moveSpeed * Scene::GetDeltaTime());
+    float rotationSpeed = (float)(m_rotationSpeed * Scene::GetDeltaTime());
+
+    if (InputManager::KeyDown(GLFW_KEY_W))
+        Move(-GetUp() * moveSpeed);
+    if (InputManager::KeyDown(GLFW_KEY_A))
+        Move(GetRight() * moveSpeed);
+    if (InputManager::KeyDown(GLFW_KEY_S))
+        Move(GetUp() * moveSpeed);
+    if (InputManager::KeyDown(GLFW_KEY_D))
+        Move(-GetRight() * moveSpeed);
+    if (InputManager::KeyDown(GLFW_KEY_Q))
+        Move(Scene::Up() * moveSpeed);
+    if (InputManager::KeyDown(GLFW_KEY_E))
+        Move(-Scene::Up() * moveSpeed);
+}
+
+void Helicopter::SetCamera(Camera* camera)
+{
+    m_camera = camera;
 }

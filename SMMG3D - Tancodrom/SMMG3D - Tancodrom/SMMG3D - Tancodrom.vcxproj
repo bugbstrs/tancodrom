@@ -162,6 +162,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="Moon.h" />
     <ClInclude Include="Particles.h" />
+    <ClInclude Include="POV.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneObject.h" />

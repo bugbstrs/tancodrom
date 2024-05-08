@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneObject.h"
+#include "Camera.h"
 
 class Tank : public SceneObject
 {
@@ -8,7 +9,13 @@ public:
 	
 	void Update() override;
 
+	void SetCamera(Camera* camera);
+
 private:
-	bool isMoving;
+	const float m_rotationSpeed = 30.0f;
+	const float m_moveSpeed = 2.0f;
+	
+	Camera *m_camera;
+	bool m_isMoving;
 };
 
