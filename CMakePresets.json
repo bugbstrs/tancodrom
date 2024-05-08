@@ -1,0 +1,23 @@
+{
+    "version": 2,
+    "configurePresets": [
+      {
+        "name": "Build (MSVC)",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/Build MSVC/",
+        "cacheVariables": {
+          "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+          "CMAKE_CXX_COMPILER": "cl",
+          "CMAKE_C_COMPILER": "cl",
+          "CMAKE_BUILD_TYPE": "Release"
+        },
+        "toolset": {
+          "value": "host=x64",
+          "strategy": "external"
+        },
+        "architecture": {
+          "value": "x64"
+        }
+      }
+    ]
+  }
