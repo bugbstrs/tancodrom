@@ -76,7 +76,6 @@ StyleCopReport.xml
 *_h.h
 *.ilk
 *.meta
-*.obj
 *.iobj
 *.pch
 *.pdb
@@ -398,3 +397,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Visual Studio Code
+.vscode/*
+
+# Build / Debug folders
+Build */
+Debug */
