@@ -24,3 +24,7 @@ target_link_libraries(tancodrom PRIVATE glm::glm)
 
 find_package(Stb REQUIRED)
 target_include_directories(tancodrom PRIVATE ${Stb_INCLUDE_DIR})
+
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/Vertex Shaders" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/Fragment Shaders" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/Models" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
