@@ -48,7 +48,7 @@ void Camera::SetTank(SceneObject* tank)
 void Camera::ProcessInput()
 {
     SceneObject* ptr;
-    if (InputManager::KeyDown(GLFW_KEY_E))
+    if (InputManager::KeyDown(GLFW_KEY_Z))
         m_isFirstPerson = !m_isFirstPerson;
 
     if (m_isFirstPerson) {
@@ -73,6 +73,10 @@ void Camera::ProcessInput()
         ptr->Move(-GetForward() * velocity);
     if (InputManager::KeyDown(GLFW_KEY_D))
         ptr->Move(GetRight() * velocity);
+    if (InputManager::KeyDown(GLFW_KEY_Q) && m_position.y < 20)
+        ptr->Move(Scene::Up() * velocity);
+    if (InputManager::KeyDown(GLFW_KEY_E) && m_position.y > 0)
+        ptr->Move(-Scene::Up() * velocity);
 
     //rotation
     if (ptr == this)

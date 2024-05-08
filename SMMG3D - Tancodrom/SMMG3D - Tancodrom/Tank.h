@@ -9,6 +9,6 @@ public:
 	void Update() override;
 
 private:
-
+	bool isMoving;
 };
 
