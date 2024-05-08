@@ -68,6 +68,7 @@ void Scene::Run()
 
 	Start();
 
+
 	while (true)//TODO:  while (!glfwWindowShouldClose(window)) de preferat in Program.cpp
 	{
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
@@ -111,6 +112,7 @@ void Scene::Run()
 		Program::m_shadowMappingShader.Use();
 		Program::m_shadowMappingShader.SetMat4("projection", m_camera->GetProjectionMatrix());
 		Program::m_shadowMappingShader.SetMat4("view", m_camera->GetViewMatrix());
+		Program::m_shadowMappingShader.SetFloat("hue", 1);
 
 		Program::m_shadowMappingShader.SetVec3("viewPos", m_camera->GetPosition());
 		Program::m_shadowMappingShader.SetVec3("lightPos", m_lights[0]->GetPosition());
