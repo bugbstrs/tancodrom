@@ -144,6 +144,7 @@
     <ClCompile Include="Moon.cpp" />
     <ClCompile Include="Particles.cpp" />
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Particles.h" />
     <ClInclude Include="POV.h" />
     <ClInclude Include="Program.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Shader.h" />

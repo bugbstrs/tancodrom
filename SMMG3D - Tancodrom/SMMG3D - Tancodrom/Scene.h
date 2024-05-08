@@ -19,6 +19,7 @@ public:
 	static void Run();
 
 	static void Instantiate(SceneObject* object);
+	static void Destroy(SceneObject* object);
 
 	static float GetDeltaTime();
 	static Camera* GetCamera();
@@ -35,5 +36,8 @@ private:
 	static float m_deltaTime;
 
 	static std::unique_ptr<SkyBox> m_skybox;
+
+	static std::vector<SceneObject*> m_objectsToInstantiate;
+	static std::vector<SceneObject*> m_objectsToDestroy;
 };
 

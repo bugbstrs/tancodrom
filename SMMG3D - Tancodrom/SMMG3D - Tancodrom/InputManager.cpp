@@ -13,6 +13,11 @@ bool InputManager::KeyDown(int key)
     return glfwGetKey(Program::GetWindow(), key) == GLFW_PRESS;
 }
 
+bool InputManager::PrimaryClick()
+{
+    return glfwGetMouseButton(Program::GetWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+}
+
 float InputManager::MouseMoveX()
 {
     if (!m_mouseMoved) return 0;

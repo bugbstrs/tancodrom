@@ -5,8 +5,11 @@
 #include "Moon.h"
 #include "Sun.h"
 #include "Helicopter.h"
+#include "Projectile.h"
 
 std::vector<SceneObject*> Scene::m_objects;
+std::vector<SceneObject*> Scene::m_objectsToInstantiate;
+std::vector<SceneObject*> Scene::m_objectsToDestroy;
 std::vector<LightSource*> Scene::m_lights;
 Camera* Scene::m_camera;
 float Scene::m_deltaTime;
@@ -21,6 +24,7 @@ void Scene::Start()
 	m_objects.emplace_back(new Tank(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(10, 0, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
 
+	m_objects.emplace_back(new Projectile(glm::vec3(20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));/////////
 	m_objects.emplace_back(new Tank(glm::vec3(20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_camera->SetTank(m_objects.back());
 
@@ -131,6 +135,20 @@ void Scene::Run()
 
 		InputManager::ClearMouseMovement();
 
+		//Instantiate objects
+		for (auto object : m_objectsToInstantiate)
+		{
+			m_objects.emplace_back(object);
+		}
+		m_objectsToInstantiate.clear();
+
+		//Destroy objects
+		for (auto object : m_objectsToDestroy)
+		{
+			m_objects.erase(std::find(m_objects.begin(), m_objects.end(), object));
+		}
+		m_objectsToDestroy.clear();
+
 		glfwSwapBuffers(Program::GetWindow());
 		glfwPollEvents();
 	}
@@ -138,7 +156,12 @@ void Scene::Run()
 
 void Scene::Instantiate(SceneObject* object)
 {
-	m_objects.push_back(object);
+	m_objectsToInstantiate.emplace_back(object);
+}
+
+void Scene::Destroy(SceneObject* object)
+{
+	m_objectsToDestroy.emplace_back(object);
 }
 
 glm::vec3 Scene::Forward()

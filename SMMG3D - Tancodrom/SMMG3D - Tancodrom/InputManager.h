@@ -7,6 +7,8 @@ class InputManager
 public:
 	static bool KeyDown(int key);//ex key: GLFW_KEY_W
 
+	static bool PrimaryClick();
+
 	static float MouseMoveX();
 	static float MouseMoveY();
 

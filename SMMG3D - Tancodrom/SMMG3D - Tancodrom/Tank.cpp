@@ -1,6 +1,7 @@
 #include "Tank.h"
 #include "Scene.h"
 #include "InputManager.h"
+#include "Projectile.h"
 
 Tank::Tank(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     SceneObject(position, size, rotation), m_isMoving(true)
@@ -23,8 +24,8 @@ void Tank::Update()
         return;
     }
 
-    float moveSpeed = (float)(m_moveSpeed * Scene::GetDeltaTime());
-    float rotationSpeed = (float)(m_rotationSpeed * Scene::GetDeltaTime());
+    float moveSpeed = m_moveSpeed * Scene::GetDeltaTime();
+    float rotationSpeed = m_rotationSpeed * Scene::GetDeltaTime();
 
     if (InputManager::KeyDown(GLFW_KEY_W))
         Move(GetForward() * moveSpeed);
@@ -34,6 +35,11 @@ void Tank::Update()
         Move(-GetForward() * moveSpeed);
     if (InputManager::KeyDown(GLFW_KEY_D))
         Rotate(glm::vec3(0, -rotationSpeed, 0));
+
+    if (InputManager::PrimaryClick())
+    {
+        Scene::Instantiate(new Projectile(m_position, glm::vec3(1), m_rotation));
+    }
 }
 
 void Tank::SetCamera(Camera* camera)
