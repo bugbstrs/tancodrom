@@ -23,18 +23,18 @@ void Helicopter::Update()
     float moveSpeed = (float)(m_moveSpeed * Scene::GetDeltaTime());
     float rotationSpeed = (float)(m_rotationSpeed * Scene::GetDeltaTime());
 
-    if (InputManager::KeyDown(GLFW_KEY_W))
+    if (InputManager::KeyHold(GLFW_KEY_W))
         Move(-GetUp() * moveSpeed);
-    if (InputManager::KeyDown(GLFW_KEY_A))
+    if (InputManager::KeyHold(GLFW_KEY_A))
         Move(GetRight() * moveSpeed);
-    if (InputManager::KeyDown(GLFW_KEY_S))
+    if (InputManager::KeyHold(GLFW_KEY_S))
         Move(GetUp() * moveSpeed);
-    if (InputManager::KeyDown(GLFW_KEY_D))
+    if (InputManager::KeyHold(GLFW_KEY_D))
         Move(-GetRight() * moveSpeed);
-    if (InputManager::KeyDown(GLFW_KEY_Q))
-        Move(Scene::Up() * moveSpeed);
-    if (InputManager::KeyDown(GLFW_KEY_E))
+    if (InputManager::KeyHold(GLFW_KEY_Q))
         Move(-Scene::Up() * moveSpeed);
+    if (InputManager::KeyHold(GLFW_KEY_E))
+        Move(Scene::Up() * moveSpeed);
 }
 
 void Helicopter::SetCamera(Camera* camera)

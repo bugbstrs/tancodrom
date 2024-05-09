@@ -92,18 +92,18 @@ void Camera::ProcessInput()
     float rotationSpeed = (float)(m_mouseSensitivity * Scene::GetDeltaTime());
 
     //move
-    if (InputManager::KeyDown(GLFW_KEY_W))
+    if (InputManager::KeyHold(GLFW_KEY_W))
         Move(GetForward() * moveSpeed);
-    if (InputManager::KeyDown(GLFW_KEY_A))
+    if (InputManager::KeyHold(GLFW_KEY_A))
         Move(-GetRight() * moveSpeed);
-    if (InputManager::KeyDown(GLFW_KEY_S))
+    if (InputManager::KeyHold(GLFW_KEY_S))
         Move(-GetForward() * moveSpeed);
-    if (InputManager::KeyDown(GLFW_KEY_D))
+    if (InputManager::KeyHold(GLFW_KEY_D))
         Move(GetRight() * moveSpeed);
-    if (InputManager::KeyDown(GLFW_KEY_Q))
-        Move(Scene::Up() * moveSpeed);
-    if (InputManager::KeyDown(GLFW_KEY_E))
+    if (InputManager::KeyHold(GLFW_KEY_Q))
         Move(-Scene::Up() * moveSpeed);
+    if (InputManager::KeyHold(GLFW_KEY_E))
+        Move(Scene::Up() * moveSpeed);
 
     if (m_position.y > 20)
         m_position.y = 20;
