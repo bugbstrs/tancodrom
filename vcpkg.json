@@ -1,0 +1,33 @@
+{
+  "name": "tancodrom",
+  "dependencies": [
+    "glew",
+    "glfw3",
+    "assimp",
+    "stb",
+    "glm"
+  ],
+  "overrides": [
+    {
+      "name": "glew",
+      "version": "2.2.0#3"
+    },
+    {
+      "name": "glfw3",
+      "version": "3.4"
+    },
+    {
+      "name": "assimp",
+      "version": "5.4.0"
+    },
+    {
+      "name": "stb",
+      "version": "2023-04-11#1"
+    },
+    {
+      "name": "glm",
+      "version": "1.0.1#2"
+    }
+  ],
+  "builtin-baseline": "3dcd8bb40bc2bbedf206e0bf0dc72c26e2aa2ddd"
+}

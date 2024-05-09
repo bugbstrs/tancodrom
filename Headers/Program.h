@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "Shader.h";
+#include "Shader.h"
 
 class Program
 {
