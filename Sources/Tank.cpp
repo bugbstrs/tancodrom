@@ -4,14 +4,16 @@
 #include "Projectile.h"
 
 Tank::Tank(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
-    SceneObject(position, size, rotation), m_isMoving(true)
+    SceneObject(position, size, rotation),
+    m_isMoving(true),
+    m_camera{nullptr}
 {
     SetModel("Models/Tanks/Tank/IS.obj", false, 2);
 }
 
 void Tank::Update()
 {
-    if (!m_camera || m_camera->GetCameraPOV() != TankCamera)
+    if (m_camera == nullptr || m_camera->GetCameraPOV() != TankCamera)
     {
         glm::vec3 forward = GetForward();
         float movementSpeed = 0.2f * Scene::GetDeltaTime();

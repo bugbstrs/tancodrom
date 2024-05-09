@@ -4,7 +4,8 @@
 std::vector<Texture> Helicopter::textures;
 
 Helicopter::Helicopter(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
-    SceneObject(position, size, rotation)
+    SceneObject(position, size, rotation),
+    m_camera{ nullptr }
 {
     SetModel("Models/Helicopters/uh60.dae", false, 2);
 
@@ -17,7 +18,7 @@ Helicopter::Helicopter(const glm::vec3& position, const glm::vec3& size, const g
 
 void Helicopter::Update()
 {
-    if (!m_camera || m_camera->GetCameraPOV() != HelicopterCamera)
+    if (m_camera == nullptr || m_camera->GetCameraPOV() != HelicopterCamera)
         return;
 
     float moveSpeed = (float)(m_moveSpeed * Scene::GetDeltaTime());
