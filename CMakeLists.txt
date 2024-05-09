@@ -2,9 +2,9 @@ set (CMAKE_CXX_STANDARD 23)
 cmake_minimum_required(VERSION 3.10)
 
 project(tancodrom)
-file(GLOB SOURCES Headers/*.h Sources/*.cpp)
+file(GLOB SRC_FILES Headers/*.h Sources/*.cpp)
 
-add_executable(tancodrom ${SOURCES})
+add_executable(tancodrom ${SRC_FILES})
 target_include_directories(tancodrom PRIVATE Headers)
 
 # assimp
