@@ -67,6 +67,8 @@ void Helicopter::Update()
         Move(Scene::Up() * moveSpeed);
     }
 
+    Rotate(glm::vec3(0, 0, -InputManager::MouseMoveX() * rotationSpeed));
+
     if (pitch != 0 && !pitchModified)
     {
         if (pitch > 0)

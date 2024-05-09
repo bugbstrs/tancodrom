@@ -27,7 +27,6 @@ void Scene::Start()
 
 	m_objects.emplace_back(new Terrain(glm::vec3(0, -5.05, 0), glm::vec3(10), glm::vec3(0, 0, 0)));
 
-	m_objects.emplace_back(new Projectile(glm::vec3(20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_camera->SetTank(m_objects.back());
 
