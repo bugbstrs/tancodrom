@@ -16,19 +16,20 @@ Model::Model(std::string const &path, bool bSmoothNormals, int modelId)
     loadModel(path, bSmoothNormals);
 }
 
-void Model::RenderModel(Shader &shader, const glm::mat4 &model)
+void Model::RenderModel(Shader &shader, const glm::mat4& objectTransform)
 {
     for (unsigned int i = 0; i < meshes.size(); i++)
-        meshes[i].RenderMesh(shader, model);
+        meshes[i].RenderMesh(shader, objectTransform * meshesTransform[i]);
 }
 
-void Model::RenderModelMesh(Shader &shader, glm::mat4 &model, int meshID, glm::mat4 &meshModel)
+glm::mat4 Model::GetMeshTransform(int meshID)
 {
-    for (unsigned int i = 0; i < meshes.size(); i++)
-    {
-        if (i == meshID) meshes[i].RenderMesh(shader, meshModel);
-        else meshes[i].RenderMesh(shader, model);
-    }
+    return meshesTransform[meshID];
+}
+
+void Model::SetMeshTransform(int meshID, glm::mat4 transform)
+{
+    meshesTransform[meshID] = transform;
 }
 
 void Model::loadModel(std::string const &path, bool bSmoothNormals)
@@ -58,6 +59,7 @@ void Model::processNode(aiNode *node, const aiScene *scene)
         // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
         meshes.push_back(processMesh(mesh, scene));
+        meshesTransform.push_back(glm::mat4(1));
     }
     // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
     for (unsigned int i = 0; i < node->mNumChildren; i++)

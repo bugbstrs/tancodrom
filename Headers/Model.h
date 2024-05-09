@@ -15,6 +15,7 @@ public:
     // model data 
     std::vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
     std::vector<Mesh>    meshes;
+    std::vector<glm::mat4> meshesTransform;
     std::string directory;
     int modelId;
 
@@ -22,8 +23,10 @@ public:
     Model(std::string const &path, bool bSmoothNormals, int modelId);
 
     // draws the model, and thus all its meshes
-    void RenderModel(Shader &shader, const glm::mat4 &model = glm::mat4(1));
-    void RenderModelMesh(Shader &shader, glm::mat4 &model, int meshID, glm::mat4 &meshModel);
+    void RenderModel(Shader &shader, const glm::mat4& objectTransform = glm::mat4(1));
+
+    glm::mat4 GetMeshTransform(int meshID);
+    void SetMeshTransform(int meshID, glm::mat4 transform);
 
 private:
     // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.

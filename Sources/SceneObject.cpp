@@ -106,11 +106,11 @@ void SceneObject::Render(Shader& shader)
 {
     if (!m_model)
         return;
-    glm::mat4 model(1.0f);
-    model = glm::translate(model, m_position);
-    model = glm::rotate(model, glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, m_size);
-    m_model->RenderModel(shader, model);
+    glm::mat4 modelTransform(1.0f);
+    modelTransform = glm::translate(modelTransform, m_position);
+    modelTransform = glm::rotate(modelTransform, glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    modelTransform = glm::rotate(modelTransform, glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    modelTransform = glm::rotate(modelTransform, glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    modelTransform = glm::scale(modelTransform, m_size);
+    m_model->RenderModel(shader, modelTransform);
 }
