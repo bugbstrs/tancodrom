@@ -12,7 +12,15 @@ public:
 	static std::vector<Texture> textures;
 
 	void SetCamera(Camera* camera);
+
+	void Render(Shader& shader) override;
 private:
+	static float pitch;
+	static float yaw;
+
+	static const float maxTilt;
+	static const float constTiltSpeed;
+
 	const float m_rotationSpeed = 30.0f;
 	const float m_moveSpeed = 2.0f;
 

@@ -29,7 +29,7 @@ public:
 	glm::vec3 GetRight() const;
 	glm::vec3 GetUp() const;
 
-	void Render(Shader& shader);
+	virtual void Render(Shader& shader);
 
 protected:
 	Model* m_model;
