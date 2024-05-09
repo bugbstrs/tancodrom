@@ -27,13 +27,13 @@ void Tank::Update()
     float moveSpeed = m_moveSpeed * Scene::GetDeltaTime();
     float rotationSpeed = m_rotationSpeed * Scene::GetDeltaTime();
 
-    if (InputManager::KeyDown(GLFW_KEY_W))
+    if (InputManager::KeyHold(GLFW_KEY_W))
         Move(GetForward() * moveSpeed);
-    if (InputManager::KeyDown(GLFW_KEY_A))
+    if (InputManager::KeyHold(GLFW_KEY_A))
         Rotate(glm::vec3(0, rotationSpeed, 0));
-    if (InputManager::KeyDown(GLFW_KEY_S))
+    if (InputManager::KeyHold(GLFW_KEY_S))
         Move(-GetForward() * moveSpeed);
-    if (InputManager::KeyDown(GLFW_KEY_D))
+    if (InputManager::KeyHold(GLFW_KEY_D))
         Rotate(glm::vec3(0, -rotationSpeed, 0));
 
     if (InputManager::PrimaryClick())
