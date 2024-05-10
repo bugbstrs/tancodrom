@@ -107,13 +107,11 @@ void Camera::ProcessInput()
 
     if (m_position.y > 20)
         m_position.y = 20;
-    if (m_position.y < 0)
-        m_position.y = 0;
+    if (m_position.y < 0.5)
+        m_position.y = 0.5;
 
     //rotation
-    Rotate(glm::vec3(-InputManager::MouseMoveY() * rotationSpeed,
-        -InputManager::MouseMoveX() * rotationSpeed,
-        0));
+    Rotate(glm::vec3(-InputManager::MouseMoveY() * rotationSpeed, -InputManager::MouseMoveX() * rotationSpeed, 0));
 
     if (m_rotation.x > 89.0f)
         m_rotation.x = 89.0f;

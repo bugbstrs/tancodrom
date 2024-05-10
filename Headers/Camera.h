@@ -31,7 +31,7 @@ private:
 
     const float m_zNEAR = 0.1f;
     const float m_zFAR = 500.f;
-    const float m_cameraSpeedFactor = 2.5f;
+    const float m_cameraSpeedFactor = 25.5f;
     const float m_mouseSensitivity = 50.0f;
 
     // Perspective properties
