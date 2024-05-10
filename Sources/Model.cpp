@@ -12,9 +12,9 @@
 
 Model::Model(std::string const &path, bool bSmoothNormals, int modelId)
 {
-    modelId = modelId;
+    m_modelId = modelId;
 
-    if (modelId == 2)
+    if (m_modelId == 2)
     {
         textures_loaded.emplace_back(Texture(path));
     }
@@ -153,15 +153,15 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
     
-    if (modelId == 2)
+    if (m_modelId == 2)
     {
         textures = Helicopter::textures;
     }
-    if (modelId == 3)
+    if (m_modelId == 3)
     {
         textures = Moon::textures;
     }
-    if (modelId == 4)
+    if (m_modelId == 4)
     {
         textures = Sun::textures;
     }

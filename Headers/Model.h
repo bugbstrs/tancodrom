@@ -17,7 +17,7 @@ public:
     std::vector<Mesh>    meshes;
     std::vector<glm::mat4> meshesTransform;
     std::string directory;
-    int modelId;
+    int m_modelId;
 
     // constructor, expects a filepath to a 3D model.
     Model(std::string const &path, bool bSmoothNormals, int modelId);
