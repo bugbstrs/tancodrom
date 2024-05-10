@@ -42,13 +42,14 @@ void Scene::Start()
 	m_objects.emplace_back(new Tank(glm::vec3(10, 0, 35), glm::vec3(1), glm::vec3(0, 180, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(20, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
 
-	m_lights.emplace_back(new LightSource(glm::vec3(5, 21, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
-	m_objects.push_back(m_lights[0]);
+	//m_lights.emplace_back(new LightSource(glm::vec3(5, 21, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
+	//m_objects.push_back(m_lights[0]);
 
-	m_objects.push_back(new Moon(glm::vec3(0, 5, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
-	m_objects.push_back(new Sun(glm::vec3(0, -5, 0), glm::vec3(0.006), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Moon(glm::vec3(0, -5, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Sun(glm::vec3(0, 5, 0), glm::vec3(0.006), glm::vec3(0, 0, 0)));
+	m_lights.push_back((LightSource*)m_objects[m_objects.size() - 1]);
 
-	//m_objects.push_back(new SkyBox(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new SkyBox(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
 
 	//Texture skyboxTexture({
 	//	"Models/Skybox/right.jpg",
@@ -92,6 +93,9 @@ void Scene::Run()
 	Program::m_shadowMappingShader.Use();
 	Program::m_shadowMappingShader.SetInt("diffuseTexture", 0);
 	Program::m_shadowMappingShader.SetInt("shadowMap", 1);
+
+	float hue = 1.0;
+	float floorHue = 0.9;
 
 	Start();
 
@@ -148,7 +152,7 @@ void Scene::Run()
 		Program::m_shadowMappingShader.Use();
 		Program::m_shadowMappingShader.SetMat4("projection", m_camera->GetProjectionMatrix());
 		Program::m_shadowMappingShader.SetMat4("view", m_camera->GetViewMatrix());
-		Program::m_shadowMappingShader.SetFloat("hue", 1);
+		Program::m_shadowMappingShader.SetFloat("hue", floorHue);
 
 		Program::m_shadowMappingShader.SetVec3("viewPos", m_camera->GetPosition());
 		Program::m_shadowMappingShader.SetVec3("lightPos", m_lights[0]->GetPosition());
@@ -162,6 +166,11 @@ void Scene::Run()
 			object->Render(Program::m_shadowMappingShader);
 		}
 
+		float sunPassingTime = currentFrame * Sun::rotationSpeed;
+		m_lights[0]->SetPosition(glm::vec3(0.0f, 20 * sin(sunPassingTime), 50 * cos(sunPassingTime)));
+		hue = std::max<float>(sin(sunPassingTime), 0.1);
+		floorHue = std::max<float>(sin(sunPassingTime), 0.6);
+		
 		//Program::m_skyboxShader.Use();
 		//Program::m_skyboxShader.SetMat4("projection", m_camera->GetProjectionMatrix());
 		//Program::m_skyboxShader.SetMat4("view", glm::mat4(glm::mat3(m_camera->GetViewMatrix())));

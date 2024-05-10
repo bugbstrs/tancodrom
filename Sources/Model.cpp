@@ -14,7 +14,7 @@ Model::Model(std::string const &path, bool bSmoothNormals, int modelId)
 {
     m_modelId = modelId;
 
-    if (m_modelId == 2)
+    if (modelId == 2 || modelId == 10)
     {
         textures_loaded.emplace_back(Texture(path));
     }

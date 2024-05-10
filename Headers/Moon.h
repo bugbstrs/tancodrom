@@ -11,6 +11,8 @@ public:
 	static std::vector<Texture> textures;
 
 	static float rotationSpeed;
+
+	const float initialSpeed = 0.1f;
 private:
 };
 

@@ -7,7 +7,7 @@ LightSource::LightSource(const glm::vec3& position, const glm::vec3& size, const
 
 glm::mat4 LightSource::GetLightSpaceMatrix()
 {
-    float near_plane = 1.0f, far_plane = 7.5f;
+    float near_plane = 1.0f, far_plane = 500.f;
     glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 
     glm::mat4 lightView = glm::lookAt(m_position, GetForward(), Scene::Up());

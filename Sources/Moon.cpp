@@ -27,5 +27,5 @@ void Moon::Update()
         Moon::rotationSpeed -= 0.1f * Scene::GetDeltaTime();
     }
 
-    RotateAround(5.f, rotationSpeed * glfwGetTime());
+    RotateAround(-5.f, rotationSpeed * glfwGetTime());
 }

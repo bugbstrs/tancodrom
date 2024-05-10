@@ -14,7 +14,10 @@ Texture::Texture(const std::string& texturePath)
 	// load image, create texture and generate mipmaps
 	int width, height, nrChannels;
 
-	stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+	if(!texturePath.contains("Skybox"))
+		stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+	else
+		stbi_set_flip_vertically_on_load(false); // tell stb_image.h to flip loaded texture's on the y-axis.
 
 	unsigned char* data = stbi_load(texturePath.c_str(), &width, &height, &nrChannels, 0);
 
