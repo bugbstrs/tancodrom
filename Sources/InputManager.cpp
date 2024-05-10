@@ -73,19 +73,3 @@ void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yof
     m_scrollY = yoffset;
 }
 
-
-void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (InputManager::KeyDown(GLFW_KEY_P) && action == GLFW_PRESS)
-    {
-        Sun::rotationSpeed += 0.05f * glfwGetTime();
-        Moon::rotationSpeed += 0.05f * glfwGetTime();
-    }
-
-    if (InputManager::KeyDown(GLFW_KEY_O) && action == GLFW_PRESS)
-    {
-        Sun::rotationSpeed -= 0.05f;
-        Moon::rotationSpeed -= 0.05f;
-    }
-}
-
