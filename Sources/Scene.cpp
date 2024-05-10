@@ -48,7 +48,7 @@ void Scene::Start()
 	m_objects.push_back(new Moon(glm::vec3(0, 5, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
 	m_objects.push_back(new Sun(glm::vec3(0, -5, 0), glm::vec3(0.006), glm::vec3(0, 0, 0)));
 
-	m_objects.push_back(new SkyBox(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+	//m_objects.push_back(new SkyBox(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
 
 	//Texture skyboxTexture({
 	//	"Models/Skybox/right.jpg",
