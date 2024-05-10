@@ -10,6 +10,7 @@ unsigned int Program::m_screenWidth;
 unsigned int Program::m_screenHeight;
 Shader Program::m_shadowMappingShader;
 Shader Program::m_shadowMappingDepthShader;
+Shader Program::m_skyboxShader;
 
 void Program::Run()
 {
@@ -51,7 +52,6 @@ void Program::Run()
     glfwSetFramebufferSizeCallback(m_window, FramebufferSizeCallback);
     glfwSetCursorPosCallback(m_window, InputManager::MouseCallback);
     glfwSetScrollCallback(m_window, InputManager::ScrollCallback);
-    glfwSetKeyCallback(m_window, InputManager::KeyCallback);
 
     glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -112,4 +112,5 @@ void Program::CreateShaders()
 {
     m_shadowMappingShader.Initialize("ShadowMapping");
     m_shadowMappingDepthShader.Initialize("ShadowMappingDepth");
+    m_skyboxShader.Initialize("skybox");
 }

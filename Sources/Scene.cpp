@@ -7,11 +7,13 @@
 #include "Helicopter.h"
 #include "Projectile.h"
 #include "Terrain.h"
+#include <stb_image.h>
 
 std::vector<SceneObject*> Scene::m_objects;
 std::vector<SceneObject*> Scene::m_objectsToInstantiate;
 std::vector<SceneObject*> Scene::m_objectsToDestroy;
 std::vector<LightSource*> Scene::m_lights;
+std::unique_ptr<SkyBox> Scene::m_skybox;
 Camera* Scene::m_camera;
 float Scene::m_deltaTime;
 
@@ -30,8 +32,9 @@ void Scene::Start()
 	m_objects.emplace_back(new Tank(glm::vec3(20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_camera->SetTank(m_objects.back());
 
-	m_objects.emplace_back(new Helicopter(glm::vec3(20, 15, 0), glm::vec3(0.5), glm::vec3(-90, 0, 180)));
+	m_objects.push_back(new Helicopter(glm::vec3(20, 15, 0), glm::vec3(0.5), glm::vec3(-90, 0, 180)));
 	m_camera->SetHelicopter(m_objects.back());
+	m_objects.push_back(new Helicopter(glm::vec3(0, 15, 0), glm::vec3(0.5), glm::vec3(-90, 0, 180)));
 
 	m_objects.emplace_back(new Tank(glm::vec3(-20, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(-10, 0, 35), glm::vec3(1), glm::vec3(0, 180, 0)));
@@ -39,13 +42,24 @@ void Scene::Start()
 	m_objects.emplace_back(new Tank(glm::vec3(10, 0, 35), glm::vec3(1), glm::vec3(0, 180, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(20, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
 
-	m_objects.push_back(new Helicopter(glm::vec3(0, 15, 0), glm::vec3(0.5), glm::vec3(-90, 0, 180)));
-
 	m_lights.emplace_back(new LightSource(glm::vec3(5, 21, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.push_back(m_lights[0]);
 
 	m_objects.push_back(new Moon(glm::vec3(0, 5, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
 	m_objects.push_back(new Sun(glm::vec3(0, -5, 0), glm::vec3(0.006), glm::vec3(0, 0, 0)));
+
+	m_objects.push_back(new SkyBox(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+
+	//Texture skyboxTexture({
+	//	"Models/Skybox/right.jpg",
+	//	"Models/Skybox/left.jpg",
+	//	"Models/Skybox/top.jpg",
+	//	"Models/Skybox/bottom.jpg",
+	//	"Models/Skybox/front.jpg",
+	//	"Models/Skybox/back.jpg"
+	//	});
+
+	//m_skybox = std::make_unique<SkyBox>(skyboxTexture);
 }
 
 void Scene::Run()
@@ -71,6 +85,10 @@ void Scene::Run()
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//Program::m_skyboxShader.Use();
+	//Program::m_skyboxShader.SetInt("skybox", 0);
+
 	Program::m_shadowMappingShader.Use();
 	Program::m_shadowMappingShader.SetInt("diffuseTexture", 0);
 	Program::m_shadowMappingShader.SetInt("shadowMap", 1);
@@ -134,6 +152,14 @@ void Scene::Run()
 		{
 			object->Render(Program::m_shadowMappingShader);
 		}
+
+		//Program::m_skyboxShader.Use();
+		//Program::m_skyboxShader.SetMat4("projection", m_camera->GetProjectionMatrix());
+		//Program::m_skyboxShader.SetMat4("view", glm::mat4(glm::mat3(m_camera->GetViewMatrix())));
+		//Program::m_skyboxShader.SetFloat("hue", 1);
+		//Program::m_skyboxShader.SetFloat("time", currentFrame);
+
+		//m_skybox->Render(Program::m_skyboxShader);
 
 		InputManager::ClearMouseMovement();
 

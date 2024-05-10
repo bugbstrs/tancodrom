@@ -7,12 +7,18 @@
 #include "Helicopter.h"
 #include "Moon.h"
 #include "Sun.h"
+#include "SkyBox.h"
 #include "Tank.h"
 
 Model::Model(std::string const &path, bool bSmoothNormals, int modelId)
 {
     modelId = modelId;
-    textures_loaded.emplace_back(Texture(path));
+
+    if (modelId == 2)
+    {
+        textures_loaded.emplace_back(Texture(path));
+    }
+
     loadModel(path, bSmoothNormals);
 }
 
@@ -146,7 +152,6 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     // 4. height maps
     std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-
     
     if (modelId == 2)
     {

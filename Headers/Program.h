@@ -21,6 +21,7 @@ public:
 
 	static Shader m_shadowMappingShader;
 	static Shader m_shadowMappingDepthShader;
+	static Shader m_skyboxShader;
 
 private:
 	static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
