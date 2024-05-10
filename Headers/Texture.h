@@ -10,5 +10,5 @@ struct Texture
 
     Texture() = default;
     Texture(const std::string &strTexturePath);
-    Texture(const std::vector<std::string>& faces);
+    Texture(std::vector<std::string> faces);
 };
