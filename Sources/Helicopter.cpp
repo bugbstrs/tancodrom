@@ -2,8 +2,6 @@
 #include "InputManager.h"
 
 std::vector<Texture> Helicopter::textures;
-float Helicopter::pitch = 0;
-float Helicopter::yaw = 0;
 float const Helicopter::maxTilt = 30;
 float const Helicopter::constTiltSpeed = 15;
 
@@ -26,36 +24,45 @@ void Helicopter::Update()
 
     float tiltSpeed = constTiltSpeed * Scene::GetDeltaTime();
 
+    if (pitch != 0)
+    {
+        if (pitch > 0)
+            pitch = (pitch - tiltSpeed < 0) ? 0 : pitch - tiltSpeed;
+        else
+            pitch = (pitch + tiltSpeed > 0) ? 0 : pitch + tiltSpeed;
+    }
+    if (yaw != 0)
+    {
+        if (yaw > 0)
+            yaw = (yaw - tiltSpeed < 0) ? 0 : yaw - tiltSpeed;
+        else
+            yaw = (yaw + tiltSpeed > 0) ? 0 : yaw + tiltSpeed;
+    }
+
     if (m_camera == nullptr || m_camera->GetCameraPOV() != HelicopterCamera)
         return;
 
     float moveSpeed = m_moveSpeed * Scene::GetDeltaTime();
     float rotationSpeed = m_rotationSpeed * Scene::GetDeltaTime();
 
-    bool pitchModified = false;
-    bool yawModified = false;
     if (InputManager::KeyHold(GLFW_KEY_W))
     {
-        pitch = (pitch - tiltSpeed < -maxTilt) ? -maxTilt : pitch - tiltSpeed;
-        pitchModified = true;
+        pitch = (pitch - tiltSpeed * 2 < -maxTilt) ? -maxTilt : pitch - tiltSpeed * 2;
         Move(-GetUp() * moveSpeed);
     }
     if (InputManager::KeyHold(GLFW_KEY_A))
     {
-        yaw = (yaw - tiltSpeed < -maxTilt) ? -maxTilt : yaw - tiltSpeed;
-        yawModified = true;
+        yaw = (yaw - tiltSpeed * 2 < -maxTilt) ? -maxTilt : yaw - tiltSpeed * 2;
         Move(GetRight() * moveSpeed);
     }
     if (InputManager::KeyHold(GLFW_KEY_S))
     {
-        pitch = (pitch + tiltSpeed > maxTilt) ? maxTilt : pitch + tiltSpeed;
-        pitchModified = true;
+        pitch = (pitch + tiltSpeed * 2 > maxTilt) ? maxTilt : pitch + tiltSpeed * 2;
         Move(GetUp() * moveSpeed);
     }
     if (InputManager::KeyHold(GLFW_KEY_D))
     {
-        yaw = (yaw + tiltSpeed > maxTilt) ? maxTilt : yaw + tiltSpeed;
-        yawModified = true;
+        yaw = (yaw + tiltSpeed * 2 > maxTilt) ? maxTilt : yaw + tiltSpeed * 2;
         Move(-GetRight() * moveSpeed);
     }
     if (InputManager::KeyHold(GLFW_KEY_Q))
@@ -67,22 +74,12 @@ void Helicopter::Update()
         Move(Scene::Up() * moveSpeed);
     }
 
-    Rotate(glm::vec3(0, 0, -InputManager::MouseMoveX() * rotationSpeed));
+    if (m_position.y > 35)
+        m_position.y = 35;
+    if (m_position.y < 0.5)
+        m_position.y = 0.5;
 
-    if (pitch != 0 && !pitchModified)
-    {
-        if (pitch > 0)
-            pitch = (pitch - tiltSpeed < 0) ? 0 : pitch - tiltSpeed;
-        else
-            pitch = (pitch + tiltSpeed > 0) ? 0 : pitch + tiltSpeed;
-    }
-    if (yaw != 0 && !yawModified)
-    {
-        if (yaw > 0)
-            yaw = (yaw - tiltSpeed < 0) ? 0 : yaw - tiltSpeed;
-        else
-            yaw = (yaw + tiltSpeed > 0) ? 0 : yaw + tiltSpeed;
-    }
+    Rotate(glm::vec3(0, 0, -InputManager::MouseMoveX() * rotationSpeed));
 }
 
 void Helicopter::SetCamera(Camera* camera)

@@ -15,14 +15,14 @@ public:
 
 	void Render(Shader& shader) override;
 private:
-	static float pitch;
-	static float yaw;
+	float pitch = 0;
+	float yaw = 0;
 
 	static const float maxTilt;
 	static const float constTiltSpeed;
 
 	const float m_rotationSpeed = 30.0f;
-	const float m_moveSpeed = 2.0f;
+	const float m_moveSpeed = 6.0f;
 
 	Camera* m_camera;
 };

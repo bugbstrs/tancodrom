@@ -64,26 +64,33 @@ void Camera::ProcessInput()
     if (m_pov == TankCamera)
     {
         glm::quat tankRotationQuat = glm::quat(glm::radians(m_tank->GetRotation()));
-        glm::quat cameraOffsetQuat = glm::quat(glm::vec3(glm::radians(3.0f), 0.0f, glm::radians(-7.0f)));
+        glm::quat cameraOffsetQuat = glm::quat(glm::vec3(glm::radians(6.0f), glm::radians(-1.0f), glm::radians(-8.0f)));
         glm::quat finalOffsetQuat = tankRotationQuat * cameraOffsetQuat;
-        glm::vec3 cameraOffset = glm::vec3(finalOffsetQuat * glm::vec4(0.0f, 3.0f, -7.0f, 1.0f));
+        glm::vec3 cameraOffset = glm::vec3(finalOffsetQuat * glm::vec4(-1.0f, 6.0f, -8.0f, 1.0f));
 
         m_position = m_tank->GetPosition() + cameraOffset;
         m_rotation = m_tank->GetRotation();
+
+        m_rotation.x += 30;
 
         return;
     }
 
     if (m_pov == HelicopterCamera)
     {
-        glm::quat helicopterRotationQuat = glm::quat(glm::radians(m_helicopter->GetRotation() * -m_helicopter->GetForward()));
-        glm::quat cameraOffsetQuat = glm::quat(glm::vec3(glm::radians(5.0f), glm::radians(-1.0f), glm::radians(-10.0f)));
+        glm::quat helicopterRotationQuat = glm::quat(glm::radians(m_helicopter->GetRotation()));
+        helicopterRotationQuat = glm::rotate(helicopterRotationQuat, 90.0f, glm::vec3(1, 0, 0));
+        helicopterRotationQuat = glm::rotate(helicopterRotationQuat, -180.0f, glm::vec3(0, 0, 1));
+        glm::quat cameraOffsetQuat = glm::quat(glm::vec3(glm::radians(5.0f), glm::radians(-9.0f), glm::radians(-5.0f)));
         glm::quat finalOffsetQuat = helicopterRotationQuat * cameraOffsetQuat;
-        glm::vec3 cameraOffset = glm::vec3(finalOffsetQuat * glm::vec4(-1.0f, 5.0f, -10.0f, 1.0f));
+
+        glm::vec3 cameraOffset = glm::vec3(finalOffsetQuat * glm::vec4(-9.0f, 5.0f, -5.0f, 1.0f));
+
 
         m_position = m_helicopter->GetPosition() + cameraOffset;
-        m_rotation = m_helicopter->GetRotation() * -m_helicopter->GetForward();
-        m_rotation.x += 30;
+        m_rotation = m_helicopter->GetRotation();
+        m_rotation.x += 120;
+        m_rotation.z -= 180;
 
         return;
     }
@@ -105,8 +112,8 @@ void Camera::ProcessInput()
     if (InputManager::KeyHold(GLFW_KEY_E))
         Move(Scene::Up() * moveSpeed);
 
-    if (m_position.y > 20)
-        m_position.y = 20;
+    if (m_position.y > 30)
+        m_position.y = 30;
     if (m_position.y < 0.5)
         m_position.y = 0.5;
 
