@@ -4,7 +4,6 @@
 
 std::vector<Texture> Moon::textures;
 float Moon::rotationSpeed = 0.1f;
-float Moon::lastFrame;
 
 Moon::Moon(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     LightSource(position, size, rotation)
@@ -18,5 +17,15 @@ Moon::Moon(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rot
 
 void Moon::Update()
 {
-    RotateAround(5.f, 0.1f * glfwGetTime());
+    if (InputManager::KeyHold(GLFW_KEY_P))
+    {
+        Moon::rotationSpeed += 0.1f * Scene::GetDeltaTime();
+    }
+
+    if (InputManager::KeyHold(GLFW_KEY_O))
+    {
+        Moon::rotationSpeed -= 0.1f * Scene::GetDeltaTime();
+    }
+
+    RotateAround(5.f, rotationSpeed * glfwGetTime());
 }

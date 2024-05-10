@@ -11,7 +11,6 @@ public:
 	static std::vector<Texture> textures;
 
 	static float rotationSpeed;
-	static float lastFrame;
 private:
 };
 
