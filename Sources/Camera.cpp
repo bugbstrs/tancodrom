@@ -10,7 +10,9 @@
 
 Camera::Camera(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     SceneObject(position, size, rotation),
-    m_pov{ FreeCamera }
+    m_pov{ FreeCamera },
+    m_tank{ nullptr },
+    m_helicopter{ nullptr }
 {
     m_width = glfwGetVideoMode(glfwGetPrimaryMonitor())->width;
     m_height = glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
