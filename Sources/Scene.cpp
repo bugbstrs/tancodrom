@@ -42,10 +42,8 @@ void Scene::Start()
 	m_objects.emplace_back(new Tank(glm::vec3(10, 0, 35), glm::vec3(1), glm::vec3(0, 180, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(20, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
 
-	//m_lights.emplace_back(new LightSource(glm::vec3(5, 21, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
-	//m_objects.push_back(m_lights[0]);
-
 	m_objects.push_back(new Moon(glm::vec3(0, -5, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	//m_lights.push_back((LightSource*)m_objects[m_objects.size() - 1]);
 	m_objects.push_back(new Sun(glm::vec3(0, 5, 0), glm::vec3(0.006), glm::vec3(0, 0, 0)));
 	m_lights.push_back((LightSource*)m_objects[m_objects.size() - 1]);
 
