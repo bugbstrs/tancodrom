@@ -10,6 +10,7 @@ Helicopter::Helicopter(const glm::vec3& position, const glm::vec3& size, const g
     m_camera{ nullptr }
 {
     SetModel("Models/Helicopters/uh60.dae", false, 2);
+    m_collider = new Collider(glm::vec3(0), 7, "Helicopter", m_position, m_rotation);
 
     textures.emplace_back(Texture("Models/Helicopter/fuselage"));
     textures.emplace_back(Texture("Models/Helicopter/land"));

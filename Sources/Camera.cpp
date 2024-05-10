@@ -44,22 +44,26 @@ POV Camera::GetCameraPOV()
 
 void Camera::SetTank(SceneObject* tank)
 {
+    if (m_tank)
+        dynamic_cast<Tank*>(m_tank)->SetCamera(nullptr);
     m_tank = tank;
+    m_pov = TankCamera;
     dynamic_cast<Tank*>(m_tank)->SetCamera(this);
 }
 
 void Camera::SetHelicopter(SceneObject* helicopter)
 {
+    if(m_helicopter)
+        dynamic_cast<Helicopter*>(m_helicopter)->SetCamera(nullptr);
     m_helicopter = helicopter;
+    m_pov = HelicopterCamera;
     dynamic_cast<Helicopter*>(m_helicopter)->SetCamera(this);
 }
 
 void Camera::ProcessInput()
 {
-    if (InputManager::KeyDown(GLFW_KEY_Z))
-        m_pov = m_pov == TankCamera ? FreeCamera : TankCamera;
     if (InputManager::KeyDown(GLFW_KEY_X))
-        m_pov = m_pov == HelicopterCamera ? FreeCamera : HelicopterCamera;
+        m_pov = FreeCamera;
 
     if (m_pov == TankCamera)
     {
@@ -93,6 +97,27 @@ void Camera::ProcessInput()
         m_rotation.z -= 180;
 
         return;
+    }
+
+    if (InputManager::PrimaryClick())
+    {
+        glm::vec3 rayDirection = GetForward();
+
+        std::pair<std::string, SceneObject*> collision = Scene::RayCast(m_position, rayDirection);
+
+        if (collision.second != nullptr)
+        {
+            std::string objectType = collision.first;
+            SceneObject* objectHit = collision.second;
+            if (objectType == "Tank")
+            {
+                SetTank(objectHit);
+            }
+            if (objectType == "Helicopter")
+            {
+                SetHelicopter(objectHit);
+            }
+        }
     }
 
     float moveSpeed = (float)(m_cameraSpeedFactor * Scene::GetDeltaTime());
