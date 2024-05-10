@@ -5,14 +5,22 @@
 
 Tank::Tank(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     SceneObject(position, size, rotation),
-    m_isMoving(true),
     m_camera{nullptr}
 {
-    SetModel("Models/Tanks/Tank/IS.obj", false, 2);
+    SetModel("Models/Tanks/Tank/IS.obj", false, 1);
+    m_collider = new Collider(glm::vec3(0), 3, "Tank", m_position, m_rotation);
 }
 
 void Tank::Update()
 {
+    m_isMoving = true;
+
+    for (auto collision : m_collider->GetCollisions())
+    {
+        if (collision.first == "Tank")
+            m_isMoving = false;
+    }
+
     if (m_camera == nullptr || m_camera->GetCameraPOV() != TankCamera)
     {
         glm::vec3 forward = GetForward();
@@ -42,6 +50,13 @@ void Tank::Update()
     {
         Scene::Instantiate(new Projectile(m_position, glm::vec3(1), m_rotation));
     }
+}
+
+void Tank::TakeDamage(float damage)
+{
+    m_health -= damage;
+    if (m_health <= 0)
+        Scene::Destroy(this);
 }
 
 void Tank::SetCamera(Camera* camera)

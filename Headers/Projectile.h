@@ -11,6 +11,7 @@ public:
 private:
 	float m_lifeTime = 10.0f;
 
-	const float m_moveSpeed = 0.5f;
+	const float m_damage = 40.0f;
+	const float m_moveSpeed = 5.0f;
 };
 
