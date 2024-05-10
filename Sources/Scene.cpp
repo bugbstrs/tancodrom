@@ -105,6 +105,15 @@ void Scene::Run()
 		m_deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		//Check collisions
+		for (int i = 0; i < m_objects.size(); ++i)
+		{
+			for (int j = i + 1; j < m_objects.size(); ++j)
+			{
+				Collider::CheckCollisions(m_objects[i], m_objects[j]);
+			}
+		}
+
 		//logica
 		for (auto object : m_objects)
 		{
@@ -163,6 +172,13 @@ void Scene::Run()
 
 		InputManager::ClearMouseMovement();
 
+		//Clear collisions
+		for (auto object : m_objects)
+		{
+			if (object->GetCollider())
+				object->GetCollider()->ClearCollisions();
+		}
+
 		//Instantiate objects
 		for (auto object : m_objectsToInstantiate)
 		{
@@ -173,7 +189,8 @@ void Scene::Run()
 		//Destroy objects
 		for (auto object : m_objectsToDestroy)
 		{
-			m_objects.erase(std::find(m_objects.begin(), m_objects.end(), object));
+			if(std::find(m_objects.begin(), m_objects.end(), object) != m_objects.end())
+				m_objects.erase(std::find(m_objects.begin(), m_objects.end(), object));
 		}
 		m_objectsToDestroy.clear();
 
@@ -189,7 +206,8 @@ void Scene::Instantiate(SceneObject* object)
 
 void Scene::Destroy(SceneObject* object)
 {
-	m_objectsToDestroy.emplace_back(object);
+	if (std::find(m_objectsToDestroy.begin(), m_objectsToDestroy.end(), object) == m_objectsToDestroy.end())
+		m_objectsToDestroy.emplace_back(object);
 }
 
 glm::vec3 Scene::Forward()

@@ -4,12 +4,38 @@
 #include "Model.h"
 #include "Shader.h"
 
+class SceneObject;
+
+class Collider
+{
+public:
+	Collider() = delete;
+	Collider(const glm::vec3& position, float radius, const std::string& type, glm::vec3& objPosition, glm::vec3& objRotation);
+
+	std::vector<std::pair<std::string, SceneObject*>> GetCollisions();
+	void ClearCollisions();
+
+	static void CheckCollisions(SceneObject* object1, SceneObject* object2);
+
+private:
+	glm::vec3 CalculatePosition();
+
+	glm::vec3& m_objectPosition;
+	glm::vec3& m_objectRotation;
+	glm::vec3 m_position;
+	float m_radius;
+	std::string m_type;
+	std::vector<std::pair<std::string, SceneObject*>> m_collisions;
+};
+
 class SceneObject
 {
 public:
 	SceneObject(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation);
 
 	void SetModel(std::string const& path, bool bSmoothNormals, int modelId);
+
+	Collider* GetCollider();
 
 	virtual void Update() = 0;
 
@@ -33,6 +59,7 @@ public:
 
 protected:
 	Model* m_model;
+	Collider* m_collider;
 
 	glm::vec3 m_position;
 	glm::vec3 m_rotation;

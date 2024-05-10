@@ -3,16 +3,75 @@
 #include "SceneObject.h"
 #include <GLFW/glfw3.h>
 
+Collider::Collider(const glm::vec3& position, float radius, const std::string& type, glm::vec3& objPosition, glm::vec3& objRotation) :
+    m_radius(radius),
+    m_type(type),
+    m_position(position),
+    m_objectPosition(objPosition),
+    m_objectRotation(objRotation)
+{}
+
+std::vector<std::pair<std::string, SceneObject*>> Collider::GetCollisions()
+{
+    return m_collisions;
+}
+
+void Collider::ClearCollisions()
+{
+    m_collisions.clear();
+}
+
+void Collider::CheckCollisions(SceneObject* object1, SceneObject* object2)
+{
+    Collider* collider1 = object1->GetCollider();
+    Collider* collider2 = object2->GetCollider();
+
+    if (collider1 == nullptr || collider2 == nullptr)
+    {
+        return;
+    }
+
+    float distance = glm::distance(collider1->CalculatePosition(), collider2->CalculatePosition());
+
+    if (distance < collider1->m_radius + collider2->m_radius)
+    {
+        collider1->m_collisions.push_back(std::make_pair(collider2->m_type, object2));
+        collider2->m_collisions.push_back(std::make_pair(collider1->m_type, object1));
+    }
+}
+
+glm::vec3 Collider::CalculatePosition()
+{
+    glm::mat4 rotationMatrix = glm::mat4(1.0f);
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(m_objectRotation.x), glm::vec3(1, 0, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(m_objectRotation.y), glm::vec3(0, 1, 0));
+    rotationMatrix = glm::rotate(rotationMatrix, glm::radians(m_objectRotation.z), glm::vec3(0, 0, 1));
+
+    glm::vec4 rotatedPosition = rotationMatrix * glm::vec4(m_position, 1.0f);
+    glm::vec3 rotatedPosition3 = glm::vec3(rotatedPosition);
+
+    return m_objectPosition + rotatedPosition3;
+}
+
+
+
+
 SceneObject::SceneObject(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     m_position{ position },
     m_size{ size },
     m_rotation{ rotation },
-    m_model{ nullptr }
+    m_model{ nullptr },
+    m_collider{ nullptr }
 {}
 
 void SceneObject::SetModel(std::string const& path, bool bSmoothNormals, int modelId)
 {
     m_model = new Model(path, bSmoothNormals, modelId);
+}
+
+Collider* SceneObject::GetCollider()
+{
+    return m_collider;
 }
 
 glm::vec3 SceneObject::GetPosition() const
