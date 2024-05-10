@@ -18,6 +18,8 @@ public:
 
 	static void Run();
 
+	static std::pair<std::string, SceneObject*> RayCast(const glm::vec3& origin, const glm::vec3& direction);
+
 	static void Instantiate(SceneObject* object);
 	static void Destroy(SceneObject* object);
 

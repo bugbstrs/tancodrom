@@ -26,6 +26,8 @@ private:
 	float m_radius;
 	std::string m_type;
 	std::vector<std::pair<std::string, SceneObject*>> m_collisions;
+
+	friend class Scene;
 };
 
 class SceneObject

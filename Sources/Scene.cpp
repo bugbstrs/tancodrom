@@ -30,10 +30,8 @@ void Scene::Start()
 	m_objects.emplace_back(new Terrain(glm::vec3(0, -5.05, 0), glm::vec3(10), glm::vec3(0, 0, 0)));
 
 	m_objects.emplace_back(new Tank(glm::vec3(20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
-	m_camera->SetTank(m_objects.back());
 
 	m_objects.push_back(new Helicopter(glm::vec3(20, 15, 0), glm::vec3(0.5), glm::vec3(-90, 0, 180)));
-	m_camera->SetHelicopter(m_objects.back());
 	m_objects.push_back(new Helicopter(glm::vec3(0, 15, 0), glm::vec3(0.5), glm::vec3(-90, 0, 180)));
 
 	m_objects.emplace_back(new Tank(glm::vec3(-20, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
@@ -204,6 +202,47 @@ void Scene::Run()
 		glfwSwapBuffers(Program::GetWindow());
 		glfwPollEvents();
 	}
+}
+
+std::pair<std::string, SceneObject*> Scene::RayCast(const glm::vec3& origin, const glm::vec3& direction)
+{
+	float closestCollision = std::numeric_limits<float>::infinity();
+	std::pair<std::string, SceneObject*> closestObject("", nullptr);
+
+	for (auto object : m_objects)
+	{
+		if (Collider* collider = object->GetCollider())
+		{
+			glm::vec3 colliderPosition = collider->CalculatePosition();
+
+			glm::vec3 toCollider = colliderPosition - origin;
+			glm::vec3 colliderDirection = glm::normalize(toCollider);
+
+			float colliderDistance = glm::length(toCollider);
+			float dotProduct = glm::dot(colliderDirection, direction);
+
+			if (dotProduct > 0 && colliderDistance > 0)
+			{
+				float t = glm::dot(colliderDirection, colliderPosition - origin);
+
+				if (t > 0 && t < colliderDistance)
+				{
+					glm::vec3 collisionPoint = origin + direction * t;
+
+					if (glm::distance(collisionPoint, colliderPosition) <= collider->m_radius)
+					{
+						if (t < closestCollision)
+						{
+							closestCollision = t;
+							closestObject = std::make_pair(collider->m_type, object);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return closestObject;
 }
 
 void Scene::Instantiate(SceneObject* object)
