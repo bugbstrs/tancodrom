@@ -19,9 +19,6 @@ float Scene::m_deltaTime;
 
 void Scene::Start()
 {
-	m_camera = new Camera(glm::vec3(0, 2, 0), glm::vec3(1), glm::vec3(0, 0, 0));
-	m_objects.push_back(m_camera);
-
 	m_objects.emplace_back(new Tank(glm::vec3(-20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(-10, 0, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
@@ -47,16 +44,9 @@ void Scene::Start()
 
 	m_objects.push_back(new SkyBox(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
 
-	//Texture skyboxTexture({
-	//	"Models/Skybox/right.jpg",
-	//	"Models/Skybox/left.jpg",
-	//	"Models/Skybox/top.jpg",
-	//	"Models/Skybox/bottom.jpg",
-	//	"Models/Skybox/front.jpg",
-	//	"Models/Skybox/back.jpg"
-	//	});
-
-	//m_skybox = std::make_unique<SkyBox>(skyboxTexture);
+	Projectile::InitializeModel();
+	m_camera = new Camera(glm::vec3(0, 2, 0), glm::vec3(1), glm::vec3(0, 0, 0));
+	m_objects.push_back(m_camera);
 }
 
 void Scene::Run()
@@ -82,9 +72,6 @@ void Scene::Run()
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	//Program::m_skyboxShader.Use();
-	//Program::m_skyboxShader.SetInt("skybox", 0);
 
 	Program::m_shadowMappingShader.Use();
 	Program::m_shadowMappingShader.SetInt("diffuseTexture", 0);
@@ -167,14 +154,6 @@ void Scene::Run()
 		hue = std::max<float>(sin(sunPassingTime), 0.1);
 		floorHue = std::max<float>(sin(sunPassingTime), 0.6);
 		
-		//Program::m_skyboxShader.Use();
-		//Program::m_skyboxShader.SetMat4("projection", m_camera->GetProjectionMatrix());
-		//Program::m_skyboxShader.SetMat4("view", glm::mat4(glm::mat3(m_camera->GetViewMatrix())));
-		//Program::m_skyboxShader.SetFloat("hue", 1);
-		//Program::m_skyboxShader.SetFloat("time", currentFrame);
-
-		//m_skybox->Render(Program::m_skyboxShader);
-
 		InputManager::ClearMouseMovement();
 
 		//Clear collisions
