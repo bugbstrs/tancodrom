@@ -96,7 +96,7 @@ void Scene::Run()
 	Start();
 
 
-	while (true)//TODO:  while (!glfwWindowShouldClose(window)) de preferat in Program.cpp
+	while (!glfwWindowShouldClose(Program::GetWindow()))//TODO:  while (!glfwWindowShouldClose(window)) de preferat in Program.cpp
 	{
 		glClearColor(0.3f, 0.3f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -201,6 +201,9 @@ void Scene::Run()
 
 		glfwSwapBuffers(Program::GetWindow());
 		glfwPollEvents();
+
+		if (InputManager::KeyDown(GLFW_KEY_ESCAPE))
+			glfwSetWindowShouldClose(Program::GetWindow(), true);
 	}
 }
 
