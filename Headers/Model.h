@@ -21,6 +21,7 @@ public:
 
     // constructor, expects a filepath to a 3D model.
     Model(std::string const &path, bool bSmoothNormals, int modelId);
+    Model(const Model* newModel);
 
     // draws the model, and thus all its meshes
     void RenderModel(Shader &shader, const glm::mat4& objectTransform = glm::mat4(1));

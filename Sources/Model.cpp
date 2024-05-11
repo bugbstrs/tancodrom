@@ -22,6 +22,22 @@ Model::Model(std::string const &path, bool bSmoothNormals, int modelId)
     loadModel(path, bSmoothNormals);
 }
 
+Model::Model(const Model* newModel) {
+    directory = newModel->directory;
+
+    m_modelId = newModel->m_modelId;
+
+    for (const auto& texture : newModel->textures_loaded) {
+        textures_loaded.push_back(texture); 
+    }
+
+    for (const auto& mesh : newModel->meshes) {
+        meshes.push_back(mesh); 
+    }
+
+    meshesTransform = newModel->meshesTransform;
+}
+
 void Model::RenderModel(Shader &shader, const glm::mat4& objectTransform)
 {
     for (unsigned int i = 0; i < meshes.size(); i++)
