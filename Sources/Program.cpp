@@ -3,6 +3,7 @@
 #include "Program.h"
 #include "Scene.h"
 #include "InputManager.h"
+#include "SoundManager.h"
 
 GLuint Program::m_programId;
 GLFWwindow* Program::m_window;
@@ -65,6 +66,11 @@ void Program::Run()
     Initialize();
 
     Scene::Run();
+}
+
+void Program::CleanUp()
+{
+    SoundManager::StopAllSounds();
 }
 
 GLuint Program::GetProgramID()

@@ -3,6 +3,7 @@
 int main()
 {
 	Program::Run();
+	Program::CleanUp();
 
 	return 0;
 }

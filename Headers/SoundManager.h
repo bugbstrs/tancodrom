@@ -10,6 +10,7 @@ public:
     static void Initialize();
     static void IncreaseVolume();
     static void DecreaseVolume();
+    static void StopAllSounds();
 
     //Background Music related
     static void PlayBackgroundMusic();

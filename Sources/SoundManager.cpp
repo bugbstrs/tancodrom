@@ -47,8 +47,16 @@ void SoundManager::IncreaseVolume()
 
 void SoundManager::DecreaseVolume()
 {
+	for (auto it = soundMap.begin(); it != soundMap.end(); ++it) {
+		if (it->first != "backgroundMusic")
+			it->second->setVolume(it->second->getVolume() - 10.0f);
+	}
+}
+
+void SoundManager::StopAllSounds()
+{
 	for (auto it = soundMap.begin(); it != soundMap.end(); ++it)
-		it->second->setVolume(it->second->getVolume() - 10.0f);
+		it->second->stop();
 }
 
 void SoundManager::PlayBackgroundMusic()

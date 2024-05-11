@@ -12,6 +12,8 @@ public:
 
 	static void Run();
 
+	static void CleanUp();
+
 	static GLuint GetProgramID();
 
 	static GLFWwindow* GetWindow();
