@@ -6,6 +6,8 @@ class Projectile : public SceneObject
 public:
 	Projectile(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation);
 
+	static void InitializeModel();
+
 	void Update() override;
 
 private:

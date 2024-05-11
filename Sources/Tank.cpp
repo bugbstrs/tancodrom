@@ -4,6 +4,7 @@
 #include "Projectile.h"
 
 Model* Tank::tankModel = nullptr;
+float Tank::turretRotationSpeed = 10.f;
 
 Tank::Tank(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     SceneObject(position, size, rotation),
@@ -14,7 +15,7 @@ Tank::Tank(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rot
     {
         tankModel = new Model("Models/Tanks/Tank/IS.obj", false, 2);
     }
-    m_model = tankModel;
+    m_model = new Model(tankModel);
     m_collider = new Collider(glm::vec3(0), 3, "Tank", m_position, m_rotation);
 }
 
@@ -32,7 +33,7 @@ void Tank::Update()
     {
         glm::vec3 forward = GetForward();
         float movementSpeed = 0.2f * Scene::GetDeltaTime();
-    
+
         if (m_isMoving)
         {
             Move(forward * movementSpeed);
@@ -40,6 +41,12 @@ void Tank::Update()
 
         return;
     }
+
+    m_model->SetMeshTransform(1, glm::rotate(m_model->GetMeshTransform(1), -glm::radians(m_turretRotation), glm::vec3(0, 1, 0)));
+    m_model->SetMeshTransform(0, glm::rotate(m_model->GetMeshTransform(0), -glm::radians(m_turretRotation), glm::vec3(0, 1, 0)));
+    m_turretRotation += -InputManager::MouseMoveX() * turretRotationSpeed * Scene::GetDeltaTime();
+    m_model->SetMeshTransform(1, glm::rotate(m_model->GetMeshTransform(1), glm::radians(m_turretRotation), glm::vec3(0, 1, 0)));
+    m_model->SetMeshTransform(0, glm::rotate(m_model->GetMeshTransform(0), glm::radians(m_turretRotation), glm::vec3(0, 1, 0)));
 
     float moveSpeed = m_moveSpeed * Scene::GetDeltaTime();
     float rotationSpeed = m_rotationSpeed * Scene::GetDeltaTime();
@@ -55,7 +62,7 @@ void Tank::Update()
 
     if (InputManager::PrimaryClick())
     {
-        Scene::Instantiate(new Projectile(m_position, glm::vec3(1), m_rotation));
+        Scene::Instantiate(new Projectile(m_position, glm::vec3(1), m_rotation + GetTurretRotation()));
     }
 }
 
@@ -69,4 +76,9 @@ void Tank::TakeDamage(float damage)
 void Tank::SetCamera(Camera* camera)
 {
     m_camera = camera;
+}
+
+glm::vec3 Tank::GetTurretRotation() const
+{
+    return glm::vec3(0, m_turretRotation, 0);
 }

@@ -13,8 +13,13 @@ public:
 
 	void SetCamera(Camera* camera);
 
+	glm::vec3 GetTurretRotation() const;
+
+	static float turretRotationSpeed;
+
 private:
 	float m_health = 100.0f;
+	float m_turretRotation = 0.f;
 
 	const float m_rotationSpeed = 30.0f;
 	const float m_moveSpeed = 4.0f;
