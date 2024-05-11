@@ -34,6 +34,24 @@ bool InputManager::KeyHold(int key)
 
 bool InputManager::PrimaryClick()
 {
+    static bool wasButtonDown = false;
+    bool isButtonDown = glfwGetMouseButton(Program::GetWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+
+    if (isButtonDown && !wasButtonDown)
+    {
+        wasButtonDown = true;
+        return true;
+    }
+    else if (!isButtonDown && wasButtonDown)
+    {
+        wasButtonDown = false;
+    }
+
+    return false;
+}
+
+bool InputManager::PrimaryHold()
+{
     return glfwGetMouseButton(Program::GetWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
 }
 

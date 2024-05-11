@@ -11,6 +11,7 @@ public:
 	static bool KeyHold(int key);//ex key: GLFW_KEY_W
 
 	static bool PrimaryClick();
+	static bool PrimaryHold();
 
 	static float MouseMoveX();
 	static float MouseMoveY();
