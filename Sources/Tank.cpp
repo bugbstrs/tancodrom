@@ -17,7 +17,7 @@ Tank::Tank(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rot
 		tankModel = new Model("Models/Tanks/Tank/IS.obj", false, 2);
 	}
 	m_model = new Model(tankModel);
-	m_collider = new Collider(glm::vec3(0), 3, "Tank", m_position, m_rotation);
+	m_collider = new Collider(glm::vec3(0), 6.9, "Tank", m_position, m_rotation);
 }
 
 void Tank::Update()
@@ -33,7 +33,7 @@ void Tank::Update()
 	if (m_camera == nullptr || m_camera->GetCameraPOV() != TankCamera)
 	{
 		glm::vec3 forward = GetForward();
-		float movementSpeed = 0.2f * Scene::GetDeltaTime();
+		float movementSpeed = 2.f * Scene::GetDeltaTime();
 
 		if (m_isMoving)
 		{

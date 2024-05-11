@@ -9,7 +9,8 @@ Model* Helicopter::helicopterModel = nullptr;
 
 Helicopter::Helicopter(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     SceneObject(position, size, rotation),
-    m_camera{ nullptr }
+    m_camera{ nullptr },
+    m_isMoving{ true }
 {
     if (!helicopterModel)
     {
@@ -22,7 +23,7 @@ Helicopter::Helicopter(const glm::vec3& position, const glm::vec3& size, const g
     }
     m_model = helicopterModel;
 
-    m_collider = new Collider(glm::vec3(0), 8, "Helicopter", m_position, m_rotation);
+    m_collider = new Collider(glm::vec3(0), 4, "Helicopter", m_position, m_rotation);
 
     textures.emplace_back(Texture("Models/Helicopter/fuselage"));
     textures.emplace_back(Texture("Models/Helicopter/land"));
@@ -36,6 +37,12 @@ void Helicopter::Update()
     //m_model->SetMeshTransform(10, glm::rotate(m_model->GetMeshTransform(10), glm::radians(720 * Scene::GetDeltaTime()), glm::vec3(0, 0, 1)));
     m_model->RotateMesh(10, 720 * Scene::GetDeltaTime(), glm::vec3(0, 0, 1));
     m_model->RotateMesh(19, 720 * Scene::GetDeltaTime(), glm::vec3(1, 0, 0));
+
+    for (auto collision : m_collider->GetCollisions())
+    {
+        if (collision.first == "Helicopter")
+            m_isMoving = false;
+    }
 
     float tiltSpeed = constTiltSpeed * Scene::GetDeltaTime();
 
@@ -54,8 +61,18 @@ void Helicopter::Update()
             yaw = (yaw + tiltSpeed > 0) ? 0 : yaw + tiltSpeed;
     }
 
-    if (m_camera == nullptr || m_camera->GetCameraPOV() != HelicopterCamera)
+    if (m_camera == nullptr || m_camera->GetCameraPOV() != TankCamera)
+    {
+        glm::vec3 forward = GetForward();
+        float movementSpeed = 2.f * Scene::GetDeltaTime();
+
+        if (m_isMoving)
+        {
+            Move(forward * movementSpeed);
+        }
+
         return;
+    }
 
     float moveSpeed = m_moveSpeed * Scene::GetDeltaTime();
     float rotationSpeed = m_rotationSpeed * Scene::GetDeltaTime();

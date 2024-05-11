@@ -20,23 +20,35 @@ float Scene::m_deltaTime;
 
 void Scene::Start()
 {
-	m_objects.emplace_back(new Tank(glm::vec3(-20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
-	m_objects.emplace_back(new Tank(glm::vec3(-10, 0, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(-30, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(-30, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
+
+	m_objects.emplace_back(new Tank(glm::vec3(-15, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(-15, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
+
 	m_objects.emplace_back(new Tank(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
-	m_objects.emplace_back(new Tank(glm::vec3(10, 0, 5), glm::vec3(1), glm::vec3(0, 0, 0)));
-
-	m_objects.emplace_back(new Terrain(glm::vec3(0, -5.05, 0), glm::vec3(10), glm::vec3(0, 0, 0)));
-
-	m_objects.emplace_back(new Tank(glm::vec3(20, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
-
-	m_objects.push_back(new Helicopter(glm::vec3(20, 15, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
-	m_objects.push_back(new Helicopter(glm::vec3(0, 15, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
-
-	m_objects.emplace_back(new Tank(glm::vec3(-20, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
-	m_objects.emplace_back(new Tank(glm::vec3(-10, 0, 35), glm::vec3(1), glm::vec3(0, 180, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(0, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
-	m_objects.emplace_back(new Tank(glm::vec3(10, 0, 35), glm::vec3(1), glm::vec3(0, 180, 0)));
-	m_objects.emplace_back(new Tank(glm::vec3(20, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
+
+	m_objects.emplace_back(new Tank(glm::vec3(15, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(15, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
+
+	m_objects.emplace_back(new Tank(glm::vec3(30, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(30, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
+
+	m_objects.push_back(new Helicopter(glm::vec3(-30, 15, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(-30, 15, 40), glm::vec3(0.5), glm::vec3(0, 180, 0)));
+
+	m_objects.push_back(new Helicopter(glm::vec3(-15, 15, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(-15, 15, 40), glm::vec3(0.5), glm::vec3(0, 180, 0)));
+
+	m_objects.push_back(new Helicopter(glm::vec3(0, 15, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(0, 15, 40), glm::vec3(0.5), glm::vec3(0, 180, 0)));
+
+	m_objects.push_back(new Helicopter(glm::vec3(15, 15, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(15, 15, 40), glm::vec3(0.5), glm::vec3(0, 180, 0)));
+
+	m_objects.push_back(new Helicopter(glm::vec3(30, 15, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(30, 15, 40), glm::vec3(0.5), glm::vec3(0, 180, 0)));
 
 	m_objects.push_back(new Moon(glm::vec3(0, -5, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
 	//m_lights.push_back((LightSource*)m_objects[m_objects.size() - 1]);
