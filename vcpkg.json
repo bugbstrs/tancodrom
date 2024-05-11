@@ -5,7 +5,8 @@
     "glfw3",
     "assimp",
     "stb",
-    "glm"
+    "glm",
+    "sfml"
   ],
   "overrides": [
     {
@@ -27,6 +28,10 @@
     {
       "name": "glm",
       "version": "1.0.1#2"
+    },
+    {
+      "name": "sfml",
+      "version": "2.6.1"
     }
   ],
   "builtin-baseline": "3dcd8bb40bc2bbedf206e0bf0dc72c26e2aa2ddd"
