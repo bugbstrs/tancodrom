@@ -24,14 +24,6 @@ void Sun::Update()
     {
         Sun::rotationSpeed -= 0.1f * Scene::GetDeltaTime();
     }
-
-    if (InputManager::KeyHold(GLFW_KEY_R))
-    {
-        while (Sun::rotationSpeed != initialSpeed)
-        {
-            Sun::rotationSpeed -= 0.1f * Scene::GetDeltaTime();
-        }
-    }
     
 	RotateAround(5.f, Sun::rotationSpeed * glfwGetTime());
 }

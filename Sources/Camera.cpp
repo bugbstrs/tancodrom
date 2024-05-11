@@ -70,12 +70,13 @@ void Camera::ProcessInput()
     if (m_pov == TankCamera)
     {
         glm::quat tankRotationQuat = glm::quat(glm::radians(m_tank->GetRotation()));
+        glm::quat turretRotationQuat = glm::quat(glm::radians(dynamic_cast<Tank*>(m_tank)->GetTurretRotation()));
         glm::quat cameraOffsetQuat = glm::quat(glm::vec3(glm::radians(6.0f), glm::radians(-1.0f), glm::radians(-8.0f)));
-        glm::quat finalOffsetQuat = tankRotationQuat * cameraOffsetQuat;
+        glm::quat finalOffsetQuat = turretRotationQuat * tankRotationQuat * cameraOffsetQuat;
         glm::vec3 cameraOffset = glm::vec3(finalOffsetQuat * glm::vec4(-1.0f, 6.0f, -8.0f, 1.0f));
 
         m_position = m_tank->GetPosition() + cameraOffset;
-        m_rotation = m_tank->GetRotation();
+        m_rotation = m_tank->GetRotation() + dynamic_cast<Tank*>(m_tank)->GetTurretRotation();
 
         m_rotation.x += 30;
 
@@ -88,8 +89,7 @@ void Camera::ProcessInput()
         glm::quat cameraOffsetQuat = glm::quat(glm::vec3(glm::radians(6.0f), glm::radians(-1.0f), glm::radians(-8.0f)));
         glm::quat finalOffsetQuat = helicopterRotationQuat * cameraOffsetQuat;
         glm::vec3 cameraOffset = glm::vec3(finalOffsetQuat * glm::vec4(-1.0f, 6.0f, -8.0f, 1.0f));
-        //glm::vec3 cameraOffset = glm::vec3(finalOffsetQuat * glm::vec4(-9.0f, 5.0f, -5.0f, 1.0f));
-
+        
         m_position = m_helicopter->GetPosition() + cameraOffset;
         m_rotation = m_helicopter->GetRotation();
 
