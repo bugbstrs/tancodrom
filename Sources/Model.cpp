@@ -38,6 +38,13 @@ void Model::SetMeshTransform(int meshID, glm::mat4 transform)
     meshesTransform[meshID] = transform;
 }
 
+void Model::RotateMesh(int meshID, float degrees, glm::vec3 axis)
+{
+    meshesTransform[meshID] = glm::translate(meshesTransform[meshID], meshes[meshID].vertices->Position);
+    meshesTransform[meshID] = glm::rotate(meshesTransform[meshID], glm::radians(degrees), axis);
+    meshesTransform[meshID] = glm::translate(meshesTransform[meshID], -meshes[meshID].vertices->Position);
+}
+
 void Model::loadModel(std::string const &path, bool bSmoothNormals)
 {
     // read file via ASSIMP

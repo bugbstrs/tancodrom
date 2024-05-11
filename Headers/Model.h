@@ -27,6 +27,7 @@ public:
 
     glm::mat4 GetMeshTransform(int meshID);
     void SetMeshTransform(int meshID, glm::mat4 transform);
+    void RotateMesh(int meshID, float degrees, glm::vec3 axis);
 
 private:
     // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.

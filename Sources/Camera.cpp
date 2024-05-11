@@ -85,18 +85,15 @@ void Camera::ProcessInput()
     if (m_pov == HelicopterCamera)
     {
         glm::quat helicopterRotationQuat = glm::quat(glm::radians(m_helicopter->GetRotation()));
-        helicopterRotationQuat = glm::rotate(helicopterRotationQuat, 90.0f, glm::vec3(1, 0, 0));
-        helicopterRotationQuat = glm::rotate(helicopterRotationQuat, -180.0f, glm::vec3(0, 0, 1));
-        glm::quat cameraOffsetQuat = glm::quat(glm::vec3(glm::radians(5.0f), glm::radians(-9.0f), glm::radians(-5.0f)));
+        glm::quat cameraOffsetQuat = glm::quat(glm::vec3(glm::radians(6.0f), glm::radians(-1.0f), glm::radians(-8.0f)));
         glm::quat finalOffsetQuat = helicopterRotationQuat * cameraOffsetQuat;
-
-        glm::vec3 cameraOffset = glm::vec3(finalOffsetQuat * glm::vec4(-9.0f, 5.0f, -5.0f, 1.0f));
-
+        glm::vec3 cameraOffset = glm::vec3(finalOffsetQuat * glm::vec4(-1.0f, 6.0f, -8.0f, 1.0f));
+        //glm::vec3 cameraOffset = glm::vec3(finalOffsetQuat * glm::vec4(-9.0f, 5.0f, -5.0f, 1.0f));
 
         m_position = m_helicopter->GetPosition() + cameraOffset;
         m_rotation = m_helicopter->GetRotation();
-        m_rotation.x += 120;
-        m_rotation.z -= 180;
+
+        m_rotation.x += 30;
 
         return;
     }
