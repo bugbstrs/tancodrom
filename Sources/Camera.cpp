@@ -7,6 +7,7 @@
 #include "InputManager.h"
 #include "Tank.h"
 #include "Helicopter.h"
+#include <SoundManager.h>
 
 Camera::Camera(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     SceneObject(position, size, rotation),
@@ -65,10 +66,19 @@ void Camera::SetHelicopter(SceneObject* helicopter)
 void Camera::ProcessInput()
 {
     if (InputManager::KeyDown(GLFW_KEY_X))
+    {
         m_pov = FreeCamera;
+
+        if (!SoundManager::IsBackgroundMusicPlaying())
+        {
+            SoundManager::PlayBackgroundMusic();
+        }
+    }
 
     if (m_pov == TankCamera)
     {
+        SoundManager::StopBackgroundMusic();
+
         glm::quat tankRotationQuat = glm::quat(glm::radians(m_tank->GetRotation()));
         glm::quat turretRotationQuat = glm::quat(glm::radians(dynamic_cast<Tank*>(m_tank)->GetTurretRotation()));
         glm::quat cameraOffsetQuat = glm::quat(glm::vec3(glm::radians(6.0f), glm::radians(-1.0f), glm::radians(-8.0f)));
@@ -85,6 +95,8 @@ void Camera::ProcessInput()
 
     if (m_pov == HelicopterCamera)
     {
+        SoundManager::StopBackgroundMusic();
+
         glm::quat helicopterRotationQuat = glm::quat(glm::radians(m_helicopter->GetRotation()));
         glm::quat cameraOffsetQuat = glm::quat(glm::vec3(glm::radians(6.0f), glm::radians(-1.0f), glm::radians(-8.0f)));
         glm::quat finalOffsetQuat = helicopterRotationQuat * cameraOffsetQuat;

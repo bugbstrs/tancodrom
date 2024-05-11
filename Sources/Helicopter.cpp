@@ -1,5 +1,6 @@
 #include "Helicopter.h"
 #include "InputManager.h"
+#include <SoundManager.h>
 
 std::vector<Texture> Helicopter::textures;
 float const Helicopter::maxTilt = 30;
@@ -63,29 +64,52 @@ void Helicopter::Update()
     {
         pitch = (pitch + tiltSpeed * 2 > maxTilt) ? maxTilt : pitch + tiltSpeed * 2;
         Move(GetForward() * moveSpeed);
+
+        if (!SoundManager::IsHelicopterMoving())
+            SoundManager::StartFlyingHelicopter();
     }
     if (InputManager::KeyHold(GLFW_KEY_A))
     {
         yaw = (yaw - tiltSpeed * 2 < -maxTilt) ? -maxTilt : yaw - tiltSpeed * 2;
         Move(-GetRight() * moveSpeed);
+
+        if (!SoundManager::IsHelicopterMoving())
+            SoundManager::StartFlyingHelicopter();
     }
     if (InputManager::KeyHold(GLFW_KEY_S))
     {
         pitch = (pitch - tiltSpeed * 2 < -maxTilt) ? -maxTilt : pitch - tiltSpeed * 2;
         Move(-GetForward() * moveSpeed);
+
+        if (!SoundManager::IsHelicopterMoving())
+            SoundManager::StartFlyingHelicopter();
     }
     if (InputManager::KeyHold(GLFW_KEY_D))
     {
         yaw = (yaw + tiltSpeed * 2 > maxTilt) ? maxTilt : yaw + tiltSpeed * 2;
         Move(GetRight() * moveSpeed);
+
+        if (!SoundManager::IsHelicopterMoving())
+            SoundManager::StartFlyingHelicopter();
     }
     if (InputManager::KeyHold(GLFW_KEY_Q))
     {
         Move(-Scene::Up() * moveSpeed);
+
+        if (!SoundManager::IsHelicopterMoving())
+            SoundManager::StartFlyingHelicopter();
     }
     if (InputManager::KeyHold(GLFW_KEY_E))
     {
         Move(Scene::Up() * moveSpeed);
+
+        if (!SoundManager::IsHelicopterMoving())
+            SoundManager::StartFlyingHelicopter();
+    }
+
+    if (!InputManager::KeyHold(GLFW_KEY_W) && !InputManager::KeyHold(GLFW_KEY_A) && !InputManager::KeyHold(GLFW_KEY_S) && !InputManager::KeyHold(GLFW_KEY_D) && !InputManager::KeyHold(GLFW_KEY_Q) && !InputManager::KeyHold(GLFW_KEY_E))
+    {
+        SoundManager::StopFlyingHelicopter();
     }
 
     if (m_position.y > 35)

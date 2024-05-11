@@ -28,15 +28,15 @@ void SoundManager::Initialize()
 
 	soundMap["movingTank"]->openFromFile("..\\Sounds\\moving_tank.wav");
 	soundMap["movingTank"]->setVolume(30.0f);
-	soundMap["movingTank"]->setLoop(true);
+	soundMap["movingTank"]->setLoop(false);
 
 	soundMap["rotateTurret"]->openFromFile("..\\Sounds\\rotate_turret.wav");
 	soundMap["rotateTurret"]->setVolume(30.0f);
-	soundMap["rotateTurret"]->setLoop(true);
+	soundMap["rotateTurret"]->setLoop(false);
 
 	soundMap["helicopterFlying"]->openFromFile("..\\Sounds\\helicopter_flying.flac");
 	soundMap["helicopterFlying"]->setVolume(30.0f);
-	soundMap["helicopterFlying"]->setLoop(true);
+	soundMap["helicopterFlying"]->setLoop(false);
 }
 
 void SoundManager::IncreaseVolume()
@@ -77,6 +77,11 @@ void SoundManager::DecreaseBackgroundMusicVolume()
 void SoundManager::StopBackgroundMusic()
 {
 	soundMap["backgroundMusic"]->stop();
+}
+
+bool SoundManager::IsBackgroundMusicPlaying()
+{
+	return soundMap["backgroundMusic"]->getStatus() == sf::SoundSource::Playing;
 }
 
 void SoundManager::PlayTankShot()

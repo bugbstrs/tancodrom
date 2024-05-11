@@ -8,6 +8,7 @@
 #include "Projectile.h"
 #include "Terrain.h"
 #include <stb_image.h>
+#include <SoundManager.h>
 
 std::vector<SceneObject*> Scene::m_objects;
 std::vector<SceneObject*> Scene::m_objectsToInstantiate;
@@ -47,6 +48,9 @@ void Scene::Start()
 	Projectile::InitializeModel();
 	m_camera = new Camera(glm::vec3(0, 2, 0), glm::vec3(1), glm::vec3(0, 0, 0));
 	m_objects.push_back(m_camera);
+
+	SoundManager::Initialize();
+	//SoundManager::DecreaseVolume();
 }
 
 void Scene::Run()

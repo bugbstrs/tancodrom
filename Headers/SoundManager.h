@@ -17,6 +17,7 @@ public:
     static void IncreaseBackgroundMusicVolume();
     static void DecreaseBackgroundMusicVolume();
     static void StopBackgroundMusic();
+    static bool IsBackgroundMusicPlaying();
 
     //Shooting related
     static void PlayTankShot();
