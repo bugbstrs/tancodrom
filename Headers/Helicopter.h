@@ -25,5 +25,7 @@ private:
 	const float m_moveSpeed = 6.0f;
 
 	Camera* m_camera;
+
+	static Model* helicopterModel;
 };
 

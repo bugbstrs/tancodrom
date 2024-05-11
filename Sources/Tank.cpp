@@ -3,11 +3,18 @@
 #include "InputManager.h"
 #include "Projectile.h"
 
+Model* Tank::tankModel = nullptr;
+
 Tank::Tank(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     SceneObject(position, size, rotation),
-    m_camera{nullptr}
+    m_camera{nullptr},
+    m_isMoving{true}
 {
-    SetModel("Models/Tanks/Tank/IS.obj", false, 1);
+    if (!tankModel)
+    {
+        tankModel = new Model("Models/Tanks/Tank/IS.obj", false, 2);
+    }
+    m_model = tankModel;
     m_collider = new Collider(glm::vec3(0), 3, "Tank", m_position, m_rotation);
 }
 

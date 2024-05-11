@@ -21,5 +21,7 @@ private:
 	
 	Camera *m_camera;
 	bool m_isMoving;
+
+	static Model* tankModel;
 };
 

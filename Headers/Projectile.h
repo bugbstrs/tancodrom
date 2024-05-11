@@ -13,5 +13,7 @@ private:
 
 	const float m_damage = 40.0f;
 	const float m_moveSpeed = 5.0f;
+
+	static Model* projectileModel;
 };
 

@@ -2,10 +2,16 @@
 #include "Scene.h"
 #include "Tank.h"
 
+Model* Projectile::projectileModel = nullptr;
+
 Projectile::Projectile(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
 	SceneObject(position, size, rotation)
 {
-	SetModel("Models/Projectile/projectile.obj", false, 11);
+	if (!projectileModel)
+	{
+		projectileModel = new Model("Models/Projectile/projectile.obj", false, 2);
+	}
+	m_model = projectileModel;
 	m_collider = new Collider(glm::vec3(0,2,6), 0.5, "Projectile", m_position, m_rotation);
 }
 

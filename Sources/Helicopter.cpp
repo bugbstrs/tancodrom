@@ -4,17 +4,23 @@
 std::vector<Texture> Helicopter::textures;
 float const Helicopter::maxTilt = 30;
 float const Helicopter::constTiltSpeed = 15;
+Model* Helicopter::helicopterModel = nullptr;
 
 Helicopter::Helicopter(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
     SceneObject(position, size, rotation),
     m_camera{ nullptr }
 {
-    SetModel("Models/Helicopters/uh60.dae", false, 2);
-    for (int i = 0; i < m_model->meshes.size(); ++i)
+    if (!helicopterModel)
     {
-        m_model->SetMeshTransform(i, glm::rotate(m_model->GetMeshTransform(i), glm::radians(90.0f), glm::vec3(1, 0, 0)));
-        m_model->SetMeshTransform(i, glm::rotate(m_model->GetMeshTransform(i), glm::radians(-180.0f), glm::vec3(0, 1, 0)));
+        helicopterModel = new Model("Models/Helicopters/uh60.dae", false, 2);
+        for (int i = 0; i < helicopterModel->meshes.size(); ++i)
+        {
+            helicopterModel->SetMeshTransform(i, glm::rotate(helicopterModel->GetMeshTransform(i), glm::radians(90.0f), glm::vec3(1, 0, 0)));
+            helicopterModel->SetMeshTransform(i, glm::rotate(helicopterModel->GetMeshTransform(i), glm::radians(-180.0f), glm::vec3(0, 1, 0)));
+        }
     }
+    m_model = helicopterModel;
+
     m_collider = new Collider(glm::vec3(0), 8, "Helicopter", m_position, m_rotation);
 
     textures.emplace_back(Texture("Models/Helicopter/fuselage"));
