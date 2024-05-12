@@ -2,7 +2,8 @@
 #include "Scene.h"
 #include "InputManager.h"
 #include "Projectile.h"
-#include <SoundManager.h>
+#include "Light.h"
+#include "SoundManager.h"
 
 Model* Tank::tankModel = nullptr;
 float Tank::turretRotationSpeed = 10.f;
@@ -24,10 +25,14 @@ void Tank::Update()
 {
 	m_isMoving = true;
 
-	for (auto collision : m_collider->GetCollisions())
+	auto collisions = m_collider->GetCollisions();
+	for (auto collision : collisions)
 	{
 		if (collision.first == "Tank")
+		{
 			m_isMoving = false;
+			Collider::ResolveCollision(this, collision.second);
+		}
 	}
 
 	if (m_camera == nullptr || m_camera->GetCameraPOV() != TankCamera)
@@ -103,6 +108,7 @@ void Tank::TakeDamage(float damage)
 	m_health -= damage;
 	if (m_health <= 0)
 	{
+		Scene::AddLight(new Light(m_position + GetUp() * 1.5f, glm::vec3(1, 0.4, 0), 10, 1.7));
 		Scene::Destroy(this);
 		SoundManager::PlayTankHit();
 	}

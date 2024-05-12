@@ -13,19 +13,25 @@ Moon::Moon(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rot
     textures.emplace_back(Texture("Models/Moon/Moon_Normal.jpg"));
     textures.emplace_back(Texture("Models/Moon/Moon_Diffuse.jpg"));
     textures.emplace_back(Texture("Models/Moon/Moon_Displacement.jpg"));
+
+    color = glm::vec3(0.1f, 0.1f, 0.4f);
+    intensity = 10.0f;
 }
 
 void Moon::Update()
 {
     if (InputManager::KeyHold(GLFW_KEY_P))
     {
-        Moon::rotationSpeed += 0.1f * Scene::GetDeltaTime();
+        rotationSpeed += 0.1f * Scene::GetDeltaTime();
     }
 
     if (InputManager::KeyHold(GLFW_KEY_O))
     {
-        Moon::rotationSpeed -= 0.1f * Scene::GetDeltaTime();
+        rotationSpeed -= 0.1f * Scene::GetDeltaTime();
     }
 
-    RotateAround(-5.f, rotationSpeed * glfwGetTime());
+    RotateAround(glm::vec3(0), 90, glm::vec3(0, 0, 1), rotationSpeed * Scene::GetDeltaTime());
+
+    if (m_position.y >= 1)
+        Scene::SetPrimaryLight(this);
 }

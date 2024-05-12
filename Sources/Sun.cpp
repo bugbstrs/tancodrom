@@ -11,19 +11,25 @@ Sun::Sun(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotat
 	SetModel("Models/Sun/13913_Sun_v2_l3.obj", false, 4);
 
 	textures.push_back(Texture("Models/Sun/13913_Sun_diff.jpg"));
+
+    color = glm::vec3(0.6f);
+    intensity = 10.0f;
 }
 
 void Sun::Update()
 {
     if (InputManager::KeyHold(GLFW_KEY_P))
     {
-        Sun::rotationSpeed += 0.1f * Scene::GetDeltaTime();
+        rotationSpeed += 0.1f * Scene::GetDeltaTime();
     }
 
     if (InputManager::KeyHold(GLFW_KEY_O))
     {
-        Sun::rotationSpeed -= 0.1f * Scene::GetDeltaTime();
+        rotationSpeed -= 0.1f * Scene::GetDeltaTime();
     }
     
-	RotateAround(5.f, Sun::rotationSpeed * glfwGetTime());
+    RotateAround(glm::vec3(0), 90, glm::vec3(0, 0, 1), rotationSpeed * Scene::GetDeltaTime());
+
+    if (m_position.y >= 1)
+        Scene::SetPrimaryLight(this);
 }

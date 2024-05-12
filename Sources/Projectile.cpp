@@ -1,6 +1,7 @@
 #include "Projectile.h"
 #include "Scene.h"
 #include "Tank.h"
+#include "Light.h"
 
 Model* Projectile::projectileModel = nullptr;
 
@@ -27,6 +28,7 @@ void Projectile::Update()
 		if (collision.first == "Tank")
 		{
 			dynamic_cast<Tank*>(collision.second)->TakeDamage(m_damage);
+			Scene::AddLight(new Light(m_position + GetForward() * 6.0f + GetUp() * 2.0f, glm::vec3(0.8, 0.3, 0), 7, 1));
 			Scene::Destroy(this);
 		}
 	}
