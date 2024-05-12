@@ -2,8 +2,8 @@
 #include <glm/glm.hpp>
 
 #include "Model.h"
-#include "Shader.h"
 
+class Shader;
 class SceneObject;
 
 class Collider
@@ -13,9 +13,11 @@ public:
 	Collider(const glm::vec3& position, float radius, const std::string& type, glm::vec3& objPosition, glm::vec3& objRotation);
 
 	std::vector<std::pair<std::string, SceneObject*>> GetCollisions();
+	float GetRadius();
 	void ClearCollisions();
 
 	static void CheckCollisions(SceneObject* object1, SceneObject* object2);
+	static void ResolveCollision(SceneObject* object1, SceneObject* object2);
 
 private:
 	glm::vec3 CalculatePosition();
@@ -48,7 +50,7 @@ public:
 	glm::vec3 GetRotation() const;
 	void SetRotation(glm::vec3 rotation);
 	void Rotate(glm::vec3 direction);
-	void RotateAround(float distance, float rotationSpeed);
+	void RotateAround(glm::vec3 point, float distance, glm::vec3 axis, float speed);
 
 	glm::vec3 GetSize() const;
 	void SetSize(glm::vec3 size);

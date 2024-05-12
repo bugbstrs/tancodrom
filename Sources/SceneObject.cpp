@@ -16,6 +16,11 @@ std::vector<std::pair<std::string, SceneObject*>> Collider::GetCollisions()
     return m_collisions;
 }
 
+float Collider::GetRadius()
+{
+    return m_radius;
+}
+
 void Collider::ClearCollisions()
 {
     m_collisions.clear();
@@ -38,6 +43,16 @@ void Collider::CheckCollisions(SceneObject* object1, SceneObject* object2)
         collider1->m_collisions.push_back(std::make_pair(collider2->m_type, object2));
         collider2->m_collisions.push_back(std::make_pair(collider1->m_type, object1));
     }
+}
+
+void Collider::ResolveCollision(SceneObject* object1, SceneObject* object2)
+{
+    glm::vec3 direction(object1->GetPosition() - object2->GetPosition());
+    direction = glm::normalize(direction);
+    float collidersRadious = object1->GetCollider()->GetRadius() + object2->GetCollider()->GetRadius();
+    float distance = glm::distance(object1->GetPosition(), object2->GetPosition());
+    object1->Move(direction * ((collidersRadious - distance) / 2));
+    object2->Move(-direction * ((collidersRadious - distance) / 2));
 }
 
 glm::vec3 Collider::CalculatePosition()
@@ -135,14 +150,18 @@ void SceneObject::Rotate(glm::vec3 direction)
     NormalizeRotation();
 }
 
-void SceneObject::RotateAround(float distance, float rotationAngle)
+void SceneObject::RotateAround(glm::vec3 point, float distance, glm::vec3 axis, float speed)
 {
-    float scaleX = 25.0f; // Adjust this value to control the width of the ellipse
-    float scaleY = 7.0f; // Adjust this value to control the height of the ellipse
+    float angle = speed;
 
-    m_position = glm::vec3(distance * scaleX * cos(rotationAngle), distance * scaleY * sin(rotationAngle), 0.f);
+    glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), angle, axis);
+    glm::vec4 newPosition = rotationMatrix * glm::vec4(m_position - point, 1.0f);
+    newPosition = glm::normalize(newPosition) * distance;
+
+    m_position = glm::vec3(newPosition) + point;
+
+    m_rotation += angle * glm::degrees(axis);
 }
-
 
 glm::vec3 SceneObject::GetSize() const
 {
