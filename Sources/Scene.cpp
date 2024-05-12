@@ -12,7 +12,9 @@
 
 std::vector<SceneObject*> Scene::m_objects;
 std::vector<SceneObject*> Scene::m_objectsToInstantiate;
+std::vector<LightSource*> Scene::m_lightsToInstantiate;
 std::vector<SceneObject*> Scene::m_objectsToDestroy;
+std::vector<LightSource*> Scene::m_lightsToDestroy;
 std::vector<LightSource*> Scene::m_lights;
 std::unique_ptr<SkyBox> Scene::m_skybox;
 Camera* Scene::m_camera;
@@ -20,6 +22,12 @@ float Scene::m_deltaTime;
 
 void Scene::Start()
 {
+	m_camera = new Camera(glm::vec3(0, 2, 0), glm::vec3(1), glm::vec3(0, 0, 0));
+	m_objects.push_back(m_camera);
+
+	m_objects.emplace_back(new Terrain(glm::vec3(0, -5.05, 0), glm::vec3(10), glm::vec3(0, 0, 0)));
+
+
 	m_objects.emplace_back(new Tank(glm::vec3(-30, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
 	m_objects.emplace_back(new Tank(glm::vec3(-30, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
 
@@ -50,16 +58,15 @@ void Scene::Start()
 	m_objects.push_back(new Helicopter(glm::vec3(30, 15, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
 	m_objects.push_back(new Helicopter(glm::vec3(30, 15, 40), glm::vec3(0.5), glm::vec3(0, 180, 0)));
 
-	m_objects.push_back(new Moon(glm::vec3(0, -5, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
-	//m_lights.push_back((LightSource*)m_objects[m_objects.size() - 1]);
-	m_objects.push_back(new Sun(glm::vec3(0, 5, 0), glm::vec3(0.006), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Sun(glm::vec3(10, 0, 0), glm::vec3(0.006), glm::vec3(0, 0, 0)));
 	m_lights.push_back((LightSource*)m_objects[m_objects.size() - 1]);
 
-	m_objects.push_back(new SkyBox(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Moon(glm::vec3(-10, 0, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	m_lights.push_back((LightSource*)m_objects[m_objects.size() - 1]);
+
+	m_objects.push_back(new SkyBox(glm::vec3(0, 0, 0), glm::vec3(30), glm::vec3(0, 0, 0)));
 
 	Projectile::InitializeModel();
-	m_camera = new Camera(glm::vec3(0, 2, 0), glm::vec3(1), glm::vec3(0, 0, 0));
-	m_objects.push_back(m_camera);
 
 	SoundManager::Initialize();
 	//SoundManager::DecreaseVolume();
@@ -72,7 +79,7 @@ void Scene::Run()
 
 	unsigned int depthMapFBO;
 	glGenFramebuffers(1, &depthMapFBO);
-	const unsigned int SHADOW_WIDTH = 4096, SHADOW_HEIGHT = 4096;
+	const unsigned int SHADOW_WIDTH = 8192, SHADOW_HEIGHT = 8192;
 	unsigned int depthMap;
 	glGenTextures(1, &depthMap);
 	glBindTexture(GL_TEXTURE_2D, depthMap);
@@ -93,13 +100,9 @@ void Scene::Run()
 	Program::m_shadowMappingShader.SetInt("diffuseTexture", 0);
 	Program::m_shadowMappingShader.SetInt("shadowMap", 1);
 
-	float hue = 1.0;
-	float floorHue = 0.9;
-
 	Start();
 
-
-	while (!glfwWindowShouldClose(Program::GetWindow()))//TODO:  while (!glfwWindowShouldClose(window)) de preferat in Program.cpp
+	while (!glfwWindowShouldClose(Program::GetWindow()))
 	{
 		glClearColor(0.3f, 0.3f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -124,25 +127,23 @@ void Scene::Run()
 		}
 
 		//randare umbre
-		for (auto light : m_lights) {
-			Program::m_shadowMappingDepthShader.Use();
-			Program::m_shadowMappingDepthShader.SetMat4("lightSpaceMatrix", light->GetLightSpaceMatrix());
+		Program::m_shadowMappingDepthShader.Use();
+		Program::m_shadowMappingDepthShader.SetMat4("lightSpaceMatrix", m_lights[0]->GetLightSpaceMatrix());
 
-			glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-			glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-			glClear(GL_DEPTH_BUFFER_BIT);
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+		glClear(GL_DEPTH_BUFFER_BIT);
 
-			for (auto object : m_objects)
-			{
-				object->Render(Program::m_shadowMappingDepthShader);
-			}
-
-			glActiveTexture(GL_TEXTURE0);
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_FRONT);
-			glCullFace(GL_BACK);
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		for (auto object : m_objects)
+		{
+			object->Render(Program::m_shadowMappingDepthShader);
 		}
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glActiveTexture(GL_TEXTURE0);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
+		glCullFace(GL_BACK);
 
 		glViewport(0, 0, Program::GetScreenWidth(), Program::GetScreenHeight());
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -151,11 +152,25 @@ void Scene::Run()
 		Program::m_shadowMappingShader.Use();
 		Program::m_shadowMappingShader.SetMat4("projection", m_camera->GetProjectionMatrix());
 		Program::m_shadowMappingShader.SetMat4("view", m_camera->GetViewMatrix());
-		Program::m_shadowMappingShader.SetFloat("hue", floorHue);
 
 		Program::m_shadowMappingShader.SetVec3("viewPos", m_camera->GetPosition());
 		Program::m_shadowMappingShader.SetVec3("lightPos", m_lights[0]->GetPosition());
 		Program::m_shadowMappingShader.SetMat4("lightSpaceMatrix", m_lights[0]->GetLightSpaceMatrix());
+
+		std::vector<glm::vec3> lightsPosition;
+		std::vector<glm::vec3> lightsColor;
+		std::vector<float> lightsIntensity;
+		for (auto light : m_lights)
+		{
+			lightsPosition.push_back(light->GetPosition());
+			lightsColor.push_back(light->color);
+			lightsIntensity.push_back(light->intensity);
+		}
+		Program::m_shadowMappingShader.SetInt("numLights", m_lights.size());
+		Program::m_shadowMappingShader.SetLightsVec3("position", lightsPosition);
+		Program::m_shadowMappingShader.SetLightsVec3("color", lightsColor);
+		Program::m_shadowMappingShader.SetLightsFloat("intensity", lightsIntensity);
+
 		glActiveTexture(GL_TEXTURE0);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
@@ -164,11 +179,6 @@ void Scene::Run()
 		{
 			object->Render(Program::m_shadowMappingShader);
 		}
-
-		float sunPassingTime = currentFrame * Sun::rotationSpeed;
-		m_lights[0]->SetPosition(glm::vec3(0.0f, 20 * sin(sunPassingTime), 50 * cos(sunPassingTime)));
-		hue = std::max<float>(sin(sunPassingTime), 0.1);
-		floorHue = std::max<float>(sin(sunPassingTime), 0.6);
 		
 		InputManager::ClearMouseMovement();
 
@@ -185,6 +195,11 @@ void Scene::Run()
 			m_objects.emplace_back(object);
 		}
 		m_objectsToInstantiate.clear();
+		for (auto light : m_lightsToInstantiate)
+		{
+			m_lights.emplace_back(light);
+		}
+		m_lightsToInstantiate.clear();
 
 		//Destroy objects
 		for (auto object : m_objectsToDestroy)
@@ -193,6 +208,12 @@ void Scene::Run()
 				m_objects.erase(std::find(m_objects.begin(), m_objects.end(), object));
 		}
 		m_objectsToDestroy.clear();
+		for (auto light : m_lightsToDestroy)
+		{
+			if (std::find(m_lights.begin(), m_lights.end(), light) != m_lights.end())
+				m_lights.erase(std::find(m_lights.begin(), m_lights.end(), light));
+		}
+		m_lightsToDestroy.clear();
 
 		glfwSwapBuffers(Program::GetWindow());
 		glfwPollEvents();
@@ -252,6 +273,33 @@ void Scene::Destroy(SceneObject* object)
 {
 	if (std::find(m_objectsToDestroy.begin(), m_objectsToDestroy.end(), object) == m_objectsToDestroy.end())
 		m_objectsToDestroy.emplace_back(object);
+}
+
+void Scene::AddLight(LightSource* light)
+{
+	m_objectsToInstantiate.emplace_back(light);
+	m_lightsToInstantiate.emplace_back(light);
+}
+
+void Scene::DestroyLight(LightSource* light)
+{
+	if (std::find(m_objectsToDestroy.begin(), m_objectsToDestroy.end(), light) == m_objectsToDestroy.end())
+		m_objectsToDestroy.emplace_back(light);
+	if (std::find(m_lightsToDestroy.begin(), m_lightsToDestroy.end(), light) == m_lightsToDestroy.end())
+		m_lightsToDestroy.emplace_back(light);
+}
+
+void Scene::SetPrimaryLight(LightSource* light)
+{
+	if (light == m_lights[0])
+		return;
+
+	auto it = std::find(m_lights.begin(), m_lights.end(), light);
+
+	if (it != m_lights.end())
+	{
+		std::iter_swap(m_lights.begin(), it);
+	}
 }
 
 glm::vec3 Scene::Forward()
