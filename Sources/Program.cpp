@@ -33,7 +33,7 @@ void Program::Run()
         m_screenWidth = mode->width;
         m_screenHeight = mode->height;
 
-        m_window = glfwCreateWindow(m_screenWidth, m_screenHeight, "Tancodrom", NULL, NULL);
+        m_window = glfwCreateWindow(m_screenWidth, m_screenHeight, "Tancodrom", glfwGetPrimaryMonitor(), NULL);
 
         if (m_window == NULL)
         {

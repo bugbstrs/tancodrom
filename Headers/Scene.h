@@ -23,6 +23,10 @@ public:
 	static void Instantiate(SceneObject* object);
 	static void Destroy(SceneObject* object);
 
+	static void AddLight(LightSource* light);
+	static void DestroyLight(LightSource* light);
+	static void SetPrimaryLight(LightSource* light);
+
 	static float GetDeltaTime();
 	static Camera* GetCamera();
 
@@ -40,6 +44,8 @@ private:
 	static std::unique_ptr<SkyBox> m_skybox;
 
 	static std::vector<SceneObject*> m_objectsToInstantiate;
+	static std::vector<LightSource*> m_lightsToInstantiate;
 	static std::vector<SceneObject*> m_objectsToDestroy;
+	static std::vector<LightSource*> m_lightsToDestroy;
 };
 
