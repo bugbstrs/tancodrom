@@ -30,7 +30,7 @@ private:
     void Reshape();
 
     const float m_zNEAR = 0.1f;
-    const float m_zFAR = 1000.f;
+    const float m_zFAR = 100000.0f;
     const float m_cameraSpeedFactor = 25.5f;
     const float m_mouseSensitivity = 50.0f;
 
