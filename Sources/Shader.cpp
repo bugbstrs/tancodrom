@@ -97,6 +97,24 @@ void Shader::SetMat4(const std::string& name, const glm::mat4& mat) const
 	glUniformMatrix4fv(glGetUniformLocation(m_ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
 }
 
+void Shader::SetLightsVec3(const std::string& name, const std::vector<glm::vec3>& vec) const
+{
+	for (int i = 0; i < vec.size(); ++i)
+	{
+		std::string prefix = "lights[" + std::to_string(i) + "].";
+		glUniform3fv(glGetUniformLocation(m_ID, (prefix + name).c_str()), 1, glm::value_ptr(vec[i]));
+	}
+}
+
+void Shader::SetLightsFloat(const std::string& name, const std::vector<float>& vec) const
+{
+	for (int i = 0; i < vec.size(); ++i)
+	{
+		std::string prefix = "lights[" + std::to_string(i) + "].";
+		SetFloat(prefix + name, vec[i]);
+	}
+}
+
 void Shader::SetFloat(const std::string& name, float value) const
 {
 	glUniform1f(glGetUniformLocation(m_ID, name.c_str()), value);
