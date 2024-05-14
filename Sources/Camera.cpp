@@ -10,7 +10,7 @@
 #include <SoundManager.h>
 
 Camera::Camera(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
-    SceneObject(position, size, rotation),
+    SceneObject(position, size, rotation, "camera"),
     m_pov{ FreeCamera },
     m_tank{ nullptr },
     m_helicopter{ nullptr }
@@ -23,7 +23,21 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& size, const glm::vec3
 
 void Camera::Update()
 {
+    if (m_tank && m_tank->GetName() == "")
+    {
+        m_tank = nullptr;
+        m_pov = FreeCamera;
+    }
+    if (m_helicopter && m_helicopter->GetName() == "")
+    {
+        m_helicopter = nullptr;
+        m_pov = FreeCamera;
+    }
+
     Reshape();
+
+    if (m_pov == CinematicCamera)
+        return;
 
     ProcessInput();
 }
@@ -45,13 +59,19 @@ POV Camera::GetCameraPOV()
     return m_pov;
 }
 
+void Camera::SetCameraPOV(POV pov)
+{
+    m_pov = pov;
+}
+
 void Camera::SetTank(SceneObject* tank)
 {
     if (m_tank)
         dynamic_cast<Tank*>(m_tank)->SetCamera(nullptr);
     m_tank = tank;
     m_pov = TankCamera;
-    dynamic_cast<Tank*>(m_tank)->SetCamera(this);
+    if (tank)
+        dynamic_cast<Tank*>(m_tank)->SetCamera(this);
 }
 
 void Camera::SetHelicopter(SceneObject* helicopter)
@@ -60,7 +80,8 @@ void Camera::SetHelicopter(SceneObject* helicopter)
         dynamic_cast<Helicopter*>(m_helicopter)->SetCamera(nullptr);
     m_helicopter = helicopter;
     m_pov = HelicopterCamera;
-    dynamic_cast<Helicopter*>(m_helicopter)->SetCamera(this);
+    if (helicopter)
+        dynamic_cast<Helicopter*>(m_helicopter)->SetCamera(this);
 }
 
 void Camera::ProcessInput()
@@ -110,7 +131,7 @@ void Camera::ProcessInput()
         return;
     }
 
-    if (InputManager::PrimaryClick())
+    if (InputManager::PrimaryClick() || InputManager::PrimaryHold())
     {
         glm::vec3 rayDirection = GetForward();
 

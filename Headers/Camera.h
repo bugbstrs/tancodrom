@@ -25,6 +25,7 @@ public:
     const glm::mat4 GetProjectionMatrix() const;
 
     POV GetCameraPOV();
+    void SetCameraPOV(POV pov);
 
 private:
     void Reshape();

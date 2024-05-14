@@ -3,5 +3,6 @@ enum POV
 {
     FreeCamera,
     TankCamera,
-    HelicopterCamera
+    HelicopterCamera,
+    CinematicCamera
 };
