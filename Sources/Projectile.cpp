@@ -2,6 +2,8 @@
 #include "Scene.h"
 #include "Tank.h"
 #include "Light.h"
+#include <Building.h>
+#include <Wall.h>
 
 Model* Projectile::projectileModel = nullptr;
 
@@ -28,6 +30,20 @@ void Projectile::Update()
 		if (collision.first == "Tank")
 		{
 			dynamic_cast<Tank*>(collision.second)->TakeDamage(m_damage);
+			Scene::AddLight(new Light(m_position + GetForward() * 6.0f + GetUp() * 2.0f, glm::vec3(0.8, 0.3, 0), 7, 1));
+			Scene::Destroy(this);
+		}
+
+		if (collision.first == "Building")
+		{
+			dynamic_cast<Building*>(collision.second)->TakeDamage(m_damage);
+			Scene::AddLight(new Light(m_position + GetForward() * 6.0f + GetUp() * 2.0f, glm::vec3(0.8, 0.3, 0), 7, 1));
+			Scene::Destroy(this);
+		}
+
+		if (collision.first == "Wall")
+		{
+			dynamic_cast<Wall*>(collision.second)->TakeDamage(m_damage);
 			Scene::AddLight(new Light(m_position + GetForward() * 6.0f + GetUp() * 2.0f, glm::vec3(0.8, 0.3, 0), 7, 1));
 			Scene::Destroy(this);
 		}

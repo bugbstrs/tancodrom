@@ -17,6 +17,11 @@ std::vector<std::pair<std::string, SceneObject*>> Collider::GetCollisions()
     return m_collisions;
 }
 
+void Collider::SetRadius(float newRadius)
+{
+    m_radius = newRadius;
+}
+
 float Collider::GetRadius()
 {
     return m_radius;
@@ -54,6 +59,15 @@ void Collider::ResolveCollision(SceneObject* object1, SceneObject* object2)
     float distance = glm::distance(object1->GetPosition(), object2->GetPosition());
     object1->Move(direction * ((collidersRadious - distance) / 2));
     object2->Move(-direction * ((collidersRadious - distance) / 2));
+}
+
+void Collider::ResolveCollision2(SceneObject* object1, SceneObject* object2)
+{
+    glm::vec3 direction(object1->GetPosition() - object2->GetPosition());
+    direction = glm::normalize(direction);
+    float collidersRadious = object1->GetCollider()->GetRadius() + object2->GetCollider()->GetRadius();
+    float distance = glm::distance(object1->GetPosition(), object2->GetPosition());
+    object1->Move(direction * ((collidersRadious - distance)));
 }
 
 glm::vec3 Collider::CalculatePosition()
