@@ -17,7 +17,7 @@
 //}
 
 SkyBox::SkyBox(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation):
-	SceneObject(position, size, rotation)
+	SceneObject(position, size, rotation, "skybox")
 {
 	SetModel("Models/Skybox/skybox.obj", false, 10);
 

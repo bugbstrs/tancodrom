@@ -14,5 +14,6 @@ public:
 
 	const float initialSpeed = 0.1f;
 private:
+	float m_initialIntensity;
 };
 

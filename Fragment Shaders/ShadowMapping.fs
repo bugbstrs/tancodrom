@@ -23,6 +23,8 @@ uniform vec3 viewPos;
 uniform int numLights;
 uniform Light lights[MAX_LIGHTS];
 
+uniform float skyboxHue;
+
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
     // perform perspective divide
@@ -37,7 +39,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     vec3 normal = normalize(fs_in.Normal);
     vec3 lightDir = normalize(lights[0].position - fs_in.FragPos);
 
-    float bias = max(0.001 * (1.0 - dot(normal, lightDir)), 0.001);
+    float bias = max(0.0015 * (1.0 - dot(normal, lightDir)), 0.0015);
     float shadow = 0.0;
     vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
     for (int x = -1; x <= 1; ++x)
@@ -62,9 +64,9 @@ void main()
     vec3 normal = normalize(fs_in.Normal);
     vec3 lighting = vec3(0.0);
 
-    if(length(vec3(0.0) - fs_in.FragPos) > 150)
+    if(length(vec3(0.0) - fs_in.FragPos) > 300)
     {
-        FragColor = vec4(color, 1.0);
+        FragColor = vec4(color * skyboxHue, 1.0);
         return;
     }
 
