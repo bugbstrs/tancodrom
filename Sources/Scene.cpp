@@ -130,7 +130,6 @@ void Scene::Start()
 	Projectile::InitializeModel();
 
 	SoundManager::Initialize();
-	//SoundManager::DecreaseVolume();
 }
 
 void Scene::Run()

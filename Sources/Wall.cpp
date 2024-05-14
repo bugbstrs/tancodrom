@@ -49,5 +49,4 @@ void Wall::Render(Shader& shader)
 	modelTransform = glm::rotate(modelTransform, glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	modelTransform = glm::scale(modelTransform, m_size);
 	m_model->RenderModel(shader, modelTransform);
-	//glDisable(GL_DEPTH_TEST);
 }

@@ -7,8 +7,6 @@ public:
 
 	void Update() override;
 
-	//static std::vector<Texture> textures;
-
 private:
 };
 

@@ -36,7 +36,6 @@ Helicopter::Helicopter(const glm::vec3& position, const glm::vec3& size, const g
 void Helicopter::Update()
 {
     m_model->SetMeshTransform(10, glm::rotate(m_model->GetMeshTransform(10), glm::radians(120 * Scene::GetDeltaTime()), glm::vec3(0, 0, 1)));
-    //m_model->RotateMesh(10, 120 * Scene::GetDeltaTime(), glm::vec3(0, 0, 1));
     m_model->RotateMesh(19, 120 * Scene::GetDeltaTime(), glm::vec3(1, 0, 0));
 
     float tiltSpeed = constTiltSpeed * Scene::GetDeltaTime();
