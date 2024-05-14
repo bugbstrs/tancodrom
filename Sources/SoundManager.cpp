@@ -1,6 +1,6 @@
 #include "SoundManager.h"
 
-std::map<std::string, sf::Music*> SoundManager::soundMap {
+std::map<std::string, sf::Music*> SoundManager::soundMap{
 	{"backgroundMusic", new sf::Music()},
 	{"tankShot", new sf::Music()},
 	{"tankHit", new sf::Music()},
@@ -41,16 +41,12 @@ void SoundManager::Initialize()
 
 void SoundManager::IncreaseVolume()
 {
-	for (auto it = soundMap.begin(); it != soundMap.end(); ++it)
-		it->second->setVolume(it->second->getVolume() + 10.0f);
+	sf::Listener::setGlobalVolume(sf::Listener::getGlobalVolume() + 10.0f);
 }
 
 void SoundManager::DecreaseVolume()
 {
-	for (auto it = soundMap.begin(); it != soundMap.end(); ++it) {
-		if (it->first != "backgroundMusic")
-			it->second->setVolume(it->second->getVolume() - 10.0f);
-	}
+	sf::Listener::setGlobalVolume(sf::Listener::getGlobalVolume() - 10.0f);
 }
 
 void SoundManager::StopAllSounds()
