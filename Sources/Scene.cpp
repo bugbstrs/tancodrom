@@ -10,6 +10,8 @@
 #include <stb_image.h>
 #include "SoundManager.h"
 #include "CinematicHandler.h"
+#include "Building.h"
+#include "Wall.h"
 
 std::vector<SceneObject*> Scene::m_objects;
 std::vector<SceneObject*> Scene::m_objectsToInstantiate;
@@ -68,6 +70,62 @@ void Scene::Start()
 	m_objects.push_back(new SkyBox(glm::vec3(0, 0, 0), glm::vec3(30), glm::vec3(0, 0, 0)));
 
 	m_objects.push_back(new CinematicHandler(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0)));
+
+	// First city
+	m_objects.push_back(new Building(glm::vec3(91, 0, -90), glm::vec3(1), glm::vec3(0, 45, 0)));
+	m_objects.push_back(new Building(glm::vec3(72.8, 0, -82), glm::vec3(1), glm::vec3(0, 90, 0)));
+	m_objects.push_back(new Building(glm::vec3(54.6, 0, -87), glm::vec3(1), glm::vec3(0, 30, 0)));
+	m_objects.push_back(new Building(glm::vec3(36.4, 0, -78), glm::vec3(1), glm::vec3(0, 60, 0)));
+	m_objects.push_back(new Building(glm::vec3(18.2, 0, -78), glm::vec3(1), glm::vec3(0, 120, 0)));
+	m_objects.push_back(new Building(glm::vec3(0, 0, -73), glm::vec3(1), glm::vec3(0, 180, 0)));
+	m_objects.push_back(new Building(glm::vec3(-91, 0, -90), glm::vec3(1), glm::vec3(0, 270, 0)));
+	m_objects.push_back(new Building(glm::vec3(-72.8, 0, -82), glm::vec3(1), glm::vec3(0, 330, 0)));
+	m_objects.push_back(new Building(glm::vec3(-54.6, 0, -87), glm::vec3(1), glm::vec3(0, 210, 0)));
+	m_objects.push_back(new Building(glm::vec3(-36.4, 0, -78), glm::vec3(1), glm::vec3(0, 240, 0)));
+	m_objects.push_back(new Building(glm::vec3(-18.2, 0, -78), glm::vec3(1), glm::vec3(0, 300, 0)));
+	m_objects.push_back(new Building(glm::vec3(91, 0, -90), glm::vec3(1), glm::vec3(0, 15, 0)));
+	m_objects.push_back(new Building(glm::vec3(72.8, 0, -82), glm::vec3(1), glm::vec3(0, 75, 0)));
+	m_objects.push_back(new Building(glm::vec3(54.6, 0, -87), glm::vec3(1), glm::vec3(0, 135, 0)));
+
+	m_objects.push_back(new Wall(glm::vec3(91, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(72.8, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(54.6, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(36.4, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(18.2, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(0, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(-18.2, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(-36.4, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(-54.6, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(-72.8, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(-91, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+
+	// Second city
+	m_objects.push_back(new Building(glm::vec3(91, 0, 90), glm::vec3(1), glm::vec3(0, 45, 0)));
+	m_objects.push_back(new Building(glm::vec3(72.8, 0, 82), glm::vec3(1), glm::vec3(0, 90, 0)));
+	m_objects.push_back(new Building(glm::vec3(54.6, 0, 87), glm::vec3(1), glm::vec3(0, 30, 0)));
+	m_objects.push_back(new Building(glm::vec3(36.4, 0, 78), glm::vec3(1), glm::vec3(0, 60, 0)));
+	m_objects.push_back(new Building(glm::vec3(18.2, 0, 78), glm::vec3(1), glm::vec3(0, 120, 0)));
+	m_objects.push_back(new Building(glm::vec3(0, 0, 73), glm::vec3(1), glm::vec3(0, 180, 0)));
+	m_objects.push_back(new Building(glm::vec3(-91, 0, 90), glm::vec3(1), glm::vec3(0, 270, 0)));
+	m_objects.push_back(new Building(glm::vec3(-72.8, 0, 82), glm::vec3(1), glm::vec3(0, 330, 0)));
+	m_objects.push_back(new Building(glm::vec3(-54.6, 0, 87), glm::vec3(1), glm::vec3(0, 210, 0)));
+	m_objects.push_back(new Building(glm::vec3(-36.4, 0, 78), glm::vec3(1), glm::vec3(0, 240, 0)));
+	m_objects.push_back(new Building(glm::vec3(-18.2, 0, 78), glm::vec3(1), glm::vec3(0, 300, 0)));
+	m_objects.push_back(new Building(glm::vec3(91, 0, 90), glm::vec3(1), glm::vec3(0, 15, 0)));
+	m_objects.push_back(new Building(glm::vec3(72.8, 0, 82), glm::vec3(1), glm::vec3(0, 75, 0)));
+	m_objects.push_back(new Building(glm::vec3(54.6, 0, 87), glm::vec3(1), glm::vec3(0, 135, 0)));
+
+	m_objects.push_back(new Wall(glm::vec3(91, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(72.8, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(54.6, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(36.4, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(18.2, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(0, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(-18.2, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(-36.4, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(-54.6, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(-72.8, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	m_objects.push_back(new Wall(glm::vec3(-91, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
 
 	Projectile::InitializeModel();
 

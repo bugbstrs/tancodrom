@@ -30,7 +30,7 @@ Tank::Tank(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rot
 
 Tank::~Tank()
 {
-
+	m_collider = new Collider(glm::vec3(0), 3, "Tank", m_position, m_rotation);
 }
 
 void Tank::Update()
@@ -48,6 +48,12 @@ void Tank::Update()
 		{
 			m_isMoving = false;
 			Collider::ResolveCollision(this, collision.second);
+		}
+
+		if (collision.first == "Wall")
+		{
+			m_isMoving = false;
+			Collider::ResolveCollision2(this, collision.second);
 		}
 	}
 
