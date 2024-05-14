@@ -23,12 +23,12 @@ void Moon::Update()
 {
     if (InputManager::KeyHold(GLFW_KEY_P))
     {
-        rotationSpeed += 0.1f * Scene::GetDeltaTime();
+        rotationSpeed += 9.0f * Scene::GetDeltaTime();
     }
 
     if (InputManager::KeyHold(GLFW_KEY_O))
     {
-        rotationSpeed -= 0.1f * Scene::GetDeltaTime();
+        rotationSpeed -= 9.0f * Scene::GetDeltaTime();
     }
 
     RotateAround(glm::vec3(0), 110, glm::vec3(0, 0, 1), rotationSpeed * Scene::GetDeltaTime());
