@@ -20,6 +20,9 @@ public:
 
 	static std::pair<std::string, SceneObject*> RayCast(const glm::vec3& origin, const glm::vec3& direction);
 
+	static SceneObject* GetObject(std::string name);
+	static std::vector<SceneObject*> GetAllObjects(std::string name);
+
 	static void Instantiate(SceneObject* object);
 	static void Destroy(SceneObject* object);
 

@@ -8,7 +8,8 @@
 #include "Projectile.h"
 #include "Terrain.h"
 #include <stb_image.h>
-#include <SoundManager.h>
+#include "SoundManager.h"
+#include "CinematicHandler.h"
 
 std::vector<SceneObject*> Scene::m_objects;
 std::vector<SceneObject*> Scene::m_objectsToInstantiate;
@@ -28,35 +29,35 @@ void Scene::Start()
 	m_objects.emplace_back(new Terrain(glm::vec3(0, -5.05, 0), glm::vec3(10), glm::vec3(0, 0, 0)));
 
 
-	m_objects.emplace_back(new Tank(glm::vec3(-30, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
-	m_objects.emplace_back(new Tank(glm::vec3(-30, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(-30, 0, -20), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(-30, 0, 20), glm::vec3(1), glm::vec3(0, 180, 0)));
 
-	m_objects.emplace_back(new Tank(glm::vec3(-15, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
-	m_objects.emplace_back(new Tank(glm::vec3(-15, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(-15, 0, -20), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(-15, 0, 20), glm::vec3(1), glm::vec3(0, 180, 0)));
 
-	m_objects.emplace_back(new Tank(glm::vec3(0, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
-	m_objects.emplace_back(new Tank(glm::vec3(0, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(0, 0, -20), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(0, 0, 20), glm::vec3(1), glm::vec3(0, 180, 0)));
 
-	m_objects.emplace_back(new Tank(glm::vec3(15, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
-	m_objects.emplace_back(new Tank(glm::vec3(15, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(15, 0, -20), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(15, 0, 20), glm::vec3(1), glm::vec3(0, 180, 0)));
 
-	m_objects.emplace_back(new Tank(glm::vec3(30, 0, 0), glm::vec3(1), glm::vec3(0, 0, 0)));
-	m_objects.emplace_back(new Tank(glm::vec3(30, 0, 40), glm::vec3(1), glm::vec3(0, 180, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(30, 0, -20), glm::vec3(1), glm::vec3(0, 0, 0)));
+	m_objects.emplace_back(new Tank(glm::vec3(30, 0, 20), glm::vec3(1), glm::vec3(0, 180, 0)));
 
-	m_objects.push_back(new Helicopter(glm::vec3(-30, 15, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
-	m_objects.push_back(new Helicopter(glm::vec3(-30, 15, 40), glm::vec3(0.5), glm::vec3(0, 180, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(-30, 15, -20), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(-30, 15, 20), glm::vec3(0.5), glm::vec3(0, 180, 0)));
 
-	m_objects.push_back(new Helicopter(glm::vec3(-15, 15, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
-	m_objects.push_back(new Helicopter(glm::vec3(-15, 15, 40), glm::vec3(0.5), glm::vec3(0, 180, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(-15, 15, -20), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(-15, 15, 20), glm::vec3(0.5), glm::vec3(0, 180, 0)));
 
-	m_objects.push_back(new Helicopter(glm::vec3(0, 15, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
-	m_objects.push_back(new Helicopter(glm::vec3(0, 15, 40), glm::vec3(0.5), glm::vec3(0, 180, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(0, 15, -20), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(0, 15, 20), glm::vec3(0.5), glm::vec3(0, 180, 0)));
 
-	m_objects.push_back(new Helicopter(glm::vec3(15, 15, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
-	m_objects.push_back(new Helicopter(glm::vec3(15, 15, 40), glm::vec3(0.5), glm::vec3(0, 180, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(15, 15, -20), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(15, 15, 20), glm::vec3(0.5), glm::vec3(0, 180, 0)));
 
-	m_objects.push_back(new Helicopter(glm::vec3(30, 15, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
-	m_objects.push_back(new Helicopter(glm::vec3(30, 15, 40), glm::vec3(0.5), glm::vec3(0, 180, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(30, 15, -20), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	m_objects.push_back(new Helicopter(glm::vec3(30, 15, 20), glm::vec3(0.5), glm::vec3(0, 180, 0)));
 
 	m_objects.push_back(new Sun(glm::vec3(10, 0, 0), glm::vec3(0.006), glm::vec3(0, 0, 0)));
 	m_lights.push_back((LightSource*)m_objects[m_objects.size() - 1]);
@@ -65,6 +66,8 @@ void Scene::Start()
 	m_lights.push_back((LightSource*)m_objects[m_objects.size() - 1]);
 
 	m_objects.push_back(new SkyBox(glm::vec3(0, 0, 0), glm::vec3(30), glm::vec3(0, 0, 0)));
+
+	m_objects.push_back(new CinematicHandler(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0)));
 
 	Projectile::InitializeModel();
 
@@ -170,6 +173,9 @@ void Scene::Run()
 		Program::m_shadowMappingShader.SetLightsVec3("position", lightsPosition);
 		Program::m_shadowMappingShader.SetLightsVec3("color", lightsColor);
 		Program::m_shadowMappingShader.SetLightsFloat("intensity", lightsIntensity);
+		float sunPos = GetObject("sun")->GetPosition().y;
+		float skyboxHue = 0.3 + ((sunPos + 90) / 180 * 0.7);
+		Program::m_shadowMappingShader.SetFloat("skyboxHue", skyboxHue);
 
 		glActiveTexture(GL_TEXTURE0);
 		glActiveTexture(GL_TEXTURE1);
@@ -202,18 +208,21 @@ void Scene::Run()
 		m_lightsToInstantiate.clear();
 
 		//Destroy objects
-		for (auto object : m_objectsToDestroy)
-		{
-			if(std::find(m_objects.begin(), m_objects.end(), object) != m_objects.end())
-				m_objects.erase(std::find(m_objects.begin(), m_objects.end(), object));
-		}
-		m_objectsToDestroy.clear();
 		for (auto light : m_lightsToDestroy)
 		{
 			if (std::find(m_lights.begin(), m_lights.end(), light) != m_lights.end())
 				m_lights.erase(std::find(m_lights.begin(), m_lights.end(), light));
 		}
 		m_lightsToDestroy.clear();
+		for (auto object : m_objectsToDestroy)
+		{
+			if (std::find(m_objects.begin(), m_objects.end(), object) != m_objects.end())
+			{
+				m_objects.erase(std::find(m_objects.begin(), m_objects.end(), object));
+				delete object;
+			}
+		}
+		m_objectsToDestroy.clear();
 
 		glfwSwapBuffers(Program::GetWindow());
 		glfwPollEvents();
@@ -232,29 +241,21 @@ std::pair<std::string, SceneObject*> Scene::RayCast(const glm::vec3& origin, con
 	{
 		if (Collider* collider = object->GetCollider())
 		{
-			glm::vec3 colliderPosition = collider->CalculatePosition();
+			glm::vec3 oc = origin - collider->CalculatePosition();
+			float a = glm::dot(direction, direction);
+			float b = 2.0f * glm::dot(oc, direction);
+			float c = glm::dot(oc, oc) - collider->GetRadius() * collider->GetRadius();
+			float discriminant = b * b - 4 * a * c;
 
-			glm::vec3 toCollider = colliderPosition - origin;
-			glm::vec3 colliderDirection = glm::normalize(toCollider);
-
-			float colliderDistance = glm::length(toCollider);
-			float dotProduct = glm::dot(colliderDirection, direction);
-
-			if (dotProduct > 0 && colliderDistance > 0)
+			if (discriminant >= 0)
 			{
-				float t = glm::dot(colliderDirection, colliderPosition - origin);
-
-				if (t > 0 && t < colliderDistance)
+				float t = (-b - sqrt(discriminant)) / (2.0f * a);
+				if (t >= 0)
 				{
-					glm::vec3 collisionPoint = origin + direction * t;
-
-					if (glm::distance(collisionPoint, colliderPosition) <= collider->m_radius)
+					if (t < closestCollision)
 					{
-						if (t < closestCollision)
-						{
-							closestCollision = t;
-							closestObject = std::make_pair(collider->m_type, object);
-						}
+						closestCollision = t;
+						closestObject = std::make_pair(collider->m_type, object);
 					}
 				}
 			}
@@ -262,6 +263,25 @@ std::pair<std::string, SceneObject*> Scene::RayCast(const glm::vec3& origin, con
 	}
 
 	return closestObject;
+}
+
+SceneObject* Scene::GetObject(std::string name)
+{
+	for (auto& object : m_objects)
+		if (object->GetName() == name)
+			return object;
+
+	return nullptr;
+}
+
+std::vector<SceneObject*> Scene::GetAllObjects(std::string name)
+{
+	std::vector<SceneObject*> objects;
+	for (auto& object : m_objects)
+		if (object->GetName() == name)
+			objects.push_back(object);
+
+	return objects;
 }
 
 void Scene::Instantiate(SceneObject* object)
