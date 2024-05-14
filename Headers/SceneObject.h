@@ -35,22 +35,30 @@ private:
 class SceneObject
 {
 public:
-	SceneObject(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation);
+	SceneObject(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation, std::string name);
+	virtual ~SceneObject();
 
 	void SetModel(std::string const& path, bool bSmoothNormals, int modelId);
+	void SetModel(Model* model);
+	Model* GetModel();
 
 	Collider* GetCollider();
+
+	std::string GetName();
 
 	virtual void Update() = 0;
 
 	glm::vec3 GetPosition() const;
 	void SetPosition(glm::vec3 position);
 	void Move(glm::vec3 direction);
+	void MoveTowards(glm::vec3 point, float speed);
 
 	glm::vec3 GetRotation() const;
 	void SetRotation(glm::vec3 rotation);
 	void Rotate(glm::vec3 direction);
+	void RotateTowards(glm::vec3 targetPoint, float rotationSpeed);
 	void RotateAround(glm::vec3 point, float distance, glm::vec3 axis, float speed);
+	void LookAt(glm::vec3 targetPoint, glm::vec3 up);
 
 	glm::vec3 GetSize() const;
 	void SetSize(glm::vec3 size);
@@ -62,6 +70,8 @@ public:
 	virtual void Render(Shader& shader);
 
 protected:
+	std::string m_name;
+
 	Model* m_model;
 	Collider* m_collider;
 

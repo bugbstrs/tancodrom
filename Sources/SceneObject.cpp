@@ -2,6 +2,7 @@
 
 #include "SceneObject.h"
 #include <GLFW/glfw3.h>
+#include <Scene.h>
 
 Collider::Collider(const glm::vec3& position, float radius, const std::string& type, glm::vec3& objPosition, glm::vec3& objRotation) :
     m_radius(radius),
@@ -71,22 +72,43 @@ glm::vec3 Collider::CalculatePosition()
 
 
 
-SceneObject::SceneObject(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
+SceneObject::SceneObject(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation, std::string name) :
     m_position{ position },
     m_size{ size },
     m_rotation{ rotation },
     m_model{ nullptr },
-    m_collider{ nullptr }
+    m_collider{ nullptr },
+    m_name{ name }
 {}
+
+SceneObject::~SceneObject()
+{
+
+}
 
 void SceneObject::SetModel(std::string const& path, bool bSmoothNormals, int modelId)
 {
     m_model = new Model(path, bSmoothNormals, modelId);
 }
 
+void SceneObject::SetModel(Model* model)
+{
+    m_model = model;
+}
+
+Model* SceneObject::GetModel()
+{
+    return m_model;
+}
+
 Collider* SceneObject::GetCollider()
 {
     return m_collider;
+}
+
+std::string SceneObject::GetName()
+{
+    return m_name;
 }
 
 glm::vec3 SceneObject::GetPosition() const
@@ -102,6 +124,18 @@ void SceneObject::SetPosition(glm::vec3 position)
 void SceneObject::Move(glm::vec3 direction)
 {
     m_position += direction;
+}
+
+void SceneObject::MoveTowards(glm::vec3 point, float speed)
+{
+    glm::vec3 direction = glm::normalize(point - m_position);
+    glm::vec3 displacement = direction * speed;
+    float distanceToTarget = glm::distance(point, m_position);
+
+    if (glm::length(displacement) > distanceToTarget)
+        m_position = point;
+    else
+        m_position += displacement;
 }
 
 glm::vec3 SceneObject::GetRotation() const
@@ -150,17 +184,62 @@ void SceneObject::Rotate(glm::vec3 direction)
     NormalizeRotation();
 }
 
+float AngleBetweenVectors(glm::vec3 vec1, glm::vec3 vec2)
+{
+    vec1 = glm::normalize(vec1);
+    vec2 = glm::normalize(vec2);
+
+    float dotProduct = glm::dot(vec1, vec2);
+
+    float angle = glm::acos(dotProduct);
+
+    return glm::degrees(angle);
+}
+
+void SceneObject::RotateTowards(glm::vec3 targetPoint, float rotationSpeed)
+{
+    glm::vec3 targetDirection = glm::normalize(targetPoint - m_position);
+
+    float angleToTarget = AngleBetweenVectors(GetForward(), targetDirection);
+
+    float maxRotation = rotationSpeed;
+
+    if (std::abs(angleToTarget) > maxRotation)
+    {
+        glm::vec3 rotationAxis = glm::cross(GetForward(), targetDirection);
+        float sign = glm::sign(angleToTarget);
+        glm::vec3 rotationDirection = rotationAxis * sign;
+
+        Rotate(rotationDirection * maxRotation);
+    }
+    else
+    {
+        Rotate(targetDirection * angleToTarget);
+    }
+}
+
 void SceneObject::RotateAround(glm::vec3 point, float distance, glm::vec3 axis, float speed)
 {
-    float angle = speed;
-
-    glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), angle, axis);
+    glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(speed), axis);
     glm::vec4 newPosition = rotationMatrix * glm::vec4(m_position - point, 1.0f);
     newPosition = glm::normalize(newPosition) * distance;
 
     m_position = glm::vec3(newPosition) + point;
+}
 
-    m_rotation += angle * glm::degrees(axis);
+void SceneObject::LookAt(glm::vec3 targetPoint, glm::vec3 up)
+{
+    glm::vec3 direction = glm::normalize(targetPoint - m_position);
+
+    // Calculate rotation around Y axis (yaw)
+    float yaw = glm::degrees(atan2(direction.z, direction.x)) - 90.0f;
+
+    // Calculate rotation around X axis (pitch)
+    float pitch = glm::degrees(asin(direction.y));
+
+    // Set the new rotation
+    glm::vec3 newRotation(-pitch, -yaw, 0);
+    SetRotation(newRotation);
 }
 
 glm::vec3 SceneObject::GetSize() const
