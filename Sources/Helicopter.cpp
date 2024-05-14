@@ -1,6 +1,7 @@
 #include "Helicopter.h"
 #include "InputManager.h"
-#include <SoundManager.h>
+#include "SoundManager.h"
+#include "Light.h"
 
 std::vector<Texture> Helicopter::textures;
 float const Helicopter::maxTilt = 30;
@@ -8,7 +9,7 @@ float const Helicopter::constTiltSpeed = 15;
 Model* Helicopter::helicopterModel = nullptr;
 
 Helicopter::Helicopter(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
-    SceneObject(position, size, rotation),
+    SceneObject(position, size, rotation, "helicopter"),
     m_camera{ nullptr },
     m_isMoving{ true }
 {
@@ -23,7 +24,7 @@ Helicopter::Helicopter(const glm::vec3& position, const glm::vec3& size, const g
     }
     m_model = helicopterModel;
 
-    m_collider = new Collider(glm::vec3(0), 4, "Helicopter", m_position, m_rotation);
+    m_collider = new Collider(glm::vec3(0), 2.5f, "Helicopter", m_position, m_rotation);
 
     textures.emplace_back(Texture("Models/Helicopter/fuselage"));
     textures.emplace_back(Texture("Models/Helicopter/land"));
@@ -34,15 +35,9 @@ Helicopter::Helicopter(const glm::vec3& position, const glm::vec3& size, const g
 
 void Helicopter::Update()
 {
-    //m_model->SetMeshTransform(10, glm::rotate(m_model->GetMeshTransform(10), glm::radians(720 * Scene::GetDeltaTime()), glm::vec3(0, 0, 1)));
-    m_model->RotateMesh(10, 720 * Scene::GetDeltaTime(), glm::vec3(0, 0, 1));
-    m_model->RotateMesh(19, 720 * Scene::GetDeltaTime(), glm::vec3(1, 0, 0));
-
-    for (auto collision : m_collider->GetCollisions())
-    {
-        if (collision.first == "Helicopter")
-            m_isMoving = false;
-    }
+    m_model->SetMeshTransform(10, glm::rotate(m_model->GetMeshTransform(10), glm::radians(120 * Scene::GetDeltaTime()), glm::vec3(0, 0, 1)));
+    //m_model->RotateMesh(10, 120 * Scene::GetDeltaTime(), glm::vec3(0, 0, 1));
+    m_model->RotateMesh(19, 120 * Scene::GetDeltaTime(), glm::vec3(1, 0, 0));
 
     float tiltSpeed = constTiltSpeed * Scene::GetDeltaTime();
 
@@ -61,80 +56,98 @@ void Helicopter::Update()
             yaw = (yaw + tiltSpeed > 0) ? 0 : yaw + tiltSpeed;
     }
 
-    if (m_camera == nullptr || m_camera->GetCameraPOV() != TankCamera)
+    if (m_camera == nullptr || m_camera->GetCameraPOV() != HelicopterCamera)
     {
         glm::vec3 forward = GetForward();
-        float movementSpeed = 2.f * Scene::GetDeltaTime();
+        float movementSpeed = 0.5f * Scene::GetDeltaTime();
 
-        if (m_isMoving)
-        {
+        if(m_isMoving)
             Move(forward * movementSpeed);
+    }
+    else
+    {
+        float moveSpeed = m_moveSpeed * Scene::GetDeltaTime();
+        float rotationSpeed = m_rotationSpeed * Scene::GetDeltaTime();
+
+        if (InputManager::KeyHold(GLFW_KEY_W))
+        {
+            pitch = (pitch + tiltSpeed * 2 > maxTilt) ? maxTilt : pitch + tiltSpeed * 2;
+            Move(GetForward() * moveSpeed);
+
+            if (!SoundManager::IsHelicopterMoving())
+                SoundManager::StartFlyingHelicopter();
+        }
+        if (InputManager::KeyHold(GLFW_KEY_A))
+        {
+            yaw = (yaw - tiltSpeed * 2 < -maxTilt) ? -maxTilt : yaw - tiltSpeed * 2;
+            Move(-GetRight() * moveSpeed);
+
+            if (!SoundManager::IsHelicopterMoving())
+                SoundManager::StartFlyingHelicopter();
+        }
+        if (InputManager::KeyHold(GLFW_KEY_S))
+        {
+            pitch = (pitch - tiltSpeed * 2 < -maxTilt) ? -maxTilt : pitch - tiltSpeed * 2;
+            Move(-GetForward() * moveSpeed);
+
+            if (!SoundManager::IsHelicopterMoving())
+                SoundManager::StartFlyingHelicopter();
+        }
+        if (InputManager::KeyHold(GLFW_KEY_D))
+        {
+            yaw = (yaw + tiltSpeed * 2 > maxTilt) ? maxTilt : yaw + tiltSpeed * 2;
+            Move(GetRight() * moveSpeed);
+
+            if (!SoundManager::IsHelicopterMoving())
+                SoundManager::StartFlyingHelicopter();
+        }
+        if (InputManager::KeyHold(GLFW_KEY_Q))
+        {
+            Move(-Scene::Up() * moveSpeed);
+
+            if (!SoundManager::IsHelicopterMoving())
+                SoundManager::StartFlyingHelicopter();
+        }
+        if (InputManager::KeyHold(GLFW_KEY_E))
+        {
+            Move(Scene::Up() * moveSpeed);
+
+            if (!SoundManager::IsHelicopterMoving())
+                SoundManager::StartFlyingHelicopter();
         }
 
-        return;
+        if (!InputManager::KeyHold(GLFW_KEY_W) && !InputManager::KeyHold(GLFW_KEY_A) && !InputManager::KeyHold(GLFW_KEY_S) && !InputManager::KeyHold(GLFW_KEY_D) && !InputManager::KeyHold(GLFW_KEY_Q) && !InputManager::KeyHold(GLFW_KEY_E))
+        {
+            SoundManager::StopFlyingHelicopter();
+        }
+
+        if (m_position.y > 35)
+            m_position.y = 35;
+
+        Rotate(glm::vec3(0, -InputManager::MouseMoveX() * rotationSpeed, 0));
     }
 
-    float moveSpeed = m_moveSpeed * Scene::GetDeltaTime();
-    float rotationSpeed = m_rotationSpeed * Scene::GetDeltaTime();
-
-    if (InputManager::KeyHold(GLFW_KEY_W))
+    if (m_position.y < 0.5)
     {
-        pitch = (pitch + tiltSpeed * 2 > maxTilt) ? maxTilt : pitch + tiltSpeed * 2;
-        Move(GetForward() * moveSpeed);
-
-        if (!SoundManager::IsHelicopterMoving())
-            SoundManager::StartFlyingHelicopter();
-    }
-    if (InputManager::KeyHold(GLFW_KEY_A))
-    {
-        yaw = (yaw - tiltSpeed * 2 < -maxTilt) ? -maxTilt : yaw - tiltSpeed * 2;
-        Move(-GetRight() * moveSpeed);
-
-        if (!SoundManager::IsHelicopterMoving())
-            SoundManager::StartFlyingHelicopter();
-    }
-    if (InputManager::KeyHold(GLFW_KEY_S))
-    {
-        pitch = (pitch - tiltSpeed * 2 < -maxTilt) ? -maxTilt : pitch - tiltSpeed * 2;
-        Move(-GetForward() * moveSpeed);
-
-        if (!SoundManager::IsHelicopterMoving())
-            SoundManager::StartFlyingHelicopter();
-    }
-    if (InputManager::KeyHold(GLFW_KEY_D))
-    {
-        yaw = (yaw + tiltSpeed * 2 > maxTilt) ? maxTilt : yaw + tiltSpeed * 2;
-        Move(GetRight() * moveSpeed);
-
-        if (!SoundManager::IsHelicopterMoving())
-            SoundManager::StartFlyingHelicopter();
-    }
-    if (InputManager::KeyHold(GLFW_KEY_Q))
-    {
-        Move(-Scene::Up() * moveSpeed);
-
-        if (!SoundManager::IsHelicopterMoving())
-            SoundManager::StartFlyingHelicopter();
-    }
-    if (InputManager::KeyHold(GLFW_KEY_E))
-    {
-        Move(Scene::Up() * moveSpeed);
-
-        if (!SoundManager::IsHelicopterMoving())
-            SoundManager::StartFlyingHelicopter();
-    }
-
-    if (!InputManager::KeyHold(GLFW_KEY_W) && !InputManager::KeyHold(GLFW_KEY_A) && !InputManager::KeyHold(GLFW_KEY_S) && !InputManager::KeyHold(GLFW_KEY_D) && !InputManager::KeyHold(GLFW_KEY_Q) && !InputManager::KeyHold(GLFW_KEY_E))
-    {
+        Scene::AddLight(new Light(m_position + GetUp() * 1.5f, glm::vec3(1, 0.3, 0), 15, 2));
+        Scene::Destroy(this);
         SoundManager::StopFlyingHelicopter();
     }
 
-    if (m_position.y > 35)
-        m_position.y = 35;
-    if (m_position.y < 0.5)
-        m_position.y = 0.5;
+    m_isMoving = true;
+    auto collision = Scene::RayCast(m_position, GetForward());
+    if (collision.first == "Helicopter" && glm::distance(m_position, collision.second->GetPosition()) <= 9.0f)
+        m_isMoving = false;
 
-    Rotate(glm::vec3(0, -InputManager::MouseMoveX() * rotationSpeed, 0));
+    for (auto collision : m_collider->GetCollisions())
+    {
+        if (collision.first == "Helicopter")
+        {
+            Scene::AddLight(new Light(m_position + GetUp() * 1.5f, glm::vec3(1, 0.3, 0), 15, 2));
+            Scene::Destroy(this);
+            SoundManager::StopFlyingHelicopter();
+        }
+    }
 }
 
 void Helicopter::SetCamera(Camera* camera)
