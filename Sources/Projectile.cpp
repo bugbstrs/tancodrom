@@ -6,7 +6,7 @@
 Model* Projectile::projectileModel = nullptr;
 
 Projectile::Projectile(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
-	SceneObject(position, size, rotation)
+	SceneObject(position, size, rotation, "projectile")
 {
 	m_model = projectileModel;
 	m_collider = new Collider(glm::vec3(0, 2, 6), 0.5, "Projectile", m_position, m_rotation);
