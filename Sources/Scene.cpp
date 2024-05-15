@@ -61,16 +61,6 @@ void Scene::Start()
 	m_objects.push_back(new Helicopter(glm::vec3(30, 15, -20), glm::vec3(0.5), glm::vec3(0, 0, 0)));
 	m_objects.push_back(new Helicopter(glm::vec3(30, 15, 20), glm::vec3(0.5), glm::vec3(0, 180, 0)));
 
-	m_objects.push_back(new Sun(glm::vec3(10, 0, 0), glm::vec3(0.006), glm::vec3(0, 0, 0)));
-	m_lights.push_back((LightSource*)m_objects[m_objects.size() - 1]);
-
-	m_objects.push_back(new Moon(glm::vec3(-10, 0, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
-	m_lights.push_back((LightSource*)m_objects[m_objects.size() - 1]);
-
-	m_objects.push_back(new SkyBox(glm::vec3(0, 0, 0), glm::vec3(30), glm::vec3(0, 0, 0)));
-
-	m_objects.push_back(new CinematicHandler(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0)));
-
 	// First city
 	m_objects.push_back(new Building(glm::vec3(91, 0, -90), glm::vec3(1), glm::vec3(0, 45, 0)));
 	m_objects.push_back(new Building(glm::vec3(72.8, 0, -82), glm::vec3(1), glm::vec3(0, 90, 0)));
@@ -126,6 +116,16 @@ void Scene::Start()
 	m_objects.push_back(new Wall(glm::vec3(-54.6, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
 	m_objects.push_back(new Wall(glm::vec3(-72.8, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
 	m_objects.push_back(new Wall(glm::vec3(-91, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+
+	m_objects.push_back(new Sun(glm::vec3(10, 0, 0), glm::vec3(0.006), glm::vec3(0, 0, 0)));
+	m_lights.push_back((LightSource*)m_objects[m_objects.size() - 1]);
+
+	m_objects.push_back(new Moon(glm::vec3(-10, 0, 0), glm::vec3(0.5), glm::vec3(0, 0, 0)));
+	m_lights.push_back((LightSource*)m_objects[m_objects.size() - 1]);
+
+	m_objects.push_back(new SkyBox(glm::vec3(0, 0, 0), glm::vec3(30), glm::vec3(0, 0, 0)));
+
+	m_objects.push_back(new CinematicHandler(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0)));
 
 	Projectile::InitializeModel();
 

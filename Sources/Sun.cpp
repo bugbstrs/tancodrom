@@ -3,7 +3,6 @@
 #include "InputManager.h"
 
 std::vector<Texture> Sun::textures;
-float Sun::rotationSpeed = 5.729f;
 
 Sun::Sun(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation):
 	LightSource(position, size, rotation, "sun")
@@ -12,6 +11,7 @@ Sun::Sun(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotat
 
 	textures.push_back(Texture("Models/Sun/13913_Sun_diff.jpg"));
 
+    rotationSpeed = 5.729f;
     color = glm::vec3(0.6f);
     intensity = 12.2f;
     m_initialIntensity = intensity;

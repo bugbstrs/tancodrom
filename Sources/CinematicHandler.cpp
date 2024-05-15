@@ -1,5 +1,7 @@
 #include "CinematicHandler.h"
 #include "InputManager.h"
+#include "Building.h"
+#include "Wall.h"
 
 CinematicHandler::CinematicHandler(const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation) :
 	SceneObject(position, size, rotation, "cinematic")
@@ -104,13 +106,19 @@ void CinematicHandler::ResetScene()
 	auto helicopters = Scene::GetAllObjects("helicopter");
 	for (auto helicopter : helicopters)
 		Scene::Destroy(helicopter);
+	m_helicopters.clear();
 	auto projectiles = Scene::GetAllObjects("projectile");
 	for (auto projectile : projectiles)
 		Scene::Destroy(projectile);
 	auto lights = Scene::GetAllObjects("light");
 	for (auto light : lights)
-		Scene::Destroy(light);
-	m_helicopters.clear();
+		Scene::DestroyLight(dynamic_cast<LightSource*>(light));
+	auto buildings = Scene::GetAllObjects("building");
+	for (auto building : buildings)
+		Scene::Destroy(building);
+	auto walls = Scene::GetAllObjects("wall");
+	for (auto wall : walls)
+		Scene::Destroy(wall);
 	m_camera = Scene::GetCamera();
 	m_camera->SetTank(nullptr);
 	m_camera->SetHelicopter(nullptr);
@@ -145,6 +153,61 @@ void CinematicHandler::StartCinematic1()
 	Scene::Instantiate(m_tanks.back());
 	m_tanks.emplace_back(new Tank(glm::vec3(30, 0, 25), glm::vec3(1), glm::vec3(0, 180, 0)));
 	Scene::Instantiate(m_tanks.back());
+
+	Scene::Instantiate(new Building(glm::vec3(91, 0, -90), glm::vec3(1), glm::vec3(0, 45, 0)));
+	Scene::Instantiate(new Building(glm::vec3(72.8, 0, -82), glm::vec3(1), glm::vec3(0, 90, 0)));
+	Scene::Instantiate(new Building(glm::vec3(54.6, 0, -87), glm::vec3(1), glm::vec3(0, 30, 0)));
+	Scene::Instantiate(new Building(glm::vec3(36.4, 0, -78), glm::vec3(1), glm::vec3(0, 60, 0)));
+	Scene::Instantiate(new Building(glm::vec3(18.2, 0, -78), glm::vec3(1), glm::vec3(0, 120, 0)));
+	Scene::Instantiate(new Building(glm::vec3(0, 0, -73), glm::vec3(1), glm::vec3(0, 180, 0)));
+	Scene::Instantiate(new Building(glm::vec3(-91, 0, -90), glm::vec3(1), glm::vec3(0, 270, 0)));
+	Scene::Instantiate(new Building(glm::vec3(-72.8, 0, -82), glm::vec3(1), glm::vec3(0, 330, 0)));
+	Scene::Instantiate(new Building(glm::vec3(-54.6, 0, -87), glm::vec3(1), glm::vec3(0, 210, 0)));
+	Scene::Instantiate(new Building(glm::vec3(-36.4, 0, -78), glm::vec3(1), glm::vec3(0, 240, 0)));
+	Scene::Instantiate(new Building(glm::vec3(-18.2, 0, -78), glm::vec3(1), glm::vec3(0, 300, 0)));
+	Scene::Instantiate(new Building(glm::vec3(91, 0, -90), glm::vec3(1), glm::vec3(0, 15, 0)));
+	Scene::Instantiate(new Building(glm::vec3(72.8, 0, -82), glm::vec3(1), glm::vec3(0, 75, 0)));
+	Scene::Instantiate(new Building(glm::vec3(54.6, 0, -87), glm::vec3(1), glm::vec3(0, 135, 0)));
+
+	Scene::Instantiate(new Wall(glm::vec3(91, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(72.8, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(54.6, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(36.4, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(18.2, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(0, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(-18.2, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(-36.4, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(-54.6, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(-72.8, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(-91, -0.3, -60), glm::vec3(0.5), glm::vec3(0, 0, 0), 0));
+
+	// Second city
+	Scene::Instantiate(new Building(glm::vec3(91, 0, 90), glm::vec3(1), glm::vec3(0, 45, 0)));
+	Scene::Instantiate(new Building(glm::vec3(72.8, 0, 82), glm::vec3(1), glm::vec3(0, 90, 0)));
+	Scene::Instantiate(new Building(glm::vec3(54.6, 0, 87), glm::vec3(1), glm::vec3(0, 30, 0)));
+	Scene::Instantiate(new Building(glm::vec3(36.4, 0, 78), glm::vec3(1), glm::vec3(0, 60, 0)));
+	Scene::Instantiate(new Building(glm::vec3(18.2, 0, 78), glm::vec3(1), glm::vec3(0, 120, 0)));
+	Scene::Instantiate(new Building(glm::vec3(0, 0, 73), glm::vec3(1), glm::vec3(0, 180, 0)));
+	Scene::Instantiate(new Building(glm::vec3(-91, 0, 90), glm::vec3(1), glm::vec3(0, 270, 0)));
+	Scene::Instantiate(new Building(glm::vec3(-72.8, 0, 82), glm::vec3(1), glm::vec3(0, 330, 0)));
+	Scene::Instantiate(new Building(glm::vec3(-54.6, 0, 87), glm::vec3(1), glm::vec3(0, 210, 0)));
+	Scene::Instantiate(new Building(glm::vec3(-36.4, 0, 78), glm::vec3(1), glm::vec3(0, 240, 0)));
+	Scene::Instantiate(new Building(glm::vec3(-18.2, 0, 78), glm::vec3(1), glm::vec3(0, 300, 0)));
+	Scene::Instantiate(new Building(glm::vec3(91, 0, 90), glm::vec3(1), glm::vec3(0, 15, 0)));
+	Scene::Instantiate(new Building(glm::vec3(72.8, 0, 82), glm::vec3(1), glm::vec3(0, 75, 0)));
+	Scene::Instantiate(new Building(glm::vec3(54.6, 0, 87), glm::vec3(1), glm::vec3(0, 135, 0)));
+
+	Scene::Instantiate(new Wall(glm::vec3(91, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(72.8, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(54.6, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(36.4, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(18.2, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(0, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(-18.2, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(-36.4, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(-54.6, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(-72.8, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
+	Scene::Instantiate(new Wall(glm::vec3(-91, -0.3, 60), glm::vec3(0.5), glm::vec3(0, 180, 0), 0));
 
 	m_sun = new Sun(glm::vec3(10, 0, 0), glm::vec3(0.006), glm::vec3(0, 0, 0));
 	Scene::AddLight(m_sun);
