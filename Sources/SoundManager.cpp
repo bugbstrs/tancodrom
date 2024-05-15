@@ -4,36 +4,36 @@ std::map<std::string, sf::Music*> SoundManager::soundMap {};
 
 void SoundManager::Initialize()
 {
-	soundMap["backgroundMusic"]= new sf::Music();
-	soundMap["tankShot"]= new sf::Music();
-	soundMap["tankHit"]= new sf::Music();
+	soundMap["backgroundMusic"] = new sf::Music();
+	soundMap["tankShot"] = new sf::Music();
+	soundMap["tankHit"] = new sf::Music();
 	soundMap["tankExplosion"]= new sf::Music();
-	soundMap["movingTank"]= new sf::Music();
+	soundMap["movingTank"] = new sf::Music();
 	soundMap["rotateTurret"] = new sf::Music();
 	soundMap["helicopterFlying"] = new sf::Music();
-	soundMap["backgroundMusic"]->openFromFile("..\\Sounds\\background_music.mp3");
+	soundMap["backgroundMusic"]->openFromFile("Sounds/background_music.mp3");
 	soundMap["backgroundMusic"]->setVolume(40.0f);
 	soundMap["backgroundMusic"]->setLoop(true);
 	soundMap["backgroundMusic"]->play();
 
-	soundMap["tankShot"]->openFromFile("..\\Sounds\\tank_shot.wav");
+	soundMap["tankShot"]->openFromFile("Sounds/tank_shot.wav");
 	soundMap["tankShot"]->setVolume(30.0f);
 
-	soundMap["tankHit"]->openFromFile("..\\Sounds\\tank_hit.wav");
+	soundMap["tankHit"]->openFromFile("Sounds/tank_hit.wav");
 	soundMap["tankHit"]->setVolume(30.0f);
 
-	soundMap["tankExplosion"]->openFromFile("..\\Sounds\\tank_explosion.wav");
+	soundMap["tankExplosion"]->openFromFile("Sounds/tank_explosion.wav");
 	soundMap["tankExplosion"]->setVolume(20.0f);
 
-	soundMap["movingTank"]->openFromFile("..\\Sounds\\moving_tank.wav");
+	soundMap["movingTank"]->openFromFile("Sounds/moving_tank.wav");
 	soundMap["movingTank"]->setVolume(30.0f);
 	soundMap["movingTank"]->setLoop(false);
 
-	soundMap["rotateTurret"]->openFromFile("..\\Sounds\\rotate_turret.wav");
+	soundMap["rotateTurret"]->openFromFile("Sounds/rotate_turret.wav");
 	soundMap["rotateTurret"]->setVolume(30.0f);
 	soundMap["rotateTurret"]->setLoop(false);
 
-	soundMap["helicopterFlying"]->openFromFile("..\\Sounds\\helicopter_flying.flac");
+	soundMap["helicopterFlying"]->openFromFile("Sounds/helicopter_flying.flac");
 	soundMap["helicopterFlying"]->setVolume(30.0f);
 	soundMap["helicopterFlying"]->setLoop(false);
 }
