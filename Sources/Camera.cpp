@@ -1,5 +1,11 @@
 #include <GL/glew.h>
-#pragma comment (lib, "glew32.lib")
+
+#ifdef NDEBUG
+    #pragma comment(lib, "glew32.lib")
+#else
+    #pragma comment(lib, "glew32d.lib")
+#endif
+
 
 #include "Program.h"
 #include "Scene.h"

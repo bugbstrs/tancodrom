@@ -9,12 +9,12 @@
     {
       "name": "Build (MSVC)",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/Build/MSVC",
+      "binaryDir": "${sourceDir}/Output/Release/MSVC",
       "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
         "CMAKE_CXX_COMPILER": "cl",
         "CMAKE_C_COMPILER": "cl",
-        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
         "VCPKG_HOST_TRIPLET": "x64-windows"
       },
       "toolset": {
@@ -25,12 +25,12 @@
     {
       "name": "Debug (MSVC)",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/Debug/MSVC",
+      "binaryDir": "${sourceDir}/Output/Debug/MSVC",
       "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
         "CMAKE_CXX_COMPILER": "cl",
         "CMAKE_C_COMPILER": "cl",
-        "CMAKE_BUILD_TYPE": "Debug",
         "VCPKG_HOST_TRIPLET": "x64-windows"
       },
       "toolset": {
@@ -41,12 +41,12 @@
     {
       "name": "Build (GCC)",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/Build/GCC",
+      "binaryDir": "${sourceDir}/Output/Release/GCC",
       "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
         "CMAKE_CXX_COMPILER": "g++",
         "CMAKE_C_COMPILER": "gcc",
-        "CMAKE_BUILD_TYPE": "Release",
         "VCPKG_HOST_TRIPLET": "x64-linux"
       },
       "toolset": {

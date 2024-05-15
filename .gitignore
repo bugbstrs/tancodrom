@@ -402,7 +402,4 @@ FodyWeavers.xsd
 .vscode/*
 
 # Build / Debug folders
-Build */
-Debug */
-Build/
-Debug/
+Output/
