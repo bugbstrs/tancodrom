@@ -7,7 +7,7 @@
 #include "Helicopter.h"
 #include "Moon.h"
 #include "Sun.h"
-#include "SkyBox.h"
+#include "Skybox.h"
 #include "Tank.h"
 
 Model::Model(std::string const &path, bool bSmoothNormals, int modelId)

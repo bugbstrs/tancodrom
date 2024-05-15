@@ -4,6 +4,7 @@
 #include <sstream>
 #include <glm/fwd.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <format>
 
 void Shader::Initialize(const std::string& path)
 {
