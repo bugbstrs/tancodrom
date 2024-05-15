@@ -404,3 +404,5 @@ FodyWeavers.xsd
 # Build / Debug folders
 Build */
 Debug */
+Build/
+Debug/
