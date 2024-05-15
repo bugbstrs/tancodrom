@@ -1,37 +1,59 @@
-{
-    "version": 2,
-    "configurePresets": [
-      {
-        "name": "Build (MSVC)",
-        "generator": "Ninja",
-        "binaryDir": "${sourceDir}/Build MSVC/",
-        "cacheVariables": {
-          "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-          "CMAKE_CXX_COMPILER": "cl",
-          "CMAKE_C_COMPILER": "cl",
-          "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-          "VCPKG_HOST_TRIPLET": "x64-windows"
-        },
-        "toolset": {
-          "value": "host=x64",
-          "strategy": "external"
-        }
+ {
+  "version": 2,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "Build (MSVC)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/Build/MSVC",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_C_COMPILER": "cl",
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "VCPKG_HOST_TRIPLET": "x64-windows"
       },
-      {
-        "name": "Debug (MSVC)",
-        "generator": "Ninja",
-        "binaryDir": "${sourceDir}/Debug MSVC/",
-        "cacheVariables": {
-          "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-          "CMAKE_CXX_COMPILER": "cl",
-          "CMAKE_C_COMPILER": "cl",
-          "CMAKE_BUILD_TYPE": "Debug",
-          "VCPKG_HOST_TRIPLET": "x64-windows"
-        },
-        "toolset": {
-          "value": "host=x64",
-          "strategy": "external"
-        }
+      "toolset": {
+        "value": "host=x64",
+        "strategy": "external"
       }
-    ]
-  }
+    },
+    {
+      "name": "Debug (MSVC)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/Debug/MSVC",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_C_COMPILER": "cl",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "VCPKG_HOST_TRIPLET": "x64-windows"
+      },
+      "toolset": {
+        "value": "host=x64",
+        "strategy": "external"
+      }
+    },
+    {
+      "name": "Build (GCC)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/Build/GCC",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_BUILD_TYPE": "Release",
+        "VCPKG_HOST_TRIPLET": "x64-linux"
+      },
+      "toolset": {
+        "value": "host=x64",
+        "strategy": "external"
+      },
+      "cmakeExecutable": "/usr/bin/cmake"
+    }
+  ]
+}
