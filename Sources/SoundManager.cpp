@@ -1,17 +1,16 @@
 #include "SoundManager.h"
 
-std::map<std::string, sf::Music*> SoundManager::soundMap{
-	{"backgroundMusic", new sf::Music()},
-	{"tankShot", new sf::Music()},
-	{"tankHit", new sf::Music()},
-	{"tankExplosion", new sf::Music()},
-	{"movingTank", new sf::Music()},
-	{"rotateTurret", new sf::Music()},
-	{"helicopterFlying", new sf::Music()}
-};
+std::map<std::string, sf::Music*> SoundManager::soundMap {};
 
 void SoundManager::Initialize()
 {
+	soundMap["backgroundMusic"]= new sf::Music();
+	soundMap["tankShot"]= new sf::Music();
+	soundMap["tankHit"]= new sf::Music();
+	soundMap["tankExplosion"]= new sf::Music();
+	soundMap["movingTank"]= new sf::Music();
+	soundMap["rotateTurret"] = new sf::Music();
+	soundMap["helicopterFlying"] = new sf::Music();
 	soundMap["backgroundMusic"]->openFromFile("..\\Sounds\\background_music.mp3");
 	soundMap["backgroundMusic"]->setVolume(40.0f);
 	soundMap["backgroundMusic"]->setLoop(true);
@@ -52,7 +51,10 @@ void SoundManager::DecreaseVolume()
 void SoundManager::StopAllSounds()
 {
 	for (auto it = soundMap.begin(); it != soundMap.end(); ++it)
+	{
 		it->second->stop();
+		delete it->second;
+	}
 }
 
 void SoundManager::PlayBackgroundMusic()
